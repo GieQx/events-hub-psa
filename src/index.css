@@ -40,20 +40,20 @@
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
 
-    --card: 222.2 84% 4.9%;
+    --card: 222.2 84% 6.9%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222.2 84% 4.9%;
+    --popover: 222.2 84% 5.9%;
     --popover-foreground: 210 40% 98%;
 
     --primary: 210 40% 98%;
     --primary-foreground: 222.2 47.4% 11.2%;
 
-    --secondary: 217.2 32.6% 17.5%;
+    --secondary: 217.2 32.6% 20.5%;
     --secondary-foreground: 210 40% 98%;
 
     --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted-foreground: 215 20.2% 75.1%;
 
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
@@ -74,6 +74,16 @@
 
   body {
     @apply bg-background text-foreground antialiased;
+    scroll-behavior: smooth;
+  }
+
+  a {
+    @apply transition-colors duration-200;
+  }
+
+  /* Enhanced heading styles */
+  h1, h2, h3, h4, h5, h6 {
+    @apply tracking-tight;
   }
 }
 
@@ -117,4 +127,69 @@
   .glassmorphism {
     @apply bg-white/80 backdrop-blur-md dark:bg-black/50;
   }
+
+  /* Enhanced button styles */
+  .btn-hover-effect {
+    @apply relative overflow-hidden transition-all duration-300;
+  }
+
+  .btn-hover-effect::after {
+    @apply absolute inset-0 -translate-x-full bg-white/20 transition-transform duration-300 ease-out content-[''];
+  }
+
+  .btn-hover-effect:hover::after {
+    @apply translate-x-0;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+@layer utilities {
+  .animate-fade-in {
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  .animate-slide-in {
+    transform: translateX(-20px);
+    animation: slideIn 0.5s ease-out forwards;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-lg;
+  }
+
+  .text-gradient-rvs {
+    @apply bg-gradient-to-r from-rvs-primary to-rvs-secondary bg-clip-text text-transparent;
+  }
+
+  .text-gradient-bms {
+    @apply bg-gradient-to-r from-bms-primary to-bms-secondary bg-clip-text text-transparent;
+  }
+
+  .text-gradient-sm {
+    @apply bg-gradient-to-r from-sm-primary to-sm-secondary bg-clip-text text-transparent;
+  }
+
+  .text-gradient-cs {
+    @apply bg-gradient-to-r from-cs-primary to-cs-secondary bg-clip-text text-transparent;
+  }
+}
+
+/* Add enhanced animation for marquee */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 25s linear infinite;
 }
