@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -33,22 +34,6 @@
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
@@ -79,14 +64,6 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 
@@ -96,6 +73,48 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+@layer components {
+  .event-card {
+    @apply relative overflow-hidden rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl;
+  }
+
+  .event-card:hover {
+    @apply transform -translate-y-1;
+  }
+
+  .hero-gradient-rvs {
+    @apply bg-gradient-to-br from-rvs-light via-white to-rvs-secondary;
+  }
+
+  .hero-gradient-bms {
+    @apply bg-gradient-to-br from-bms-light via-white to-bms-secondary;
+  }
+
+  .hero-gradient-sm {
+    @apply bg-gradient-to-br from-sm-light via-white to-sm-secondary;
+  }
+
+  .hero-gradient-cs {
+    @apply bg-gradient-to-br from-cs-light via-white to-cs-secondary;
+  }
+
+  .marquee-container {
+    @apply relative flex overflow-hidden whitespace-nowrap;
+  }
+
+  .marquee-content {
+    @apply flex animate-marquee items-center;
+  }
+
+  .marquee-content:hover {
+    animation-play-state: paused;
+  }
+
+  .glassmorphism {
+    @apply bg-white/80 backdrop-blur-md dark:bg-black/50;
   }
 }
