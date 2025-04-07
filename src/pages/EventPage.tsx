@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getEventById } from "@/data/events";
@@ -7,12 +6,12 @@ import { ArrowLeft } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { CountdownTimer } from "@/components/CountdownTimer";
 import { MarqueeSection } from "@/components/MarqueeSection";
-import { AgendaSection } from "@/components/AgendaSection";
-import { PartnerSection } from "@/components/PartnerSection";
-import { TopicsSection } from "@/components/TopicsSection";
+import { AgendaSection, Day } from "@/components/AgendaSection";
+import { PartnerSection, Partner } from "@/components/PartnerSection";
+import { TopicsSection, Topic } from "@/components/TopicsSection";
 import { AttendeeGuide } from "@/components/AttendeeGuide";
 import { ConventionChallenge } from "@/components/ConventionChallenge";
-import { ResourcesSection } from "@/components/ResourcesSection";
+import { ResourcesSection, Resource } from "@/components/ResourcesSection";
 import { ChatbotDialog } from "@/components/ChatbotDialog";
 import { RegistrationButton } from "@/components/RegistrationButton";
 import { EventNavigation } from "@/components/EventNavigation";

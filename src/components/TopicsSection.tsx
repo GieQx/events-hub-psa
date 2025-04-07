@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 
-interface Topic {
+export interface Topic {
   id: string;
   title: string;
   description: string;

@@ -1,7 +1,7 @@
 
 import { Card } from "@/components/ui/card";
 
-interface Partner {
+export interface Partner {
   id: string;
   name: string;
   logo: string;

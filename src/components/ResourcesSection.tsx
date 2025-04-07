@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { FileText, Download, Calendar } from "lucide-react";
 import { toast } from "sonner";
 
-interface Resource {
+export interface Resource {
   id: string;
   title: string;
   description: string;

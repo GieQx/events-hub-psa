@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 
-type Event = {
+export type Event = {
   time: string;
   title: string;
   speaker?: string;
@@ -12,7 +12,7 @@ type Event = {
   type?: 'keynote' | 'workshop' | 'panel' | 'break';
 };
 
-type Day = {
+export type Day = {
   date: string;
   title: string;
   events: Event[];
