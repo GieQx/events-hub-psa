@@ -1,8 +1,8 @@
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { MessageCircle } from "lucide-react";
+import { MessageCircle, ArrowUp } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -17,9 +17,10 @@ interface ChatOption {
 interface ChatbotDialogProps {
   eventName: string;
   options: ChatOption[];
+  eventId?: string;
 }
 
-export function ChatbotDialog({ eventName, options }: ChatbotDialogProps) {
+export function ChatbotDialog({ eventName, options, eventId = "rvs" }: ChatbotDialogProps) {
   const [agreementChecked, setAgreementChecked] = useState(false);
   const [chatStarted, setChatStarted] = useState(false);
   const [currentOptions, setCurrentOptions] = useState<ChatOption[]>(options);
@@ -32,6 +33,17 @@ export function ChatbotDialog({ eventName, options }: ChatbotDialogProps) {
       isUser: false,
     },
   ]);
+
+  // Get the correct event color
+  const getEventColor = () => {
+    switch(eventId) {
+      case "rvs": return "rvs-primary";
+      case "bms": return "bms-primary";
+      case "sm": return "sm-primary";
+      case "cs": return "cs-primary";
+      default: return "rvs-primary";
+    }
+  };
 
   const handleOptionClick = (option: ChatOption) => {
     // Add user message
@@ -66,7 +78,7 @@ export function ChatbotDialog({ eventName, options }: ChatbotDialogProps) {
   };
 
   const resetChat = () => {
-    setChatStarted(false);
+    // Don't reset chatStarted - just reset the conversation
     setConversation([
       {
         text: `Welcome to the ${eventName} chatbot assistant! How can I help you today?`,
@@ -81,7 +93,7 @@ export function ChatbotDialog({ eventName, options }: ChatbotDialogProps) {
       <DialogTrigger asChild>
         <Button 
           size="icon" 
-          className="fixed bottom-6 right-6 h-14 w-14 rounded-full bg-rvs-primary shadow-lg hover:bg-rvs-primary/90"
+          className={`fixed bottom-24 right-6 h-14 w-14 rounded-full bg-${getEventColor()} shadow-lg hover:bg-${getEventColor()}/90 md:bottom-6`}
         >
           <MessageCircle className="h-6 w-6" />
           <span className="sr-only">Open chatbot</span>
@@ -130,7 +142,7 @@ export function ChatbotDialog({ eventName, options }: ChatbotDialogProps) {
               <Button 
                 onClick={startChat} 
                 disabled={!agreementChecked}
-                className="bg-rvs-primary hover:bg-rvs-primary/90"
+                className={`bg-${getEventColor()} hover:bg-${getEventColor()}/90`}
               >
                 Start Chat
               </Button>
@@ -149,7 +161,7 @@ export function ChatbotDialog({ eventName, options }: ChatbotDialogProps) {
                   <div
                     className={`max-w-[80%] rounded-lg px-4 py-2 ${
                       message.isUser
-                        ? "bg-rvs-primary text-white"
+                        ? `bg-${getEventColor()} text-white`
                         : "bg-gray-100 dark:bg-gray-800"
                     }`}
                   >
@@ -164,7 +176,7 @@ export function ChatbotDialog({ eventName, options }: ChatbotDialogProps) {
                 {currentOptions.map((option) => (
                   <Card
                     key={option.id}
-                    className="cursor-pointer p-3 hover:bg-gray-50 dark:hover:bg-gray-800"
+                    className={`cursor-pointer p-3 transition-colors hover:bg-${getEventColor()}/10 dark:hover:bg-gray-800`}
                     onClick={() => handleOptionClick(option)}
                   >
                     {option.text}

@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getEventById } from "@/data/events";
@@ -6,18 +7,19 @@ import { ArrowLeft } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { CountdownTimer } from "@/components/CountdownTimer";
 import { MarqueeSection } from "@/components/MarqueeSection";
-import { AgendaSection, Day } from "@/components/AgendaSection";
-import { PartnerSection, Partner } from "@/components/PartnerSection";
-import { TopicsSection, Topic } from "@/components/TopicsSection";
+import { AgendaSection } from "@/components/AgendaSection";
+import { PartnerSection } from "@/components/PartnerSection";
+import { TopicsSection } from "@/components/TopicsSection";
 import { AttendeeGuide } from "@/components/AttendeeGuide";
 import { ConventionChallenge } from "@/components/ConventionChallenge";
-import { ResourcesSection, Resource } from "@/components/ResourcesSection";
+import { ResourcesSection } from "@/components/ResourcesSection";
 import { ChatbotDialog } from "@/components/ChatbotDialog";
 import { RegistrationButton } from "@/components/RegistrationButton";
 import { EventNavigation } from "@/components/EventNavigation";
 import { SpeakersSection } from "@/components/SpeakersSection";
 import { AboutSection } from "@/components/AboutSection";
 import { FaqsSection } from "@/components/FaqsSection";
+import { BackToTopButton } from "@/components/BackToTopButton";
 
 // Import data
 import { 
@@ -160,7 +162,7 @@ const EventPage = () => {
           />
         </div>
         <div className="flex items-center gap-4">
-          <RegistrationButton />
+          <RegistrationButton eventId={eventId} />
           <ThemeToggle />
         </div>
       </header>
@@ -181,7 +183,7 @@ const EventPage = () => {
         </div>
 
         <div className="relative z-10 mx-auto flex min-h-[calc(100vh-4rem)] max-w-7xl flex-col items-center justify-center px-6 py-16 text-center text-white">
-          <div className="mb-4 inline-block rounded-full bg-rvs-primary px-4 py-1 text-sm font-medium animate-fade-in">
+          <div className={`mb-4 inline-block rounded-full bg-${getEventColor()} px-4 py-1 text-sm font-medium animate-fade-in`}>
             {event.date} • {event.location}
           </div>
           <h1 className="mb-4 text-4xl font-bold sm:text-5xl md:text-6xl animate-fade-in" style={{animationDelay: "0.2s"}}>
@@ -192,7 +194,7 @@ const EventPage = () => {
           </p>
           
           <div className="mb-10 flex flex-wrap items-center justify-center gap-4 animate-fade-in" style={{animationDelay: "0.6s"}}>
-            <RegistrationButton />
+            <RegistrationButton eventId={eventId} />
             <Button variant="outline" className="text-white hover:bg-white/10">
               View Program
             </Button>
@@ -232,14 +234,14 @@ const EventPage = () => {
         {/* Speakers Section */}
         <section id="speakers" className="scroll-mt-20 py-16">
           <div className="container mx-auto px-4">
-            <SpeakersSection speakers={speakers} />
+            <SpeakersSection speakers={speakers} eventId={eventId} />
           </div>
         </section>
 
         {/* Agenda Section */}
         <section id="agenda" className="scroll-mt-20 bg-white py-16 dark:bg-gray-800">
           <div className="container mx-auto px-4">
-            <AgendaSection days={agenda} />
+            <AgendaSection days={agenda} eventId={eventId} />
           </div>
         </section>
 
@@ -341,7 +343,10 @@ const EventPage = () => {
       </footer>
 
       {/* Chatbot */}
-      <ChatbotDialog eventName={event.title} options={chatbotOptions} />
+      <ChatbotDialog eventName={event.title} options={chatbotOptions} eventId={eventId} />
+      
+      {/* Back to Top Button - only visible on mobile */}
+      <BackToTopButton eventId={eventId} />
     </div>
   );
 };
