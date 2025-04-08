@@ -1,5 +1,5 @@
 
-import { encryptData, decryptData } from "./cmsUtils";
+import { encryptData, decryptData } from "@/services/cmsUtils";
 
 // Simulated admin credentials for demo purposes
 // In a real application, this would be handled server-side

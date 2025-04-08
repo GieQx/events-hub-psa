@@ -17,7 +17,7 @@ import {
   decryptData,
   isValidDate,
   isValidUrl
-} from "@/utils/cmsUtils";
+} from "@/services/cmsUtils";
 
 // Simulating local storage for demo purposes
 // In a real application, this would be replaced with API calls to a backend

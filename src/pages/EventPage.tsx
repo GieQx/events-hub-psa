@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
@@ -210,7 +211,7 @@ const EventPage = () => {
 
       <section className={`bg-${getEventColor()} py-3 text-white`}>
         <MarqueeSection 
-          items={newsUpdates} 
+          items={rvsNewsUpdates} 
           primaryColor={event.id === "rvs" ? "#FF6479" : 
                          event.id === "bms" ? "#2A9D8F" :
                          event.id === "sm" ? "#E63946" : "#3F7E44"}
@@ -230,7 +231,7 @@ const EventPage = () => {
                 eventName={event?.title || ""}
                 description={event?.description || ""}
                 longDescription={event?.longDescription || ""}
-                highlights={highlights}
+                highlights={getHighlights()}
               />
             </ScrollSection>
           </div>
@@ -247,7 +248,7 @@ const EventPage = () => {
         <section id="agenda" className="scroll-mt-20 bg-white py-16 dark:bg-gray-800">
           <div className="container mx-auto px-4">
             <ScrollSection>
-              <AgendaSection days={agenda} eventId={eventId} />
+              <AgendaSection days={rvsAgenda} eventId={eventId} />
             </ScrollSection>
           </div>
         </section>
@@ -255,7 +256,7 @@ const EventPage = () => {
         <section id="partners" className="scroll-mt-20 py-16">
           <div className="container mx-auto px-4">
             <ScrollSection>
-              <PartnerSection partners={partners} />
+              <PartnerSection partners={rvsPartners} />
             </ScrollSection>
           </div>
         </section>
@@ -263,7 +264,7 @@ const EventPage = () => {
         <section id="topics" className="scroll-mt-20 bg-white py-16 dark:bg-gray-800">
           <div className="container mx-auto px-4">
             <ScrollSection>
-              <TopicsSection topics={topics} />
+              <TopicsSection topics={rvsTopics} />
             </ScrollSection>
           </div>
         </section>
@@ -272,10 +273,10 @@ const EventPage = () => {
           <div className="container mx-auto px-4">
             <ScrollSection>
               <AttendeeGuide 
-                venue={venueInfo}
-                hotels={hotels}
-                restaurants={restaurants}
-                faqs={faqs}
+                venue={rvsVenueInfo}
+                hotels={rvsHotels}
+                restaurants={rvsRestaurants}
+                faqs={rvsInfoFaqs}
               />
             </ScrollSection>
           </div>
@@ -284,7 +285,7 @@ const EventPage = () => {
         <section id="challenge" className="scroll-mt-20 bg-white py-16 dark:bg-gray-800">
           <div className="container mx-auto max-w-3xl px-4">
             <ScrollSection>
-              <ConventionChallenge challenge={challenge} />
+              <ConventionChallenge challenge={rvsChallenge} />
             </ScrollSection>
           </div>
         </section>
@@ -293,7 +294,7 @@ const EventPage = () => {
           <div className="container mx-auto px-4">
             <ScrollSection>
               <ResourcesSection 
-                resources={resources} 
+                resources={rvsResources} 
                 eventDetails={eventCalendarDetails}
               />
             </ScrollSection>
@@ -303,7 +304,7 @@ const EventPage = () => {
         <section id="faqs" className="scroll-mt-20 bg-white py-16 dark:bg-gray-800">
           <div className="container mx-auto px-4">
             <ScrollSection>
-              <FaqsSection faqs={eventFaqs} />
+              <FaqsSection faqs={getFaqs()} />
             </ScrollSection>
           </div>
         </section>
@@ -362,7 +363,7 @@ const EventPage = () => {
         </div>
       </footer>
 
-      <ChatbotDialog eventName={event?.title || ""} options={chatbotOptions} eventId={eventId} />
+      <ChatbotDialog eventName={event?.title || ""} options={rvsChatbotOptions} eventId={eventId} />
       
       <BackToTopButton eventId={eventId} />
     </div>
