@@ -93,7 +93,7 @@ export function ChatbotDialog({ eventName, options, eventId = "rvs" }: ChatbotDi
       <DialogTrigger asChild>
         <Button 
           size="icon" 
-          className={`fixed bottom-24 right-6 h-14 w-14 rounded-full bg-${getEventColor()} shadow-lg hover:bg-${getEventColor()}/90 md:bottom-6`}
+          className={`h-14 w-14 rounded-full bg-${getEventColor()} shadow-lg hover:bg-${getEventColor()}/90`}
         >
           <MessageCircle className="h-6 w-6" />
           <span className="sr-only">Open chatbot</span>

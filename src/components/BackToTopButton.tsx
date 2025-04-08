@@ -45,7 +45,7 @@ export function BackToTopButton({ eventId = "rvs" }: BackToTopButtonProps) {
     <Button
       onClick={scrollToTop}
       size="icon"
-      className={`fixed bottom-6 right-6 h-14 w-14 rounded-full bg-${getEventColor()} shadow-lg hover:bg-${getEventColor()}/90 transition-opacity ${
+      className={`h-14 w-14 rounded-full bg-${getEventColor()} shadow-lg hover:bg-${getEventColor()}/90 transition-opacity ${
         isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
       }`}
       aria-label="Back to top"

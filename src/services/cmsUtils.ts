@@ -1,129 +1,108 @@
 
 /**
- * Sanitizes user input to prevent XSS attacks
- * @param input The input string to sanitize
- * @returns A sanitized string
+ * CMS Utility Functions
+ * 
+ * These functions provide security and validation for CMS operations
  */
+
+// Sanitize user input to prevent XSS attacks
 export const sanitizeInput = (input: string): string => {
-  // Create a temporary element
-  const tempElement = document.createElement('div');
-  tempElement.textContent = input;
-  return tempElement.innerHTML;
+  if (!input) return input;
+  
+  // Basic sanitization - in a real app, use a library like DOMPurify
+  return input
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;')
+    .replace(/\//g, '&#x2F;');
 };
 
-/**
- * Validates input against allowed patterns
- * @param input The input to validate
- * @param pattern The regex pattern to validate against
- * @returns True if the input matches the pattern
- */
-export const validateInput = (input: string, pattern: RegExp): boolean => {
-  return pattern.test(input);
+// Validate user input meets requirements
+export const validateInput = (input: string, type: 'text' | 'email' | 'url' | 'date'): boolean => {
+  if (!input) return false;
+  
+  switch (type) {
+    case 'email':
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input);
+    case 'url':
+      return /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i.test(input);
+    case 'date':
+      return !isNaN(Date.parse(input));
+    default:
+      return input.length > 0;
+  }
 };
 
-/**
- * Generates a unique ID
- * @param prefix An optional prefix for the ID
- * @returns A unique ID
- */
-export const generateId = (prefix: string = ''): string => {
-  return `${prefix}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+// Generate a unique ID
+export const generateId = (): string => {
+  return Math.random().toString(36).substring(2, 9) + Date.now().toString(36);
 };
 
-/**
- * Deep clones an object to prevent mutation
- * @param obj The object to clone
- * @returns A deep clone of the object
- */
+// Deep clone objects
 export const deepClone = <T>(obj: T): T => {
+  if (!obj) return obj;
   return JSON.parse(JSON.stringify(obj));
 };
 
-/**
- * Encrypts data before storing (simple encoding for demo)
- * @param data The data to encrypt
- * @returns Encrypted data
- * Note: In a real app, use a proper encryption library
- */
-export const encryptData = (data: string): string => {
-  // This is just for demonstration, use a proper encryption method in production
-  return btoa(encodeURIComponent(data));
+// Simple encryption (for demo purposes only)
+export const encryptData = (data: string, key = 'demo-key'): string => {
+  // In a real app, use a proper encryption library
+  return btoa(data + key);
 };
 
-/**
- * Decrypts data after retrieval (simple decoding for demo)
- * @param data The data to decrypt
- * @returns Decrypted data
- * Note: In a real app, use a proper decryption library
- */
-export const decryptData = (data: string): string => {
-  // This is just for demonstration, use a proper decryption method in production
-  return decodeURIComponent(atob(data));
+// Simple decryption (for demo purposes only)
+export const decryptData = (encryptedData: string, key = 'demo-key'): string => {
+  // In a real app, use a proper encryption library
+  const data = atob(encryptedData);
+  return data.substring(0, data.length - key.length);
 };
 
-/**
- * Security headers for API calls
- * @returns Security headers for fetch calls
- */
-export const getSecurityHeaders = (): HeadersInit => {
-  return {
-    'Content-Type': 'application/json',
-    'X-Content-Type-Options': 'nosniff',
-    'X-Frame-Options': 'DENY',
-    'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
-    'X-XSS-Protection': '1; mode=block'
-  };
-};
-
-/**
- * Validates a date string format
- * @param dateString The date string to validate
- * @returns True if the date string is valid
- */
+// Validate date format
 export const isValidDate = (dateString: string): boolean => {
   const date = new Date(dateString);
   return !isNaN(date.getTime());
 };
 
-/**
- * Validates a URL string format
- * @param url The URL string to validate
- * @returns True if the URL string is valid
- */
-export const isValidUrl = (url: string): boolean => {
+// Validate URL format
+export const isValidUrl = (urlString: string): boolean => {
   try {
-    new URL(url);
+    new URL(urlString);
     return true;
-  } catch {
+  } catch (error) {
     return false;
   }
 };
 
-/**
- * Validates an email string format
- * @param email The email string to validate
- * @returns True if the email string is valid
- */
-export const isValidEmail = (email: string): boolean => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
+// Format date for display
+export const formatDate = (dateString: string, format = 'long'): string => {
+  const date = new Date(dateString);
+  
+  if (isNaN(date.getTime())) {
+    return 'Invalid date';
+  }
+  
+  if (format === 'short') {
+    return date.toLocaleDateString();
+  } else if (format === 'time') {
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  } else {
+    return date.toLocaleDateString([], { 
+      weekday: 'long',
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+  }
 };
 
-/**
- * Throttles a function to prevent too many calls
- * @param fn The function to throttle
- * @param delay The delay in milliseconds
- * @returns A throttled function
- */
-export const throttle = <T extends (...args: any[]) => any>(
-  fn: T,
-  delay: number
-): ((...args: Parameters<T>) => void) => {
-  let lastCall = 0;
-  return (...args: Parameters<T>) => {
-    const now = Date.now();
-    if (now - lastCall < delay) return;
-    lastCall = now;
-    return fn(...args);
-  };
+// Check if an object is empty
+export const isEmptyObject = (obj: Record<string, any>): boolean => {
+  return Object.keys(obj).length === 0;
+};
+
+// Truncate text to a specified length
+export const truncateText = (text: string, maxLength: number): string => {
+  if (!text || text.length <= maxLength) return text;
+  return text.substring(0, maxLength) + '...';
 };

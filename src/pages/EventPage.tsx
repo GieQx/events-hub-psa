@@ -68,7 +68,15 @@ const EventPage = () => {
     );
   }
 
+  // Get speakers from CMS
   const speakers = cmsService.speakers.getByEventId(eventId || "");
+  const featuredSpeakers = cmsService.speakers.getFeatured(eventId || "");
+
+  // Get other data based on the event ID
+  const agenda = cmsService.agenda.getByEventId(eventId || "") || rvsAgenda;
+  const partners = cmsService.partners.getByEventId(eventId || "") || rvsPartners;
+  const topics = cmsService.topics.getByEventId(eventId || "") || rvsTopics;
+  const resources = cmsService.resources.getByEventId(eventId || "") || rvsResources;
 
   const getFaqs = () => {
     switch(eventId) {
@@ -240,7 +248,7 @@ const EventPage = () => {
         <section id="speakers" className="scroll-mt-20 py-16 relative">
           <div className="container mx-auto px-4 relative z-10">
             <ScrollSection>
-              <SpeakersSection speakers={speakers} eventId={eventId} />
+              <SpeakersSection speakers={featuredSpeakers.length > 0 ? featuredSpeakers : speakers} eventId={eventId} />
             </ScrollSection>
           </div>
         </section>
@@ -248,7 +256,7 @@ const EventPage = () => {
         <section id="agenda" className="scroll-mt-20 bg-white py-16 dark:bg-gray-800">
           <div className="container mx-auto px-4">
             <ScrollSection>
-              <AgendaSection days={rvsAgenda} eventId={eventId} />
+              <AgendaSection days={agenda} eventId={eventId} />
             </ScrollSection>
           </div>
         </section>
@@ -256,7 +264,7 @@ const EventPage = () => {
         <section id="partners" className="scroll-mt-20 py-16">
           <div className="container mx-auto px-4">
             <ScrollSection>
-              <PartnerSection partners={rvsPartners} />
+              <PartnerSection partners={partners} />
             </ScrollSection>
           </div>
         </section>
@@ -264,7 +272,7 @@ const EventPage = () => {
         <section id="topics" className="scroll-mt-20 bg-white py-16 dark:bg-gray-800">
           <div className="container mx-auto px-4">
             <ScrollSection>
-              <TopicsSection topics={rvsTopics} />
+              <TopicsSection topics={topics} />
             </ScrollSection>
           </div>
         </section>
@@ -294,7 +302,7 @@ const EventPage = () => {
           <div className="container mx-auto px-4">
             <ScrollSection>
               <ResourcesSection 
-                resources={rvsResources} 
+                resources={resources} 
                 eventDetails={eventCalendarDetails}
               />
             </ScrollSection>
@@ -363,9 +371,10 @@ const EventPage = () => {
         </div>
       </footer>
 
-      <ChatbotDialog eventName={event?.title || ""} options={rvsChatbotOptions} eventId={eventId} />
-      
-      <BackToTopButton eventId={eventId} />
+      <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end space-y-4">
+        <ChatbotDialog eventName={event?.title || ""} options={rvsChatbotOptions} eventId={eventId} />
+        <BackToTopButton eventId={eventId} />
+      </div>
     </div>
   );
 };
