@@ -35,7 +35,7 @@ export const events = [
     videoUrl: "https://videos.pexels.com/video-files/27946984/12269380_2320_1080_30fps.mp4",
     color: "bg-rvs-primary",
     gradientClass: "hero-gradient-rvs",
-    eventStartDate: "2026-06-15T09:00:00",
+    eventStartDate: "2025-07-28T08:00:00",
   },
   {
     id: "bms",
