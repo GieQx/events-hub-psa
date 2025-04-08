@@ -1,3 +1,4 @@
+
 import { 
   CMSEvent, 
   CMSSpeaker, 
@@ -62,7 +63,7 @@ const initializeStorage = () => {
   // Combine all speakers into one array
   const allSpeakers = [...rvsSpeakers, ...bmsSpeakers, ...smSpeakers, ...csSpeakers].map(speaker => ({
     ...speaker,
-    photoUrl: speaker.photoUrl || speaker.imageUrl, // Make sure photoUrl is available
+    photoUrl: speaker.photoUrl || speaker.photoUrl, // Ensure photoUrl is available - fixed reference
     eventId: speaker.id.split('-')[0], // Extract event ID from speaker ID
     socialLinks: {
       twitter: speaker.social?.twitter,
@@ -235,7 +236,7 @@ export const speakerService = {
     const speakers = getByEventId<CMSSpeaker>(LOCAL_STORAGE_KEYS.SPEAKERS, eventId);
     return speakers.map(speaker => ({
       ...speaker,
-      photoUrl: speaker.photoUrl || speaker.imageUrl, // Ensure photoUrl is available
+      photoUrl: speaker.photoUrl || speaker.photoUrl, // Fixed: Use photoUrl consistently
       social: {
         twitter: speaker.socialLinks?.twitter,
         linkedin: speaker.socialLinks?.linkedin
@@ -249,20 +250,20 @@ export const speakerService = {
     }
     
     // Validate image URL if provided
-    if (speaker.imageUrl && !isValidUrl(speaker.imageUrl)) {
+    if (speaker.photoUrl && !isValidUrl(speaker.photoUrl)) {
       throw new Error("Invalid image URL format");
     }
     
     return create<CMSSpeaker>(LOCAL_STORAGE_KEYS.SPEAKERS, {
       ...speaker,
-      photoUrl: speaker.photoUrl || speaker.imageUrl, // Ensure photoUrl is set
+      photoUrl: speaker.photoUrl || speaker.photoUrl, // Ensure photoUrl is set
     });
   },
   update: (id: string, speaker: CMSSpeaker) => {
     // Ensure photoUrl is set correctly
     const updatedSpeaker = {
       ...speaker,
-      photoUrl: speaker.photoUrl || speaker.imageUrl,
+      photoUrl: speaker.photoUrl || speaker.photoUrl, // Fixed: Use photoUrl consistently
     };
     
     return update<CMSSpeaker>(LOCAL_STORAGE_KEYS.SPEAKERS, id, updatedSpeaker);
@@ -272,7 +273,7 @@ export const speakerService = {
     const speakers = getByEventId<CMSSpeaker>(LOCAL_STORAGE_KEYS.SPEAKERS, eventId).filter(speaker => speaker.featured);
     return speakers.map(speaker => ({
       ...speaker,
-      photoUrl: speaker.photoUrl || speaker.imageUrl, // Ensure photoUrl is available
+      photoUrl: speaker.photoUrl || speaker.photoUrl, // Fixed: Use photoUrl consistently
       social: {
         twitter: speaker.socialLinks?.twitter,
         linkedin: speaker.socialLinks?.linkedin
