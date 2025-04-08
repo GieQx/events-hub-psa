@@ -1,4 +1,3 @@
-
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { EventCard } from "@/components/EventCard";
