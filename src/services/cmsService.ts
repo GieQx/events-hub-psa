@@ -1,4 +1,3 @@
-
 import { 
   CMSEvent, 
   CMSSpeaker, 
@@ -50,7 +49,17 @@ const initializeStorage = () => {
   }
 
   // Combine all speakers into one array
-  const allSpeakers = [...rvsSpeakers, ...bmsSpeakers, ...smSpeakers, ...csSpeakers];
+  const allSpeakers = [...rvsSpeakers, ...bmsSpeakers, ...smSpeakers, ...csSpeakers].map(speaker => ({
+    ...speaker,
+    photoUrl: speaker.photoUrl, // Make sure photoUrl is available
+    eventId: speaker.id.split('-')[0], // Extract event ID from speaker ID
+    socialLinks: {
+      twitter: speaker.social?.twitter,
+      linkedin: speaker.social?.linkedin,
+      website: null
+    }
+  }));
+  
   if (!localStorage.getItem(LOCAL_STORAGE_KEYS.SPEAKERS)) {
     localStorage.setItem(LOCAL_STORAGE_KEYS.SPEAKERS, JSON.stringify(allSpeakers));
   }
@@ -139,11 +148,31 @@ export const eventService = {
 export const speakerService = {
   getAll: () => getAll<CMSSpeaker>(LOCAL_STORAGE_KEYS.SPEAKERS),
   getById: (id: string) => getById<CMSSpeaker>(LOCAL_STORAGE_KEYS.SPEAKERS, id),
-  getByEventId: (eventId: string) => getByEventId<CMSSpeaker>(LOCAL_STORAGE_KEYS.SPEAKERS, eventId),
+  getByEventId: (eventId: string) => {
+    const speakers = getByEventId<CMSSpeaker>(LOCAL_STORAGE_KEYS.SPEAKERS, eventId);
+    return speakers.map(speaker => ({
+      ...speaker,
+      photoUrl: speaker.photoUrl || speaker.imageUrl, // Ensure photoUrl is available
+      social: {
+        twitter: speaker.socialLinks?.twitter,
+        linkedin: speaker.socialLinks?.linkedin
+      }
+    }));
+  },
   create: (speaker: CMSSpeaker) => create<CMSSpeaker>(LOCAL_STORAGE_KEYS.SPEAKERS, speaker),
   update: (id: string, speaker: CMSSpeaker) => update<CMSSpeaker>(LOCAL_STORAGE_KEYS.SPEAKERS, id, speaker),
   delete: (id: string) => remove<CMSSpeaker>(LOCAL_STORAGE_KEYS.SPEAKERS, id),
-  getFeatured: (eventId: string) => getByEventId<CMSSpeaker>(LOCAL_STORAGE_KEYS.SPEAKERS, eventId).filter(speaker => speaker.featured),
+  getFeatured: (eventId: string) => {
+    const speakers = getByEventId<CMSSpeaker>(LOCAL_STORAGE_KEYS.SPEAKERS, eventId).filter(speaker => speaker.featured);
+    return speakers.map(speaker => ({
+      ...speaker,
+      photoUrl: speaker.photoUrl || speaker.imageUrl, // Ensure photoUrl is available
+      social: {
+        twitter: speaker.socialLinks?.twitter,
+        linkedin: speaker.socialLinks?.linkedin
+      }
+    }));
+  },
 };
 
 // Agenda-specific functions

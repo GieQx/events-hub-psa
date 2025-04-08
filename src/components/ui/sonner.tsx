@@ -4,15 +4,11 @@ import { Toaster as SonnerToaster } from "sonner"
 
 import * as React from "react"
 
-const Toaster = React.forwardRef<
-  React.ElementRef<typeof SonnerToaster>,
-  React.ComponentPropsWithoutRef<typeof SonnerToaster>
->(({ ...props }, ref) => {
+const Toaster = ({ ...props }) => {
   const { theme = "system" } = useTheme()
 
   return (
     <SonnerToaster
-      ref={ref}
       theme={theme as "light" | "dark" | "system"}
       className="toaster group"
       toastOptions={{
@@ -29,7 +25,7 @@ const Toaster = React.forwardRef<
       {...props}
     />
   )
-})
+}
 Toaster.displayName = "Toaster"
 
 export { Toaster }

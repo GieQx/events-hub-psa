@@ -25,11 +25,16 @@ export interface CMSSpeaker {
   company: string;
   bio: string;
   imageUrl: string;
+  photoUrl: string; // Added to match Speaker interface
   featured?: boolean;
   socialLinks?: {
     twitter?: string;
     linkedin?: string;
     website?: string;
+  };
+  social?: { // Added to match Speaker interface
+    twitter?: string;
+    linkedin?: string;
   };
   presentationTitle?: string;
   presentationTime?: string;

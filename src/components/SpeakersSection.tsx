@@ -6,6 +6,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Linkedin, Twitter, ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { CMSSpeaker } from "@/types/cms";
 
 export interface Speaker {
   id: string;
@@ -21,7 +22,7 @@ export interface Speaker {
 }
 
 interface SpeakersSectionProps {
-  speakers: Speaker[];
+  speakers: CMSSpeaker[] | Speaker[];
   className?: string;
   eventId?: string;
 }
@@ -95,7 +96,7 @@ export function SpeakersSection({ speakers, className = "", eventId = "rvs" }: S
                   <CardHeader className="pb-2">
                     <div className="mb-4 flex justify-center">
                       <Avatar className={`h-24 w-24 border-2 border-${getEventColor()}/20`}>
-                        <AvatarImage src={speaker.photoUrl} alt={speaker.name} />
+                        <AvatarImage src={speaker.photoUrl || speaker.imageUrl} alt={speaker.name} />
                         <AvatarFallback>{speaker.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                       </Avatar>
                     </div>
@@ -107,14 +108,14 @@ export function SpeakersSection({ speakers, className = "", eventId = "rvs" }: S
                   <CardContent>
                     <p className="text-sm text-gray-600 dark:text-gray-300">{speaker.bio}</p>
                   </CardContent>
-                  {speaker.social && (
+                  {(speaker.social || speaker.socialLinks) && (
                     <CardFooter className="flex justify-center gap-2">
                       <TooltipProvider>
-                        {speaker.social.linkedin && (
+                        {((speaker.social?.linkedin) || (speaker.socialLinks?.linkedin)) && (
                           <Tooltip>
                             <TooltipTrigger asChild>
                               <Button variant="outline" size="icon" asChild className="h-9 w-9 rounded-full">
-                                <a href={speaker.social.linkedin} target="_blank" rel="noopener noreferrer">
+                                <a href={speaker.social?.linkedin || speaker.socialLinks?.linkedin} target="_blank" rel="noopener noreferrer">
                                   <Linkedin className="h-4 w-4" />
                                 </a>
                               </Button>
@@ -125,11 +126,11 @@ export function SpeakersSection({ speakers, className = "", eventId = "rvs" }: S
                           </Tooltip>
                         )}
                         
-                        {speaker.social.twitter && (
+                        {((speaker.social?.twitter) || (speaker.socialLinks?.twitter)) && (
                           <Tooltip>
                             <TooltipTrigger asChild>
                               <Button variant="outline" size="icon" asChild className="h-9 w-9 rounded-full">
-                                <a href={speaker.social.twitter} target="_blank" rel="noopener noreferrer">
+                                <a href={speaker.social?.twitter || speaker.socialLinks?.twitter} target="_blank" rel="noopener noreferrer">
                                   <Twitter className="h-4 w-4" />
                                 </a>
                               </Button>
