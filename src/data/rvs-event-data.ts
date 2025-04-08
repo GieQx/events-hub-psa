@@ -1,5 +1,5 @@
 
-export const RVSNewsUpdates = [
+export const rvsNewsUpdates = [
   "Early bird registration now open for 4NCCRVS!",
   "Just announced: Keynote speaker Sen. Juan dela Cruz, from Senate, will present on updates on Divorce Bill.",
   "New workshop added: 'Privacy-Preserving Verification Methods' - Limited seats available!",
@@ -8,7 +8,7 @@ export const RVSNewsUpdates = [
   "Exhibitor spaces selling quickly - secure your booth today!",
 ];
 
-export const RVSAgenda = [
+export const rvsAgenda = [
   {
     date: "day1",
     title: "Day 1 - July 28",
@@ -181,7 +181,7 @@ export const RVSAgenda = [
   },
 ];
 
-export const RVSPartners = [
+export const rvsPartners = [
   {
     id: "org1",
     name: "Verification Institute",
@@ -256,7 +256,7 @@ export const RVSPartners = [
   },
 ];
 
-export const RVSTopics = [
+export const rvsTopics = [
   {
     id: "t1",
     title: "Next-Gen Biometric Authentication",
@@ -358,14 +358,14 @@ export const RVSTopics = [
   },
 ];
 
-export const RVSVenueInfo = {
+export const rvsVenueInfo = {
   name: "Moscone Center",
   address: "Convention City",
   description: "The Moscone Center is San Francisco's premier convention and exhibition complex. Located in the heart of the city, this world-class facility offers state-of-the-art amenities and is within walking distance of hotels, shopping, dining, and cultural attractions.",
   mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.1597406921474!2d-122.40277032357242!3d37.78393571231892!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80858087e97646f7%3A0x72c5cb98814ace6!2sMoscone%20Center!5e0!3m2!1sen!2sus!4v1712524217753!5m2!1sen!2sus",
 };
 
-export const RVSHotels = [
+export const rvsHotels = [
   {
     id: "h1",
     name: "Marriott Marquis",
@@ -396,7 +396,7 @@ export const RVSHotels = [
   },
 ];
 
-export const NCCRVSRestaurants = [
+export const rvsRestaurants = [
   {
     id: "r1",
     name: "Urban Bistro",
@@ -441,7 +441,7 @@ export const NCCRVSRestaurants = [
   },
 ];
 
-export const RVSFaqs = [
+export const rvsFaqs = [
   {
     question: "What's included in the registration fee?",
     answer: "The registration fee includes access to all keynotes, sessions, workshops, exhibition area, networking events, lunches, and refreshment breaks. The gala dinner on Day 2 is also included for full conference registrants.",
@@ -468,7 +468,7 @@ export const RVSFaqs = [
   },
 ];
 
-export const RVSChallenge = {
+export const rvsChallenge = {
   id: "rvsChallenge2026",
   title: "RVS Identity Explorer Challenge",
   description: "Complete verification-related tasks throughout the conference to earn points and win exclusive prizes!",
@@ -507,7 +507,7 @@ export const RVSChallenge = {
   reward: "Exclusive access to post-conference virtual workshops and certification opportunity",
 };
 
-export const RVSResources = [
+export const rvsResources = [
   {
     id: "res1",
     title: "Event Program",
@@ -558,7 +558,7 @@ export const RVSResources = [
   },
 ];
 
-export const RVSChatbotOptions = [
+export const rvsChatbotOptions = [
   {
     id: "co1",
     text: "What sessions are available?",
