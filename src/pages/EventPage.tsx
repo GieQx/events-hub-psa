@@ -345,7 +345,7 @@ const EventPage = () => {
       {/* Chatbot */}
       <ChatbotDialog eventName={event.title} options={chatbotOptions} eventId={eventId} />
       
-      {/* Back to Top Button - visible on all devices but positioned differently on mobile */}
+      {/* Back to Top Button - only visible on mobile */}
       <BackToTopButton eventId={eventId} />
     </div>
   );

@@ -6,11 +6,11 @@ export interface Faq {
 
 export const rvsFaqs: Faq[] = [
   {
-    question: "What is the focus of the National Convention on Civil Registration and Vital Statistics?",
+    question: "What is the focus of the Registration & Verification Summit?",
     answer: "The RVS focuses on cutting-edge techniques and best practices in registration and verification systems. Topics include biometric authentication, fraud prevention, regulatory compliance, and user experience in verification processes."
   },
   {
-    question: "Are there networking opportunities at NCCRVS?",
+    question: "Are there networking opportunities at RVS?",
     answer: "Yes, RVS features multiple networking sessions including breakfast roundtables, evening receptions, and a dedicated networking app to connect with other attendees based on shared interests."
   },
   {
@@ -18,7 +18,7 @@ export const rvsFaqs: Faq[] = [
     answer: "Yes, all presentation slides and session recordings will be made available to registered attendees through our digital platform within one week after the event concludes."
   },
   {
-    question: "How can I become a speaker at future NCCRVS events?",
+    question: "How can I become a speaker at future RVS events?",
     answer: "We open our call for speakers approximately 8 months before each event. You can submit your proposal through our website when the call opens, or contact our programming team directly at speakers@rvs.example.com."
   },
   {
