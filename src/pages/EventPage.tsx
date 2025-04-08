@@ -1,9 +1,8 @@
 
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getEventById } from "@/data/events";
-import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { CountdownTimer } from "@/components/CountdownTimer";
 import { MarqueeSection } from "@/components/MarqueeSection";
@@ -20,6 +19,8 @@ import { SpeakersSection } from "@/components/SpeakersSection";
 import { AboutSection } from "@/components/AboutSection";
 import { FaqsSection } from "@/components/FaqsSection";
 import { BackToTopButton } from "@/components/BackToTopButton";
+import { ScrollSection } from "@/components/ScrollSection";
+import cmsService from "@/services/cmsService";
 
 // Import data
 import { 
@@ -36,14 +37,7 @@ import {
   rvsChatbotOptions
 } from "@/data/rvs-event-data";
 
-// Import speakers and additional data
-import { 
-  rvsSpeakers, 
-  bmsSpeakers, 
-  smSpeakers, 
-  csSpeakers 
-} from "@/data/speakers-data";
-
+// Import additional data
 import {
   rvsFaqs,
   bmsFaqs,
@@ -60,7 +54,7 @@ import {
 
 const EventPage = () => {
   const { eventId } = useParams<{ eventId: string }>();
-  const event = getEventById(eventId || "");
+  const event = cmsService.events.getById(eventId || "");
   const [videoLoaded, setVideoLoaded] = useState(false);
 
   // If event not found, display error message
@@ -77,15 +71,7 @@ const EventPage = () => {
   }
 
   // Choose data based on event ID
-  const getSpeakers = () => {
-    switch(eventId) {
-      case "rvs": return rvsSpeakers;
-      case "bms": return bmsSpeakers;
-      case "sm": return smSpeakers;
-      case "cs": return csSpeakers;
-      default: return rvsSpeakers;
-    }
-  };
+  const speakers = cmsService.speakers.getByEventId(eventId || "");
 
   const getFaqs = () => {
     switch(eventId) {
@@ -107,19 +93,18 @@ const EventPage = () => {
     }
   };
 
-  // Currently only implementing RVS data - we would need to add equivalent data for other events
+  // For now, using the existing data for demo - would be replaced with CMS calls
   const newsUpdates = rvsNewsUpdates;
   const agenda = rvsAgenda;
-  const partners = rvsPartners as any; // Type assertion to fix TypeScript error
-  const topics = rvsTopics as any; // Type assertion to fix TypeScript error
+  const partners = rvsPartners as any;
+  const topics = rvsTopics as any;
   const venueInfo = rvsVenueInfo;
   const hotels = rvsHotels;
   const restaurants = rvsRestaurants;
   const faqs = rvsInfoFaqs;
   const challenge = rvsChallenge;
-  const resources = rvsResources as any; // Type assertion to fix TypeScript error
+  const resources = rvsResources as any;
   const chatbotOptions = rvsChatbotOptions;
-  const speakers = getSpeakers();
   const eventFaqs = getFaqs();
   const highlights = getHighlights();
 
@@ -147,7 +132,7 @@ const EventPage = () => {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <header className="fixed left-0 right-0 top-0 z-50 flex h-16 items-center justify-between bg-white/80 px-6 backdrop-blur-md dark:bg-gray-900/80">
+      <header className="fixed left-0 right-0 top-0 z-50 flex h-16 items-center justify-between bg-white/95 px-6 backdrop-blur-md shadow-sm dark:bg-gray-900/95">
         <div className="flex items-center gap-4">
           <Link to="/">
             <Button variant="outline" className="flex items-center gap-2">
@@ -162,6 +147,9 @@ const EventPage = () => {
           />
         </div>
         <div className="flex items-center gap-4">
+          <Link to="/admin">
+            <Button variant="outline" size="sm">Admin</Button>
+          </Link>
           <RegistrationButton eventId={eventId} />
           <ThemeToggle />
         </div>
@@ -183,27 +171,39 @@ const EventPage = () => {
         </div>
 
         <div className="relative z-10 mx-auto flex min-h-[calc(100vh-4rem)] max-w-7xl flex-col items-center justify-center px-6 py-16 text-center text-white">
-          <div className={`mb-4 inline-block rounded-full bg-${getEventColor()} px-4 py-1 text-sm font-medium animate-fade-in`}>
-            {event.date} • {event.location}
-          </div>
-          <h1 className="mb-4 text-4xl font-bold sm:text-5xl md:text-6xl animate-fade-in" style={{animationDelay: "0.2s"}}>
-            {event.title}
-          </h1>
-          <p className="mb-10 max-w-2xl text-lg text-gray-200 sm:text-xl animate-fade-in" style={{animationDelay: "0.4s"}}>
-            {event.longDescription}
-          </p>
+          <ScrollSection>
+            <div className={`mb-4 inline-block rounded-full bg-${getEventColor()} px-4 py-1 text-sm font-medium`}>
+              {event.date} • {event.location}
+            </div>
+          </ScrollSection>
           
-          <div className="mb-10 flex flex-wrap items-center justify-center gap-4 animate-fade-in" style={{animationDelay: "0.6s"}}>
-            <RegistrationButton eventId={eventId} />
-            <Button variant="outline" className="text-white hover:bg-white/10">
-              View Program
-            </Button>
-          </div>
+          <ScrollSection delay={0.3}>
+            <h1 className="mb-4 text-4xl font-bold sm:text-5xl md:text-6xl">
+              {event.title}
+            </h1>
+          </ScrollSection>
           
-          <div className="w-full max-w-3xl animate-fade-in" style={{animationDelay: "0.8s"}}>
-            <h2 className="mb-4 text-xl font-semibold">Event Starts In</h2>
-            <CountdownTimer targetDate={event.eventStartDate} />
-          </div>
+          <ScrollSection delay={0.5}>
+            <p className="mb-10 max-w-2xl text-lg text-gray-200 sm:text-xl">
+              {event.longDescription}
+            </p>
+          </ScrollSection>
+          
+          <ScrollSection delay={0.7}>
+            <div className="mb-10 flex flex-wrap items-center justify-center gap-4">
+              <RegistrationButton eventId={eventId} />
+              <Button variant="outline" className="text-white hover:bg-white/10">
+                View Program
+              </Button>
+            </div>
+          </ScrollSection>
+          
+          <ScrollSection delay={0.9}>
+            <div className="w-full max-w-3xl">
+              <h2 className="mb-4 text-xl font-semibold">Event Starts In</h2>
+              <CountdownTimer targetDate={event.eventStartDate} />
+            </div>
+          </ScrollSection>
         </div>
       </section>
 
@@ -222,73 +222,91 @@ const EventPage = () => {
         {/* About Section */}
         <section id="about" className="scroll-mt-20 bg-white py-16 dark:bg-gray-800">
           <div className="container mx-auto px-4">
-            <AboutSection 
-              eventName={event.title}
-              description={event.description}
-              longDescription={event.longDescription}
-              highlights={highlights}
-            />
+            <ScrollSection>
+              <AboutSection 
+                eventName={event.title}
+                description={event.description}
+                longDescription={event.longDescription}
+                highlights={highlights}
+              />
+            </ScrollSection>
           </div>
         </section>
 
         {/* Speakers Section */}
         <section id="speakers" className="scroll-mt-20 py-16">
           <div className="container mx-auto px-4">
-            <SpeakersSection speakers={speakers} eventId={eventId} />
+            <ScrollSection>
+              <SpeakersSection speakers={speakers} eventId={eventId} />
+            </ScrollSection>
           </div>
         </section>
 
         {/* Agenda Section */}
         <section id="agenda" className="scroll-mt-20 bg-white py-16 dark:bg-gray-800">
           <div className="container mx-auto px-4">
-            <AgendaSection days={agenda} eventId={eventId} />
+            <ScrollSection>
+              <AgendaSection days={agenda} eventId={eventId} />
+            </ScrollSection>
           </div>
         </section>
 
         {/* Partners Section */}
         <section id="partners" className="scroll-mt-20 py-16">
           <div className="container mx-auto px-4">
-            <PartnerSection partners={partners} />
+            <ScrollSection>
+              <PartnerSection partners={partners} />
+            </ScrollSection>
           </div>
         </section>
 
         {/* Topics Section */}
         <section id="topics" className="scroll-mt-20 bg-white py-16 dark:bg-gray-800">
           <div className="container mx-auto px-4">
-            <TopicsSection topics={topics} />
+            <ScrollSection>
+              <TopicsSection topics={topics} />
+            </ScrollSection>
           </div>
         </section>
 
         {/* Attendee Guide Section */}
         <section id="guide" className="scroll-mt-20 py-16">
           <div className="container mx-auto px-4">
-            <AttendeeGuide 
-              venue={venueInfo}
-              hotels={hotels}
-              restaurants={restaurants}
-              faqs={faqs}
-            />
+            <ScrollSection>
+              <AttendeeGuide 
+                venue={venueInfo}
+                hotels={hotels}
+                restaurants={restaurants}
+                faqs={faqs}
+              />
+            </ScrollSection>
           </div>
         </section>
 
         {/* Convention Challenge Section */}
         <section id="challenge" className="scroll-mt-20 bg-white py-16 dark:bg-gray-800">
           <div className="container mx-auto max-w-3xl px-4">
-            <ConventionChallenge challenge={challenge} />
+            <ScrollSection>
+              <ConventionChallenge challenge={challenge} />
+            </ScrollSection>
           </div>
         </section>
 
         {/* Resources Section */}
         <section id="resources" className="scroll-mt-20 py-16">
           <div className="container mx-auto px-4">
-            <ResourcesSection resources={resources} />
+            <ScrollSection>
+              <ResourcesSection resources={resources} />
+            </ScrollSection>
           </div>
         </section>
 
         {/* FAQs Section */}
         <section id="faqs" className="scroll-mt-20 bg-white py-16 dark:bg-gray-800">
           <div className="container mx-auto px-4">
-            <FaqsSection faqs={eventFaqs} />
+            <ScrollSection>
+              <FaqsSection faqs={eventFaqs} />
+            </ScrollSection>
           </div>
         </section>
       </main>
