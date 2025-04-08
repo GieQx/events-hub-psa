@@ -1,18 +1,17 @@
 
-export const rvsNewsUpdates = [
-  "Early bird registration now open for RVS 2026! Save 20% until December 31.",
-  "Just announced: Keynote speaker Dr. Emma Chen, CTO of VerifyNow, will present on next-gen biometric verification.",
+export const RVSNewsUpdates = [
+  "Early bird registration now open for 4NCCRVS!",
+  "Just announced: Keynote speaker Sen. Juan dela Cruz, from Senate, will present on updates on Divorce Bill.",
   "New workshop added: 'Privacy-Preserving Verification Methods' - Limited seats available!",
-  "Call for speakers extended to November 15. Submit your proposal today!",
-  "Hotel block at the Hilton San Francisco now available at special rates for RVS attendees.",
-  "Join us for the pre-conference networking mixer on June 14, 2026.",
+  "Call for speakers extended to May 15. Submit your proposal today!",
+  "Hotel block at the Convention City now available at special rates for NCCRVS attendees.",
   "Exhibitor spaces selling quickly - secure your booth today!",
 ];
 
-export const rvsAgenda = [
+export const RVSAgenda = [
   {
     date: "day1",
-    title: "Day 1 - June 15",
+    title: "Day 1 - July 28",
     events: [
       {
         time: "8:00 AM - 9:00 AM",
@@ -68,7 +67,7 @@ export const rvsAgenda = [
   },
   {
     date: "day2",
-    title: "Day 2 - June 16",
+    title: "Day 2 - July 29",
     events: [
       {
         time: "8:30 AM - 9:00 AM",
@@ -125,7 +124,7 @@ export const rvsAgenda = [
   },
   {
     date: "day3",
-    title: "Day 3 - June 17",
+    title: "Day 3 - July 30",
     events: [
       {
         time: "8:30 AM - 9:00 AM",
@@ -174,7 +173,7 @@ export const rvsAgenda = [
       {
         time: "4:30 PM - 5:00 PM",
         title: "Closing Remarks & Conference Highlights",
-        description: "Recap of key takeaways and announcement of RVS 2027.",
+        description: "Recap of key takeaways and announcement of 5NCCRVS.",
         location: "Grand Ballroom",
         type: "break" as const,
       },
@@ -182,7 +181,7 @@ export const rvsAgenda = [
   },
 ];
 
-export const rvsPartners = [
+export const RVSPartners = [
   {
     id: "org1",
     name: "Verification Institute",
@@ -257,7 +256,7 @@ export const rvsPartners = [
   },
 ];
 
-export const rvsTopics = [
+export const RVSTopics = [
   {
     id: "t1",
     title: "Next-Gen Biometric Authentication",
@@ -359,14 +358,14 @@ export const rvsTopics = [
   },
 ];
 
-export const rvsVenueInfo = {
+export const RVSVenueInfo = {
   name: "Moscone Center",
-  address: "747 Howard St, San Francisco, CA 94103",
+  address: "Convention City",
   description: "The Moscone Center is San Francisco's premier convention and exhibition complex. Located in the heart of the city, this world-class facility offers state-of-the-art amenities and is within walking distance of hotels, shopping, dining, and cultural attractions.",
   mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.1597406921474!2d-122.40277032357242!3d37.78393571231892!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80858087e97646f7%3A0x72c5cb98814ace6!2sMoscone%20Center!5e0!3m2!1sen!2sus!4v1712524217753!5m2!1sen!2sus",
 };
 
-export const rvsHotels = [
+export const RVSHotels = [
   {
     id: "h1",
     name: "Marriott Marquis",
@@ -397,7 +396,7 @@ export const rvsHotels = [
   },
 ];
 
-export const rvsRestaurants = [
+export const NCCRVSRestaurants = [
   {
     id: "r1",
     name: "Urban Bistro",
@@ -442,7 +441,7 @@ export const rvsRestaurants = [
   },
 ];
 
-export const rvsFaqs = [
+export const RVSFaqs = [
   {
     question: "What's included in the registration fee?",
     answer: "The registration fee includes access to all keynotes, sessions, workshops, exhibition area, networking events, lunches, and refreshment breaks. The gala dinner on Day 2 is also included for full conference registrants.",
@@ -469,7 +468,7 @@ export const rvsFaqs = [
   },
 ];
 
-export const rvsChallenge = {
+export const RVSChallenge = {
   id: "rvsChallenge2026",
   title: "RVS Identity Explorer Challenge",
   description: "Complete verification-related tasks throughout the conference to earn points and win exclusive prizes!",
@@ -508,7 +507,7 @@ export const rvsChallenge = {
   reward: "Exclusive access to post-conference virtual workshops and certification opportunity",
 };
 
-export const rvsResources = [
+export const RVSResources = [
   {
     id: "res1",
     title: "Event Program",
@@ -559,7 +558,7 @@ export const rvsResources = [
   },
 ];
 
-export const rvsChatbotOptions = [
+export const RVSChatbotOptions = [
   {
     id: "co1",
     text: "What sessions are available?",
@@ -578,14 +577,14 @@ export const rvsChatbotOptions = [
       {
         id: "co1-3",
         text: "Back to main menu",
-        responses: ["What else would you like to know about the RVS event?"],
+        responses: ["What else would you like to know about the NCCRVS event?"],
       },
     ],
   },
   {
     id: "co2",
     text: "Where is the event located?",
-    responses: ["The Registration & Verification Summit (RVS) will be held at the Moscone Center, located at 747 Howard St, San Francisco, CA 94103. You can find more details including maps in the Attendee Guide section."],
+    responses: ["The Registration & Verification Summit (RVS) will be held at the Moscone Center, located at Convention City. You can find more details including maps in the Attendee Guide section."],
     followUp: [
       {
         id: "co2-1",
@@ -600,7 +599,7 @@ export const rvsChatbotOptions = [
       {
         id: "co2-3",
         text: "Back to main menu",
-        responses: ["What else would you like to know about the RVS event?"],
+        responses: ["What else would you like to know about the NCCRVS event?"],
       },
     ],
   },
@@ -622,14 +621,14 @@ export const rvsChatbotOptions = [
       {
         id: "co3-3",
         text: "Back to main menu",
-        responses: ["What else would you like to know about the RVS event?"],
+        responses: ["What else would you like to know about the NCCRVS event?"],
       },
     ],
   },
   {
     id: "co4",
     text: "Tell me about the convention challenge",
-    responses: ["The RVS Identity Explorer Challenge is a fun way to engage with the conference! Complete various tasks like attending keynotes, visiting exhibitor booths, and participating in workshops to earn points. Complete all steps to receive exclusive access to post-conference virtual workshops and certification opportunities."],
+    responses: ["The NCCRVS Identity Explorer Challenge is a fun way to engage with the conference! Complete various tasks like attending keynotes, visiting exhibitor booths, and participating in workshops to earn points. Complete all steps to receive exclusive access to post-conference virtual workshops and certification opportunities."],
     followUp: [
       {
         id: "co4-1",
@@ -644,7 +643,7 @@ export const rvsChatbotOptions = [
       {
         id: "co4-3",
         text: "Back to main menu",
-        responses: ["What else would you like to know about the RVS event?"],
+        responses: ["What else would you like to know about the NCCRVS event?"],
       },
     ],
   },
