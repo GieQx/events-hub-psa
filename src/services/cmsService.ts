@@ -8,6 +8,17 @@ import {
   CMSResource 
 } from "@/types/cms";
 
+import { 
+  sanitizeInput, 
+  validateInput, 
+  generateId, 
+  deepClone,
+  encryptData,
+  decryptData,
+  isValidDate,
+  isValidUrl
+} from "@/utils/cmsUtils";
+
 // Simulating local storage for demo purposes
 // In a real application, this would be replaced with API calls to a backend
 
@@ -51,7 +62,7 @@ const initializeStorage = () => {
   // Combine all speakers into one array
   const allSpeakers = [...rvsSpeakers, ...bmsSpeakers, ...smSpeakers, ...csSpeakers].map(speaker => ({
     ...speaker,
-    photoUrl: speaker.photoUrl, // Make sure photoUrl is available
+    photoUrl: speaker.photoUrl || speaker.imageUrl, // Make sure photoUrl is available
     eventId: speaker.id.split('-')[0], // Extract event ID from speaker ID
     socialLinks: {
       twitter: speaker.social?.twitter,
@@ -89,55 +100,127 @@ const initializeStorage = () => {
 // Initialize on import
 initializeStorage();
 
-// Generic CRUD functions
+// Enhanced CRUD functions with security
 const getAll = <T>(key: string): T[] => {
-  const data = localStorage.getItem(key);
-  return data ? JSON.parse(data) : [];
+  try {
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : [];
+  } catch (error) {
+    console.error(`Error retrieving data from ${key}:`, error);
+    return [];
+  }
 };
 
 const getById = <T extends { id: string }>(key: string, id: string): T | null => {
-  const items = getAll<T>(key);
-  return items.find(item => item.id === id) || null;
+  if (!id) return null;
+  
+  try {
+    const items = getAll<T>(key);
+    return items.find(item => item.id === id) || null;
+  } catch (error) {
+    console.error(`Error retrieving item ${id} from ${key}:`, error);
+    return null;
+  }
 };
 
 const getByEventId = <T extends { eventId: string }>(key: string, eventId: string): T[] => {
-  const items = getAll<T>(key);
-  return items.filter(item => item.eventId === eventId);
+  if (!eventId) return [];
+  
+  try {
+    const items = getAll<T>(key);
+    return items.filter(item => item.eventId === eventId);
+  } catch (error) {
+    console.error(`Error retrieving items for event ${eventId} from ${key}:`, error);
+    return [];
+  }
 };
 
-const create = <T>(key: string, item: T): T => {
-  const items = getAll<T>(key);
-  const newItems = [...items, item];
-  localStorage.setItem(key, JSON.stringify(newItems));
-  return item;
+const create = <T extends { id?: string }>(key: string, item: T): T => {
+  try {
+    const items = getAll<T>(key);
+    
+    // Generate an ID if not provided
+    const newItem = {
+      ...item,
+      id: item.id || generateId(),
+    };
+    
+    // Sanitize text inputs (simplified example)
+    Object.keys(newItem).forEach(prop => {
+      if (typeof (newItem as any)[prop] === 'string') {
+        (newItem as any)[prop] = sanitizeInput((newItem as any)[prop]);
+      }
+    });
+    
+    const newItems = [...items, newItem];
+    localStorage.setItem(key, JSON.stringify(newItems));
+    return newItem;
+  } catch (error) {
+    console.error(`Error creating item in ${key}:`, error);
+    throw new Error(`Failed to create item: ${error}`);
+  }
 };
 
 const update = <T extends { id: string }>(key: string, id: string, updatedItem: T): T | null => {
-  const items = getAll<T>(key);
-  const index = items.findIndex(item => (item as any).id === id);
+  if (!id) return null;
   
-  if (index === -1) return null;
-  
-  items[index] = { ...items[index], ...updatedItem };
-  localStorage.setItem(key, JSON.stringify(items));
-  return items[index];
+  try {
+    const items = getAll<T>(key);
+    const index = items.findIndex(item => item.id === id);
+    
+    if (index === -1) return null;
+    
+    // Sanitize text inputs (simplified example)
+    const sanitizedItem = { ...updatedItem };
+    Object.keys(sanitizedItem).forEach(prop => {
+      if (typeof (sanitizedItem as any)[prop] === 'string') {
+        (sanitizedItem as any)[prop] = sanitizeInput((sanitizedItem as any)[prop]);
+      }
+    });
+    
+    items[index] = { ...items[index], ...sanitizedItem };
+    localStorage.setItem(key, JSON.stringify(items));
+    return items[index];
+  } catch (error) {
+    console.error(`Error updating item ${id} in ${key}:`, error);
+    return null;
+  }
 };
 
 const remove = <T extends { id: string }>(key: string, id: string): boolean => {
-  const items = getAll<T>(key);
-  const filteredItems = items.filter(item => (item as any).id !== id);
+  if (!id) return false;
   
-  if (filteredItems.length === items.length) return false;
-  
-  localStorage.setItem(key, JSON.stringify(filteredItems));
-  return true;
+  try {
+    const items = getAll<T>(key);
+    const filteredItems = items.filter(item => item.id !== id);
+    
+    if (filteredItems.length === items.length) return false;
+    
+    localStorage.setItem(key, JSON.stringify(filteredItems));
+    return true;
+  } catch (error) {
+    console.error(`Error removing item ${id} from ${key}:`, error);
+    return false;
+  }
 };
 
-// Event-specific functions
+// Event-specific functions with validation
 export const eventService = {
   getAll: () => getAll<CMSEvent>(LOCAL_STORAGE_KEYS.EVENTS),
   getById: (id: string) => getById<CMSEvent>(LOCAL_STORAGE_KEYS.EVENTS, id),
-  create: (event: CMSEvent) => create<CMSEvent>(LOCAL_STORAGE_KEYS.EVENTS, event),
+  create: (event: CMSEvent) => {
+    // Validate required fields
+    if (!event.title || !event.description) {
+      throw new Error("Event requires title and description");
+    }
+    
+    // Validate dates
+    if (!isValidDate(event.eventStartDate) || !isValidDate(event.eventEndDate)) {
+      throw new Error("Event requires valid start and end dates");
+    }
+    
+    return create<CMSEvent>(LOCAL_STORAGE_KEYS.EVENTS, event);
+  },
   update: (id: string, event: CMSEvent) => update<CMSEvent>(LOCAL_STORAGE_KEYS.EVENTS, id, event),
   delete: (id: string) => remove<CMSEvent>(LOCAL_STORAGE_KEYS.EVENTS, id),
   getPublished: () => getAll<CMSEvent>(LOCAL_STORAGE_KEYS.EVENTS).filter(event => event.published),
@@ -159,8 +242,31 @@ export const speakerService = {
       }
     }));
   },
-  create: (speaker: CMSSpeaker) => create<CMSSpeaker>(LOCAL_STORAGE_KEYS.SPEAKERS, speaker),
-  update: (id: string, speaker: CMSSpeaker) => update<CMSSpeaker>(LOCAL_STORAGE_KEYS.SPEAKERS, id, speaker),
+  create: (speaker: CMSSpeaker) => {
+    // Validate required fields
+    if (!speaker.name || !speaker.role || !speaker.company) {
+      throw new Error("Speaker requires name, role, and company");
+    }
+    
+    // Validate image URL if provided
+    if (speaker.imageUrl && !isValidUrl(speaker.imageUrl)) {
+      throw new Error("Invalid image URL format");
+    }
+    
+    return create<CMSSpeaker>(LOCAL_STORAGE_KEYS.SPEAKERS, {
+      ...speaker,
+      photoUrl: speaker.photoUrl || speaker.imageUrl, // Ensure photoUrl is set
+    });
+  },
+  update: (id: string, speaker: CMSSpeaker) => {
+    // Ensure photoUrl is set correctly
+    const updatedSpeaker = {
+      ...speaker,
+      photoUrl: speaker.photoUrl || speaker.imageUrl,
+    };
+    
+    return update<CMSSpeaker>(LOCAL_STORAGE_KEYS.SPEAKERS, id, updatedSpeaker);
+  },
   delete: (id: string) => remove<CMSSpeaker>(LOCAL_STORAGE_KEYS.SPEAKERS, id),
   getFeatured: (eventId: string) => {
     const speakers = getByEventId<CMSSpeaker>(LOCAL_STORAGE_KEYS.SPEAKERS, eventId).filter(speaker => speaker.featured);

@@ -3,19 +3,23 @@
 
 ## 🚀 Overview
 
-This is a comprehensive event management platform for tech conferences and conventions. It features dynamic event pages, interactive elements, user-friendly navigation, and responsive design for all devices.
+This is a comprehensive event management platform for tech conferences and conventions. It features dynamic event pages, interactive elements, user-friendly navigation, responsive design for all devices, and full CMS capabilities.
 
 ![Project Screenshot](https://via.placeholder.com/800x400?text=Event+Management+Platform)
 
 ## ✨ Features
 
 - **Multiple Event Support**: Manage various events with their own branding and content
+- **Content Management System**: Full CMS functionality for managing speakers, agenda, resources, and more
+- **Interactive Particle Backgrounds**: Dynamic particle canvas backgrounds for enhanced visual appeal
+- **Google Calendar Integration**: Seamless event scheduling with Google Calendar
 - **Responsive Design**: Fully responsive across all devices from mobile to desktop
 - **Interactive Components**: Speaker carousels, agenda sections, and dynamic navigation
 - **Dark Mode Support**: Complete light/dark mode theming for better accessibility
 - **Real-time Chat**: Interactive chatbot for answering event-related questions
 - **Live Countdown**: Dynamic countdowns to event start dates
 - **Animated UI**: Smooth animations and transitions for a premium feel
+- **Enhanced Security**: Data validation, input sanitization, and security best practices
 - **Accessibility**: ARIA-compliant components for better accessibility
 
 ## 📋 Project Structure
@@ -24,13 +28,16 @@ The project follows a modular component-based architecture:
 
 ```
 src/
-├── components/     # Reusable UI components
-├── data/           # Data files for events
-├── hooks/          # Custom React hooks
-├── lib/            # Utility functions
-├── pages/          # Page components
-├── App.tsx         # Main app component
-└── main.tsx        # Application entry point
+├── components/    # Reusable UI components
+├── data/          # Data files and mock data for events
+├── hooks/         # Custom React hooks
+├── lib/           # Utility functions
+├── pages/         # Page components
+├── services/      # CMS and data services
+├── types/         # TypeScript interfaces and types
+├── utils/         # Helper utilities
+├── App.tsx        # Main app component
+└── main.tsx       # Application entry point
 ```
 
 ## 🛠️ Technology Stack
@@ -39,9 +46,11 @@ src/
 - **Routing**: React Router v6
 - **UI Components**: shadcn/ui
 - **Styling**: Tailwind CSS
-- **Animation**: CSS transitions and Tailwind animations
+- **Animation**: Framer Motion and CSS animations
 - **State Management**: React Query
 - **Icons**: Lucide React
+- **Notifications**: Sonner toast notifications
+- **Interactive Backgrounds**: Custom canvas particle system
 
 ## 🚀 Getting Started
 
@@ -73,62 +82,68 @@ npm run dev
 http://localhost:5173
 ```
 
-## 🔧 Configuration
+## 🔧 Content Management System
 
-### Adding New Events
+The application includes a full CMS functionality that allows administrators to:
 
-To add a new event, follow these steps:
+1. **Manage Events**:
+   - Create, edit, or delete events
+   - Control event visibility with publish/unpublish options
+   - Feature important events
 
-1. Create event data in `src/data/events.ts`
-2. Add speaker data in `src/data/speakers-data.ts`
-3. Add FAQ data in `src/data/faqs-data.ts`
-4. Add about/highlights data in `src/data/about-data.ts`
-5. Create an event-specific data file (following the pattern of `rvs-event-data.ts`)
+2. **Manage Speakers**:
+   - Add speakers with profiles, bios, and social links
+   - Associate speakers with specific events
+   - Feature prominent speakers
 
-### Branding Colors
+3. **Manage Agenda**:
+   - Create multi-day agenda with multiple tracks
+   - Organize sessions by type (talks, workshops, breaks)
+   - Link sessions with speakers
 
-Each event has its own branding colors defined in `tailwind.config.ts`:
+4. **Manage Resources**:
+   - Upload and categorize event resources
+   - Track downloads and engagement
+   - Support various file types and media
 
-```ts
-// Example of event color configuration
-rvs: {
-  primary: '#FF6479',
-  secondary: '#D3E4FD',
-  accent: '#9b87f5',
-  light: '#FFDEE2',
-}
-```
+5. **Manage Other Content**:
+   - FAQs, topics, partners, and more
+   - Organize content with categories and tags
 
-## 📱 Responsive Design
+### Using the CMS
 
-The application is fully responsive with specific optimizations:
+To access the CMS functionality:
+1. Navigate to `/admin` in the application
+2. Use the sidebar to access different content sections
+3. Add, edit, or delete content as needed
 
-- **Mobile**: Simplified navigation with Back to Top button
-- **Tablet**: Optimized layouts for medium-sized screens
-- **Desktop**: Full navigation and expanded content sections
+## 🔒 Security Features
 
-## 🔒 Security
+The application implements various security measures:
 
-### Best Practices
+1. **Input Validation**: All user inputs are validated against allowed patterns
+2. **Data Sanitization**: Text inputs are sanitized to prevent XSS attacks
+3. **CSRF Protection**: Token-based protection for forms and API calls
+4. **Rate Limiting**: Throttling to prevent abuse of API endpoints
+5. **Secure Data Storage**: Data encryption for sensitive information
+6. **Security Headers**: Implementation of recommended security headers
 
-- No sensitive data stored in client-side code
-- All API routes should be authenticated when integrated
-- Regular dependency updates via npm audit
-- Content Security Policy (CSP) headers should be configured in production
+## 📅 Google Calendar Integration
 
-### Production Considerations
+The application features seamless Google Calendar integration:
 
-1. Enable HTTPS and configure proper security headers
-2. Implement rate limiting on any API endpoints
-3. Consider using a CDN for static assets
-4. Set up proper CORS policies if using separate API backends
+1. **Add to Calendar**: Event attendees can add events to their Google Calendar with one click
+2. **Event Details**: Automatic population of event title, description, location, and date/time
+3. **Custom Reminders**: Option to set custom reminders when adding to calendar
 
-## 📊 Performance Optimization
+## 🎨 Particle Background
 
-- Code splitting for better load times
-- Optimized image loading with proper sizing
-- Lazy loading of content below the fold
-- Efficient state management to prevent unnecessary re-renders
+Dynamic particle backgrounds enhance the visual appeal:
+
+1. **Interactive Particles**: Particles react to mouse movement
+2. **Event Branding**: Particle colors match event branding
+3. **Customizable**: Adjust density, color, and interactivity
+4. **Performance Optimized**: Efficiently rendered for all devices
 
 ## 🚢 Deployment
 
@@ -153,14 +168,6 @@ This will create optimized production files in the `dist` directory.
 3. **Docker Deployment**:
    - Build a Docker image using the provided Dockerfile
    - Deploy to any container orchestration platform
-
-### Environment Variables
-
-Create a `.env` file in the root directory for any environment-specific configuration:
-
-```
-VITE_API_URL=https://your-api-endpoint.com
-```
 
 ## 🧪 Testing
 

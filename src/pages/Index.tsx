@@ -4,9 +4,9 @@ import { Button } from "@/components/ui/button";
 import { EventCard } from "@/components/EventCard";
 import { Link } from "react-router-dom";
 import { events } from "@/data/events";
-import { NetworkBackground } from "@/components/NetworkBackground";
 import { ScrollSection } from "@/components/ScrollSection";
 import { motion } from "framer-motion";
+import { ParticleBackground } from "@/components/ParticleBackground";
 
 const getRemainigDays = (dateString: string) => {
   const eventDate = new Date(dateString);
@@ -28,7 +28,13 @@ const IndexPage = () => {
 
       <main className="container mx-auto px-4 pb-20 pt-6 relative">
         <section className="mb-20 text-center relative">
-          <NetworkBackground className="absolute inset-0 -z-10" />
+          <div className="absolute inset-0 -z-10">
+            <ParticleBackground 
+              color="#9b87f5"
+              particleCount={150}
+              interactive={true}
+            />
+          </div>
           
           <ScrollSection>
             <h2 className="mb-4 text-4xl font-bold tracking-tight text-gray-900 dark:text-white md:text-5xl lg:text-6xl">
@@ -117,8 +123,13 @@ const IndexPage = () => {
         </section>
       </main>
 
-      <footer className="bg-gray-900 py-8 text-center text-white">
-        <div className="container mx-auto px-4">
+      <footer className="bg-gray-900 py-8 text-center text-white relative">
+        <ParticleBackground 
+          color="#ffffff" 
+          particleCount={30}
+          className="opacity-20" 
+        />
+        <div className="container mx-auto px-4 relative z-10">
           <p className="mb-2">© 2025 Convention Events. All rights reserved.</p>
           <p className="text-sm text-gray-400">Connecting professionals through premier industry conventions</p>
         </div>

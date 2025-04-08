@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
@@ -20,9 +19,9 @@ import { AboutSection } from "@/components/AboutSection";
 import { FaqsSection } from "@/components/FaqsSection";
 import { BackToTopButton } from "@/components/BackToTopButton";
 import { ScrollSection } from "@/components/ScrollSection";
+import { ParticleBackground } from "@/components/ParticleBackground";
 import cmsService from "@/services/cmsService";
 
-// Import data
 import { 
   rvsNewsUpdates, 
   rvsAgenda, 
@@ -37,7 +36,6 @@ import {
   rvsChatbotOptions
 } from "@/data/rvs-event-data";
 
-// Import additional data
 import {
   rvsFaqs,
   bmsFaqs,
@@ -57,7 +55,6 @@ const EventPage = () => {
   const event = cmsService.events.getById(eventId || "");
   const [videoLoaded, setVideoLoaded] = useState(false);
 
-  // If event not found, display error message
   if (!event) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center">
@@ -70,7 +67,6 @@ const EventPage = () => {
     );
   }
 
-  // Choose data based on event ID
   const speakers = cmsService.speakers.getByEventId(eventId || "");
 
   const getFaqs = () => {
@@ -93,22 +89,6 @@ const EventPage = () => {
     }
   };
 
-  // For now, using the existing data for demo - would be replaced with CMS calls
-  const newsUpdates = rvsNewsUpdates;
-  const agenda = rvsAgenda;
-  const partners = rvsPartners as any;
-  const topics = rvsTopics as any;
-  const venueInfo = rvsVenueInfo;
-  const hotels = rvsHotels;
-  const restaurants = rvsRestaurants;
-  const faqs = rvsInfoFaqs;
-  const challenge = rvsChallenge;
-  const resources = rvsResources as any;
-  const chatbotOptions = rvsChatbotOptions;
-  const eventFaqs = getFaqs();
-  const highlights = getHighlights();
-
-  // Define the primary and secondary colors for the event
   const getEventColor = () => {
     switch(eventId) {
       case "rvs": return "rvs-primary";
@@ -119,7 +99,24 @@ const EventPage = () => {
     }
   };
 
-  // Handle video loading
+  const getParticleColor = () => {
+    switch(eventId) {
+      case "rvs": return "#FF6479";
+      case "bms": return "#2A9D8F";
+      case "sm": return "#E63946";
+      case "cs": return "#3F7E44";
+      default: return "#9b87f5";
+    }
+  };
+
+  const eventCalendarDetails = {
+    title: event?.title || "",
+    description: event?.description || "",
+    location: event?.location || "",
+    startDate: event?.eventStartDate || "",
+    endDate: event?.eventEndDate || "",
+  };
+
   useEffect(() => {
     const videoElement = document.getElementById("bgVideo") as HTMLVideoElement;
     if (videoElement) {
@@ -131,7 +128,6 @@ const EventPage = () => {
 
   return (
     <div className="min-h-screen">
-      {/* Header */}
       <header className="fixed left-0 right-0 top-0 z-50 flex h-16 items-center justify-between bg-white/95 px-6 backdrop-blur-md shadow-sm dark:bg-gray-900/95">
         <div className="flex items-center gap-4">
           <Link to="/">
@@ -155,7 +151,6 @@ const EventPage = () => {
         </div>
       </header>
 
-      {/* Hero Section with Video Background */}
       <section id="hero" className="relative min-h-screen overflow-hidden pt-16">
         <div className="absolute inset-0 z-0 bg-gray-900">
           <video
@@ -166,26 +161,32 @@ const EventPage = () => {
             playsInline
             className={`h-full w-full object-cover opacity-40 transition-opacity duration-1000 ${videoLoaded ? 'opacity-40' : 'opacity-0'}`}
           >
-            <source src={event.videoUrl} type="video/mp4" />
+            <source src={event?.videoUrl} type="video/mp4" />
           </video>
+          
+          <ParticleBackground 
+            color={getParticleColor()} 
+            particleCount={150}
+            className="z-10 opacity-30" 
+          />
         </div>
 
         <div className="relative z-10 mx-auto flex min-h-[calc(100vh-4rem)] max-w-7xl flex-col items-center justify-center px-6 py-16 text-center text-white">
           <ScrollSection>
             <div className={`mb-4 inline-block rounded-full bg-${getEventColor()} px-4 py-1 text-sm font-medium`}>
-              {event.date} • {event.location}
+              {event?.date} • {event?.location}
             </div>
           </ScrollSection>
           
           <ScrollSection delay={0.3}>
             <h1 className="mb-4 text-4xl font-bold sm:text-5xl md:text-6xl">
-              {event.title}
+              {event?.title}
             </h1>
           </ScrollSection>
           
           <ScrollSection delay={0.5}>
             <p className="mb-10 max-w-2xl text-lg text-gray-200 sm:text-xl">
-              {event.longDescription}
+              {event?.longDescription}
             </p>
           </ScrollSection>
           
@@ -201,13 +202,12 @@ const EventPage = () => {
           <ScrollSection delay={0.9}>
             <div className="w-full max-w-3xl">
               <h2 className="mb-4 text-xl font-semibold">Event Starts In</h2>
-              <CountdownTimer targetDate={event.eventStartDate} />
+              <CountdownTimer targetDate={event?.eventStartDate} />
             </div>
           </ScrollSection>
         </div>
       </section>
 
-      {/* Marquee Section */}
       <section className={`bg-${getEventColor()} py-3 text-white`}>
         <MarqueeSection 
           items={newsUpdates} 
@@ -217,32 +217,33 @@ const EventPage = () => {
         />
       </section>
 
-      {/* Main Content */}
       <main className="bg-gray-50 pb-20 dark:bg-gray-900">
-        {/* About Section */}
-        <section id="about" className="scroll-mt-20 bg-white py-16 dark:bg-gray-800">
-          <div className="container mx-auto px-4">
+        <section id="about" className="scroll-mt-20 bg-white py-16 dark:bg-gray-800 relative">
+          <ParticleBackground 
+            color={getParticleColor()} 
+            particleCount={50}
+            className="opacity-10" 
+          />
+          <div className="container mx-auto px-4 relative z-10">
             <ScrollSection>
               <AboutSection 
-                eventName={event.title}
-                description={event.description}
-                longDescription={event.longDescription}
+                eventName={event?.title || ""}
+                description={event?.description || ""}
+                longDescription={event?.longDescription || ""}
                 highlights={highlights}
               />
             </ScrollSection>
           </div>
         </section>
 
-        {/* Speakers Section */}
-        <section id="speakers" className="scroll-mt-20 py-16">
-          <div className="container mx-auto px-4">
+        <section id="speakers" className="scroll-mt-20 py-16 relative">
+          <div className="container mx-auto px-4 relative z-10">
             <ScrollSection>
               <SpeakersSection speakers={speakers} eventId={eventId} />
             </ScrollSection>
           </div>
         </section>
 
-        {/* Agenda Section */}
         <section id="agenda" className="scroll-mt-20 bg-white py-16 dark:bg-gray-800">
           <div className="container mx-auto px-4">
             <ScrollSection>
@@ -251,7 +252,6 @@ const EventPage = () => {
           </div>
         </section>
 
-        {/* Partners Section */}
         <section id="partners" className="scroll-mt-20 py-16">
           <div className="container mx-auto px-4">
             <ScrollSection>
@@ -260,7 +260,6 @@ const EventPage = () => {
           </div>
         </section>
 
-        {/* Topics Section */}
         <section id="topics" className="scroll-mt-20 bg-white py-16 dark:bg-gray-800">
           <div className="container mx-auto px-4">
             <ScrollSection>
@@ -269,7 +268,6 @@ const EventPage = () => {
           </div>
         </section>
 
-        {/* Attendee Guide Section */}
         <section id="guide" className="scroll-mt-20 py-16">
           <div className="container mx-auto px-4">
             <ScrollSection>
@@ -283,7 +281,6 @@ const EventPage = () => {
           </div>
         </section>
 
-        {/* Convention Challenge Section */}
         <section id="challenge" className="scroll-mt-20 bg-white py-16 dark:bg-gray-800">
           <div className="container mx-auto max-w-3xl px-4">
             <ScrollSection>
@@ -292,16 +289,17 @@ const EventPage = () => {
           </div>
         </section>
 
-        {/* Resources Section */}
         <section id="resources" className="scroll-mt-20 py-16">
           <div className="container mx-auto px-4">
             <ScrollSection>
-              <ResourcesSection resources={resources} />
+              <ResourcesSection 
+                resources={resources} 
+                eventDetails={eventCalendarDetails}
+              />
             </ScrollSection>
           </div>
         </section>
 
-        {/* FAQs Section */}
         <section id="faqs" className="scroll-mt-20 bg-white py-16 dark:bg-gray-800">
           <div className="container mx-auto px-4">
             <ScrollSection>
@@ -311,14 +309,18 @@ const EventPage = () => {
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 py-12 text-white">
-        <div className="container mx-auto px-4">
+      <footer className="bg-gray-900 py-12 text-white relative">
+        <ParticleBackground 
+          color="#ffffff" 
+          particleCount={50}
+          className="opacity-10" 
+        />
+        <div className="container mx-auto px-4 relative z-10">
           <div className="grid gap-8 md:grid-cols-3">
             <div>
-              <h3 className="mb-4 text-xl font-bold">{event.title}</h3>
-              <p className="mb-2">{event.date}</p>
-              <p>{event.location}</p>
+              <h3 className="mb-4 text-xl font-bold">{event?.title}</h3>
+              <p className="mb-2">{event?.date}</p>
+              <p>{event?.location}</p>
             </div>
             <div>
               <h3 className="mb-4 text-xl font-bold">Quick Links</h3>
@@ -336,7 +338,7 @@ const EventPage = () => {
             </div>
             <div>
               <h3 className="mb-4 text-xl font-bold">Contact</h3>
-              <p className="mb-2">Email: info@{event.id}summit.example.com</p>
+              <p className="mb-2">Email: info@{event?.id}summit.example.com</p>
               <p className="mb-4">Phone: +1 (555) 123-4567</p>
               <div className="flex space-x-4">
                 <a href="#" className={`text-white hover:text-${getEventColor()}`}>
@@ -355,15 +357,13 @@ const EventPage = () => {
             </div>
           </div>
           <div className="mt-8 border-t border-gray-800 pt-8 text-center">
-            <p>© 2025 {event.title}. All rights reserved.</p>
+            <p>© 2025 {event?.title}. All rights reserved.</p>
           </div>
         </div>
       </footer>
 
-      {/* Chatbot */}
-      <ChatbotDialog eventName={event.title} options={chatbotOptions} eventId={eventId} />
+      <ChatbotDialog eventName={event?.title || ""} options={chatbotOptions} eventId={eventId} />
       
-      {/* Back to Top Button - only visible on mobile */}
       <BackToTopButton eventId={eventId} />
     </div>
   );
