@@ -1,3 +1,4 @@
+
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { EventCard } from "@/components/EventCard";
@@ -27,7 +28,7 @@ const IndexPage = () => {
           <h2 className="mb-4 text-4xl font-bold tracking-tight text-gray-900 dark:text-white md:text-5xl lg:text-6xl animate-fade-in">
             Discover Major Conventions
           </h2>
-          <p className="mx-auto mb-8 max-w-2xl text-lg text-gray-600 dark:text-gray-300 animate-fade-in" style={{animationDelay: "0.2s"}}>
+          <p className="mx-auto mb-8 max-w-2xl text-lg text-gray-700 dark:text-gray-300 animate-fade-in" style={{animationDelay: "0.2s"}}>
             Join us at these premier events featuring industry leaders, cutting-edge insights, and networking opportunities.
           </p>
           <div className="mb-8 flex justify-center animate-fade-in" style={{animationDelay: "0.4s"}}>
@@ -63,20 +64,22 @@ const IndexPage = () => {
               
               return (
                 <div key={event.id} className={`${isDisabled ? 'opacity-60' : ''} transition-opacity duration-300`}>
-                  <EventCard 
-                    id={event.id}
-                    title={event.title}
-                    shortName={event.shortName}
-                    description={event.description}
-                    date={event.date}
-                    location={event.location}
-                    imageUrl={event.id === "rvs" ? "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=600&h=400&auto=format&fit=crop&q=80" :
-                              event.id === "bms" ? "https://images.unsplash.com/photo-1528605248644-14dd04022da1?w=600&h=400&auto=format&fit=crop&q=80" :
-                              event.id === "sm" ? "https://images.unsplash.com/photo-1596496181871-9681eacf9764?w=600&h=400&auto=format&fit=crop&q=80" :
-                              "https://images.unsplash.com/photo-1569025743873-ea3a9ade89f9?w=600&h=400&auto=format&fit=crop&q=80"}
-                    color={event.color}
-                    disabled={isDisabled}
-                  />
+                  <Link to={`/event/${event.id}#hero`}>
+                    <EventCard 
+                      id={event.id}
+                      title={event.title}
+                      shortName={event.shortName}
+                      description={event.description}
+                      date={event.date}
+                      location={event.location}
+                      imageUrl={event.id === "rvs" ? "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=600&h=400&auto=format&fit=crop&q=80" :
+                                event.id === "bms" ? "https://images.unsplash.com/photo-1528605248644-14dd04022da1?w=600&h=400&auto=format&fit=crop&q=80" :
+                                event.id === "sm" ? "https://images.unsplash.com/photo-1596496181871-9681eacf9764?w=600&h=400&auto=format&fit=crop&q=80" :
+                                "https://images.unsplash.com/photo-1569025743873-ea3a9ade89f9?w=600&h=400&auto=format&fit=crop&q=80"}
+                      color={event.color}
+                      disabled={isDisabled}
+                    />
+                  </Link>
                   {isDisabled && (
                     <div className="mt-2 text-center text-sm text-gray-500">
                       Coming in {remainingDays} days

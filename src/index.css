@@ -140,6 +140,23 @@
   .btn-hover-effect:hover::after {
     @apply translate-x-0;
   }
+  
+  /* Agenda spacing improvements */
+  .agenda-time {
+    @apply font-semibold text-gray-900 dark:text-white mr-4;
+  }
+  
+  .agenda-title {
+    @apply font-bold text-lg mb-1;
+  }
+  
+  .agenda-item {
+    @apply flex flex-col md:flex-row md:items-start py-4 border-b border-gray-200 dark:border-gray-700 last:border-b-0;
+  }
+  
+  .agenda-content {
+    @apply mt-2 md:mt-0 md:ml-4;
+  }
 }
 
 @keyframes fadeIn {
@@ -192,4 +209,18 @@
 
 .animate-marquee {
   animation: marquee 25s linear infinite;
+}
+
+/* Improve readability in light mode */
+.text-gray-600 {
+  @apply dark:text-gray-300;
+}
+
+.text-gray-500 {
+  @apply dark:text-gray-400;
+}
+
+/* Ensure better text contrast in light mode */
+.dark-text {
+  @apply text-gray-800 dark:text-white;
 }

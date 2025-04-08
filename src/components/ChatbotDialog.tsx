@@ -1,5 +1,5 @@
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { MessageCircle, ArrowUp } from "lucide-react";
@@ -33,6 +33,14 @@ export function ChatbotDialog({ eventName, options, eventId = "rvs" }: ChatbotDi
       isUser: false,
     },
   ]);
+
+  // Store agreement in localStorage to persist across resets
+  useEffect(() => {
+    const storedAgreement = localStorage.getItem(`chatbot-agreement-${eventId}`);
+    if (storedAgreement === "true") {
+      setAgreementChecked(true);
+    }
+  }, [eventId]);
 
   // Get the correct event color
   const getEventColor = () => {
@@ -75,6 +83,8 @@ export function ChatbotDialog({ eventName, options, eventId = "rvs" }: ChatbotDi
 
   const startChat = () => {
     setChatStarted(true);
+    // Save agreement to localStorage
+    localStorage.setItem(`chatbot-agreement-${eventId}`, "true");
   };
 
   const resetChat = () => {
@@ -93,7 +103,7 @@ export function ChatbotDialog({ eventName, options, eventId = "rvs" }: ChatbotDi
       <DialogTrigger asChild>
         <Button 
           size="icon" 
-          className={`fixed bottom-24 right-6 h-14 w-14 rounded-full bg-${getEventColor()} shadow-lg hover:bg-${getEventColor()}/90 md:bottom-6`}
+          className={`fixed bottom-6 right-6 h-14 w-14 rounded-full bg-${getEventColor()} shadow-lg hover:bg-${getEventColor()}/90 md:bottom-6`}
         >
           <MessageCircle className="h-6 w-6" />
           <span className="sr-only">Open chatbot</span>
@@ -107,7 +117,7 @@ export function ChatbotDialog({ eventName, options, eventId = "rvs" }: ChatbotDi
           </DialogDescription>
         </DialogHeader>
         
-        {!chatStarted ? (
+        {!chatStarted && !localStorage.getItem(`chatbot-agreement-${eventId}`) ? (
           <div className="space-y-4">
             <div className="text-sm">
               <p className="mb-4">
