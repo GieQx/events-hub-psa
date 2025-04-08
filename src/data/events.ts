@@ -21,11 +21,11 @@ export interface Event {
 export const events = [
   {
     id: "rvs",
-    title: "Registration & Verification Summit",
-    shortName: "RVS",
+    title: "National Convention on Civil Registration & Vital Statistics",
+    shortName: "NCCRVS",
     description: "Explore cutting-edge techniques and best practices in registration and verification systems.",
-    longDescription: "Join industry leaders and experts at the Registration & Verification Summit (RVS) for three days of immersive learning, networking, and collaboration. Discover the latest advancements in identity verification, fraud prevention, and seamless registration experiences. This premier event brings together professionals from technology, security, and user experience to shape the future of verification systems.",
-    date: "June 15-17, 2026",
+    longDescription: "Join industry leaders and experts at the National Convention on Civil Registration & Vital Statistics (NCCRVS) for three days of immersive learning, networking, and collaboration. Discover the latest advancements in identity verification, fraud prevention, and seamless registration experiences. This premier event brings together professionals from technology, security, and user experience to shape the future of verification systems.",
+    date: "July 28-30, 2025",
     location: "San Francisco, CA",
     venueName: "Moscone Center",
     venueAddress: "747 Howard St, San Francisco, CA 94103",
