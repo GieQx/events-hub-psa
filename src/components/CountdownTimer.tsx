@@ -48,12 +48,12 @@ export function CountdownTimer({ targetDate }: CountdownTimerProps) {
       {timeBlocks.map((block, index) => (
         <Card 
           key={index} 
-          className="flex flex-col items-center justify-center p-2 md:p-4 border border-white/30 backdrop-blur-sm bg-black/40 shadow-xl text-white dark:text-white"
+          className="flex flex-col items-center justify-center p-2 md:p-4 border border-white/30 backdrop-blur-sm bg-black/60 shadow-xl text-white"
         >
           <span className="text-xl md:text-3xl lg:text-4xl font-bold">
             {block.value.toString().padStart(2, '0')}
           </span>
-          <span className="text-xs md:text-sm text-gray-100 dark:text-gray-300">
+          <span className="text-xs md:text-sm text-gray-100">
             {block.label}
           </span>
         </Card>
