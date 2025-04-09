@@ -16,6 +16,9 @@ export interface Event {
   color: string;
   gradientClass: string;
   eventStartDate: string;
+  eventEndDate: string;
+  published: boolean;
+  featured: boolean;
 }
 
 export const events = [
@@ -36,6 +39,9 @@ export const events = [
     color: "bg-rvs-primary",
     gradientClass: "hero-gradient-rvs",
     eventStartDate: "2026-06-15T09:00:00",
+    eventEndDate: "2026-06-17T17:00:00",
+    published: true,
+    featured: true
   },
   {
     id: "cbms",
@@ -54,6 +60,9 @@ export const events = [
     color: "bg-bms-primary",
     gradientClass: "hero-gradient-bms",
     eventStartDate: "2026-09-08T09:00:00",
+    eventEndDate: "2026-09-10T17:00:00",
+    published: true,
+    featured: true
   },
   {
     id: "nsm",
@@ -72,6 +81,9 @@ export const events = [
     color: "bg-sm-primary",
     gradientClass: "hero-gradient-sm",
     eventStartDate: "2026-11-20T09:00:00",
+    eventEndDate: "2026-11-22T17:00:00",
+    published: true,
+    featured: false
   },
   {
     id: "ncs",
@@ -90,6 +102,9 @@ export const events = [
     color: "bg-cs-primary",
     gradientClass: "hero-gradient-cs",
     eventStartDate: "2027-03-05T09:00:00",
+    eventEndDate: "2027-03-07T17:00:00",
+    published: true,
+    featured: false
   },
 ];
 

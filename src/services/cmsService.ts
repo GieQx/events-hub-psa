@@ -311,9 +311,9 @@ export const eventService = {
       throw new Error("Event requires title and description");
     }
     
-    // Validate dates
-    if (!isValidDate(event.eventStartDate) || !isValidDate(event.eventEndDate)) {
-      throw new Error("Event requires valid start and end dates");
+    // Validate dates - don't require end date for backward compatibility
+    if (!event.eventStartDate) {
+      throw new Error("Event requires valid start date");
     }
     
     return create<CMSEvent>(LOCAL_STORAGE_KEYS.EVENTS, event);

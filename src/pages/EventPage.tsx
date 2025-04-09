@@ -9,7 +9,7 @@ import { EventHero } from "@/components/EventHero";
 import { EventMainContent } from "@/components/EventMainContent";
 import { EventFooter } from "@/components/EventFooter";
 import { getEventColor, getParticleColor } from "@/utils/eventHelpers";
-import { CMSAgendaDay, CMSPartner, CMSResource, CMSTopic } from "@/types/cms";
+import { useEffect, useState } from "react";
 
 import { 
   rvsNewsUpdates, 
@@ -32,7 +32,23 @@ import {
 
 const EventPage = () => {
   const { eventId } = useParams<{ eventId: string }>();
-  const event = cmsService.events.getById(eventId || "");
+  const [event, setEvent] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Get the event from CMS
+    const foundEvent = cmsService.events.getById(eventId || "");
+    setEvent(foundEvent);
+    setLoading(false);
+  }, [eventId]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-xl font-medium">Loading event information...</p>
+      </div>
+    );
+  }
 
   if (!event) {
     return (
@@ -104,10 +120,10 @@ const EventPage = () => {
   }
 
   const venueInfo = {
-    name: "Moscone Center",
-    address: "747 Howard St, San Francisco, CA 94103",
-    description: "The Moscone Center is San Francisco's premier convention and exhibition complex. Located in the heart of the city, this world-class facility offers state-of-the-art amenities and is within walking distance of hotels, shopping, dining, and cultural attractions.",
-    mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.1597406921474!2d-122.40277032357242!3d37.78393571231892!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80858087e97646f7%3A0x72c5cb98814ace6!2sMoscone%20Center!5e0!3m2!1sen!2sus!4v1712524217753!5m2!1sen!2sus",
+    name: event.venueName || "Convention Center",
+    address: event.venueAddress || "123 Main St",
+    description: event.venueDescription || "A premier convention facility with state-of-the-art amenities.",
+    mapUrl: event.mapUrl || "",
   };
 
   const hotelInfo = [
@@ -165,20 +181,20 @@ const EventPage = () => {
     }
 
     switch(eventId) {
-      case "rvs": return rvsFaqs;
-      case "bms": return bmsFaqs;
-      case "sm": return smFaqs;
-      case "cs": return csFaqs;
+      case "nccrvs": return rvsFaqs;
+      case "cbms": return bmsFaqs;
+      case "nsm": return smFaqs;
+      case "ncs": return csFaqs;
       default: return rvsFaqs;
     }
   };
 
   const getHighlights = () => {
     switch(eventId) {
-      case "rvs": return rvsHighlights;
-      case "bms": return bmsHighlights;
-      case "sm": return smHighlights;
-      case "cs": return csHighlights;
+      case "nccrvs": return rvsHighlights;
+      case "cbms": return bmsHighlights;
+      case "nsm": return smHighlights;
+      case "ncs": return csHighlights;
       default: return rvsHighlights;
     }
   };

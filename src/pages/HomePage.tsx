@@ -17,6 +17,9 @@ const HomePage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Clear existing data from localStorage to reset the application
+    localStorage.clear();
+    
     // Load the home content and events
     try {
       const content = cmsService.homeContent.get();
@@ -26,7 +29,7 @@ const HomePage = () => {
       const publishedEvents = cmsService.events.getPublished();
       setEvents(publishedEvents);
     } catch (error) {
-      console.log("Error loading content:", error);
+      console.error("Error loading content:", error);
     }
     setLoading(false);
   }, []);
@@ -42,6 +45,13 @@ const HomePage = () => {
     if (!event.eventStartDate) return false;
     const eventDate = new Date(event.eventStartDate);
     return eventDate >= today;
+  });
+
+  // Sort events by date
+  upcomingEvents.sort((a, b) => {
+    const dateA = new Date(a.eventStartDate);
+    const dateB = new Date(b.eventStartDate);
+    return dateA.getTime() - dateB.getTime();
   });
 
   return (
@@ -94,7 +104,7 @@ const HomePage = () => {
                         {event.location}
                       </p>
                       <Link to={`/events/${event.id}`}>
-                        <Button className={`w-full ${event.id === "rvs" ? "bg-rvs-primary hover:bg-rvs-primary/90" : ""}`}>
+                        <Button className={`w-full ${getEventColor(event.id)} hover:opacity-90 text-white`}>
                           View Details
                         </Button>
                       </Link>
