@@ -1,13 +1,13 @@
 
-# Event Management Platform
+# Convention Events Platform
 
 ## 🚀 Overview
 
-This is a comprehensive event management platform for tech conferences and conventions. It features dynamic event pages, interactive elements, user-friendly navigation, responsive design for all devices, and full CMS capabilities.
+A comprehensive event management platform for tech conferences and conventions, featuring dynamic event pages, interactive elements, user-friendly navigation, responsive design for all devices, and full CMS capabilities.
 
-![Project Screenshot](https://via.placeholder.com/800x400?text=Event+Management+Platform)
+![Convention Events Platform](https://via.placeholder.com/800x400?text=Convention+Events+Platform)
 
-## ✨ Features
+## ✨ Key Features
 
 - **Multiple Event Support**: Manage various events with their own branding and content
 - **Content Management System**: Full CMS functionality for managing speakers, agenda, resources, and more
@@ -16,11 +16,8 @@ This is a comprehensive event management platform for tech conferences and conve
 - **Responsive Design**: Fully responsive across all devices from mobile to desktop
 - **Interactive Components**: Speaker carousels, agenda sections, and dynamic navigation
 - **Dark Mode Support**: Complete light/dark mode theming for better accessibility
-- **Real-time Chat**: Interactive chatbot for answering event-related questions
 - **Live Countdown**: Dynamic countdowns to event start dates
 - **Animated UI**: Smooth animations and transitions for a premium feel
-- **Enhanced Security**: Data validation, input sanitization, and security best practices
-- **Accessibility**: ARIA-compliant components for better accessibility
 
 ## 📋 Project Structure
 
@@ -46,7 +43,7 @@ src/
 - **Routing**: React Router v6
 - **UI Components**: shadcn/ui
 - **Styling**: Tailwind CSS
-- **Animation**: Framer Motion and CSS animations
+- **Animation**: Framer Motion
 - **State Management**: React Query
 - **Icons**: Lucide React
 - **Notifications**: Sonner toast notifications
@@ -63,8 +60,8 @@ src/
 
 1. Clone the repository:
 ```sh
-git clone https://your-git-url/event-management-platform.git
-cd event-management-platform
+git clone https://github.com/your-username/convention-events-platform.git
+cd convention-events-platform
 ```
 
 2. Install dependencies:
@@ -86,64 +83,58 @@ http://localhost:5173
 
 The application includes a full CMS functionality that allows administrators to:
 
-1. **Manage Events**:
-   - Create, edit, or delete events
-   - Control event visibility with publish/unpublish options
-   - Feature important events
-
-2. **Manage Speakers**:
-   - Add speakers with profiles, bios, and social links
-   - Associate speakers with specific events
-   - Feature prominent speakers
-
-3. **Manage Agenda**:
-   - Create multi-day agenda with multiple tracks
-   - Organize sessions by type (talks, workshops, breaks)
-   - Link sessions with speakers
-
-4. **Manage Resources**:
-   - Upload and categorize event resources
-   - Track downloads and engagement
-   - Support various file types and media
-
-5. **Manage Other Content**:
-   - FAQs, topics, partners, and more
-   - Organize content with categories and tags
-
-### Using the CMS
+### Accessing the CMS
 
 To access the CMS functionality:
 1. Navigate to `/admin` in the application
 2. Use the sidebar to access different content sections
 3. Add, edit, or delete content as needed
 
-## 🔒 Security Features
+### Managing Events
 
-The application implements various security measures:
+The CMS allows you to:
+1. Create, edit, and delete events
+2. Set event details such as title, date, location, description
+3. Control visibility with publish/unpublish options
+4. Feature important events
 
-1. **Input Validation**: All user inputs are validated against allowed patterns
-2. **Data Sanitization**: Text inputs are sanitized to prevent XSS attacks
-3. **CSRF Protection**: Token-based protection for forms and API calls
-4. **Rate Limiting**: Throttling to prevent abuse of API endpoints
-5. **Secure Data Storage**: Data encryption for sensitive information
-6. **Security Headers**: Implementation of recommended security headers
+### Managing Speakers
 
-## 📅 Google Calendar Integration
+You can:
+1. Add speakers with profiles, bios, and social links
+2. Associate speakers with specific events
+3. Feature prominent speakers
 
-The application features seamless Google Calendar integration:
+### Managing Agenda
 
-1. **Add to Calendar**: Event attendees can add events to their Google Calendar with one click
-2. **Event Details**: Automatic population of event title, description, location, and date/time
-3. **Custom Reminders**: Option to set custom reminders when adding to calendar
+The agenda management system enables you to:
+1. Create multi-day agenda with multiple tracks
+2. Organize sessions by type (talks, workshops, breaks)
+3. Link sessions with speakers
+4. Set times, locations, and descriptions for each session
+
+### Managing Resources
+
+For event resources, you can:
+1. Upload and categorize event resources
+2. Add descriptions and type classifications
+3. Support various file types and media
+
+## 📱 Responsive Design
+
+The platform is fully responsive and works well on:
+- Mobile phones (portrait and landscape)
+- Tablets
+- Desktops and laptops
+- Large displays
 
 ## 🎨 Particle Background
 
 Dynamic particle backgrounds enhance the visual appeal:
-
-1. **Interactive Particles**: Particles react to mouse movement
-2. **Event Branding**: Particle colors match event branding
-3. **Customizable**: Adjust density, color, and interactivity
-4. **Performance Optimized**: Efficiently rendered for all devices
+1. Interactive particles that react to mouse movement
+2. Event branding with particle colors matching event themes
+3. Customizable density and color settings
+4. Performance optimized for all devices
 
 ## 🚢 Deployment
 
@@ -158,7 +149,7 @@ This will create optimized production files in the `dist` directory.
 ### Deployment Options
 
 1. **Static Hosting** (Recommended):
-   - Netlify, Vercel, or GitHub Pages
+   - Deploy to Netlify, Vercel, or GitHub Pages
    - Simply connect your repository and configure build settings
 
 2. **Traditional Hosting**:
@@ -166,31 +157,53 @@ This will create optimized production files in the `dist` directory.
    - Ensure all requests are redirected to index.html for client-side routing
 
 3. **Docker Deployment**:
-   - Build a Docker image using the provided Dockerfile
+   - Build a Docker image using a custom Dockerfile
    - Deploy to any container orchestration platform
 
-## 🧪 Testing
+## 🧪 Debugging
 
-Run tests with:
+To debug the application effectively:
 
-```sh
-npm test
-```
+1. **Client-side Debugging**:
+   - Use browser developer tools (F12)
+   - Check the Console tab for errors and logs
+   - Use React DevTools for component inspection
+   - Enable debug mode in the application with `localStorage.setItem('debug', 'true')`
 
-The project uses Vitest for unit testing and Cypress for E2E testing.
+2. **Build Issues**:
+   - Check for TypeScript errors in the terminal
+   - Verify that all dependencies are correctly installed
+   - Clear cache and node_modules if needed: `rm -rf node_modules && npm install`
+
+3. **CMS-Related Issues**:
+   - Check the browser console for API errors
+   - Verify data structures match the expected types
+   - Ensure permissions are correctly set up
+
+4. **Common Error Solutions**:
+   - Invalid state updates: Check that all React state updates are wrapped in the appropriate functions
+   - Type errors: Ensure all data structures match their TypeScript interfaces
+   - Rendering issues: Verify that conditional rendering is correctly implemented
+   - Event handling: Make sure event handlers use the correct event types
+
+## 🧩 Future Enhancements
+
+Planned features for future releases:
+
+1. User authentication and registration
+2. Personalized schedules for attendees
+3. Real-time chat and networking features
+4. Analytics dashboard for event organizers
+5. Integration with payment gateways for ticket sales
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+2. Create a feature branch: `git checkout -b feature/your-feature-name`
+3. Commit your changes: `git commit -m 'Add some feature'`
+4. Push to the branch: `git push origin feature/your-feature-name`
+5. Submit a pull request
 
 ## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 📞 Support
-
-For support or questions, please open an issue in the repository or contact the maintainers directly.

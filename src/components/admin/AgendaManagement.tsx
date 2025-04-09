@@ -43,6 +43,7 @@ export function AgendaManagement() {
     if (selectedDayId) {
       const day = days.find(d => d.id === selectedDayId);
       if (day) {
+        // Ensure day.sessions is defined before setting it
         setSessions(day.sessions || []);
       } else {
         setSessions([]);
@@ -122,8 +123,10 @@ export function AgendaManagement() {
       // Find the day that contains this session
       const day = days.find(d => d.id === session.dayId);
       if (day) {
+        // Make sure day.sessions is defined before using filter
+        const sessions = day.sessions || [];
         // Remove the session from the day
-        const updatedSessions = day.sessions.filter(s => s.id !== session.id);
+        const updatedSessions = sessions.filter(s => s.id !== session.id);
         const updatedDay = { ...day, sessions: updatedSessions };
         
         // Update the day
@@ -187,14 +190,16 @@ export function AgendaManagement() {
         return;
       }
       
+      // Ensure day.sessions exists
+      const currentSessions = day.sessions || [];
       let updatedSessions: CMSAgendaSession[];
       
       if (isCreatingSession) {
         // Add new session
-        updatedSessions = [...day.sessions, editingSession];
+        updatedSessions = [...currentSessions, editingSession];
       } else {
         // Update existing session
-        updatedSessions = day.sessions.map(s => 
+        updatedSessions = currentSessions.map(s => 
           s.id === editingSession.id ? editingSession : s
         );
       }
@@ -226,10 +231,19 @@ export function AgendaManagement() {
     if (!editingDay) return;
     
     const { name, value } = e.target;
-    setEditingDay({
-      ...editingDay,
-      [name]: value
-    });
+    
+    // Handle numeric inputs
+    if (name === "dayNumber") {
+      setEditingDay({
+        ...editingDay,
+        [name]: parseInt(value) || 1 // Default to 1 if parsing fails
+      });
+    } else {
+      setEditingDay({
+        ...editingDay,
+        [name]: value
+      });
+    }
   };
 
   const handleSessionInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -338,7 +352,7 @@ export function AgendaManagement() {
                     id="dayNumber" 
                     name="dayNumber" 
                     type="number"
-                    value={editingDay.dayNumber.toString()} 
+                    value={editingDay.dayNumber?.toString() || "1"} 
                     onChange={handleDayInputChange}
                     min="1"
                   />
@@ -364,7 +378,7 @@ export function AgendaManagement() {
                     <CardHeader>
                       <div className="flex items-center gap-2">
                         <CalendarDays className="h-5 w-5" />
-                        <CardTitle>Day {day.dayNumber}</CardTitle>
+                        <CardTitle>Day {day.dayNumber || 1}</CardTitle>
                       </div>
                       <CardDescription>{new Date(day.date).toLocaleDateString()}</CardDescription>
                     </CardHeader>
@@ -409,7 +423,7 @@ export function AgendaManagement() {
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-4">
               <h3 className="text-lg font-semibold">Sessions</h3>
-              {selectedDayId && (
+              {selectedDayId && days.length > 0 && (
                 <Select value={selectedDayId} onValueChange={setSelectedDayId}>
                   <SelectTrigger className="w-56">
                     <SelectValue placeholder="Select a day" />
@@ -417,7 +431,7 @@ export function AgendaManagement() {
                   <SelectContent>
                     {days.map(day => (
                       <SelectItem key={day.id} value={day.id}>
-                        Day {day.dayNumber} - {new Date(day.date).toLocaleDateString()}
+                        Day {day.dayNumber || 1} - {new Date(day.date).toLocaleDateString()}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -526,7 +540,7 @@ export function AgendaManagement() {
                       <SelectContent>
                         <SelectItem value="">None</SelectItem>
                         {speakers
-                          .filter(s => s.eventId === selectedEventId)
+                          .filter(s => !selectedEventId || s.eventId === selectedEventId)
                           .map(speaker => (
                             <SelectItem key={speaker.id} value={speaker.id}>{speaker.name}</SelectItem>
                           ))
