@@ -1,6 +1,6 @@
 
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, Navigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -10,11 +10,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { ScrollSection } from "@/components/ScrollSection";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { toast } from "sonner";
-import { ChevronLeft, Plus, Edit, Trash, Save } from "lucide-react";
+import { ChevronLeft, Plus, Edit, Trash, Save, LogOut } from "lucide-react";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 
 import cmsService from "@/services/cmsService";
 import { CMSEvent } from "@/types/cms";
+import { isAdmin, useAdminAuth } from "@/utils/adminAuth";
+import { getEventBorderColor } from "@/utils/eventHelpers";
 
 // Import admin management components
 import { SpeakersManagement } from "@/components/admin/SpeakersManagement";
@@ -26,11 +28,99 @@ import { HomeContentManagement } from "@/components/admin/HomeContentManagement"
 import { TopicsManagement } from "@/components/admin/TopicsManagement";
 import { MarqueeManagement } from "@/components/admin/MarqueeManagement";
 
+const AdminLoginForm = ({ onLogin }: { onLogin: (username: string, password: string) => { success: boolean, message?: string } }) => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    
+    const result = onLogin(username, password);
+    if (!result.success) {
+      setError(result.message || "Login failed");
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-4">
+      <Card className="w-full max-w-md">
+        <CardHeader className="space-y-1">
+          <div className="flex justify-between items-center">
+            <div>
+              <CardTitle className="text-2xl font-bold">Admin Login</CardTitle>
+              <CardDescription>
+                Sign in to access the event management system
+              </CardDescription>
+            </div>
+            <ThemeToggle />
+          </div>
+        </CardHeader>
+        <form onSubmit={handleSubmit}>
+          <CardContent className="space-y-4">
+            {error && (
+              <div className="p-3 text-sm bg-red-100 border border-red-200 text-red-600 rounded">
+                {error}
+              </div>
+            )}
+            <div className="space-y-2">
+              <Label htmlFor="username">Username</Label>
+              <Input 
+                id="username" 
+                value={username} 
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="admin" 
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input 
+                id="password" 
+                type="password" 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••" 
+                required
+              />
+              <p className="text-xs text-muted-foreground">
+                Demo credentials: admin / admin123
+              </p>
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Button type="submit" className="w-full">Sign In</Button>
+          </CardFooter>
+        </form>
+      </Card>
+    </div>
+  );
+};
+
 const AdminPage = () => {
+  const { isAuthenticated, loading, login, logout } = useAdminAuth();
   const [activeTab, setActiveTab] = useState("events");
   const [events, setEvents] = useState<CMSEvent[]>(cmsService.events.getAll());
   const [editingEvent, setEditingEvent] = useState<CMSEvent | null>(null);
   const [isCreating, setIsCreating] = useState(false);
+
+  useEffect(() => {
+    // Refresh events when component mounts
+    setEvents(cmsService.events.getAll());
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-xl">Loading...</p>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <AdminLoginForm onLogin={login} />;
+  }
 
   const resetForm = () => {
     setEditingEvent(null);
@@ -123,7 +213,18 @@ const AdminPage = () => {
             </Link>
             <h1 className="text-2xl font-bold">Convention CMS</h1>
           </div>
-          <ThemeToggle />
+          <div className="flex items-center gap-2">
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={logout}
+              className="flex items-center gap-1 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+            >
+              <LogOut className="h-4 w-4" />
+              Logout
+            </Button>
+            <ThemeToggle />
+          </div>
         </div>
       </header>
 
@@ -260,7 +361,7 @@ const AdminPage = () => {
                           value={editingEvent.color}
                           onValueChange={(value) => setEditingEvent({...editingEvent, color: value})}
                         >
-                          <SelectTrigger id="color">
+                          <SelectTrigger id="color" className="w-full">
                             <SelectValue placeholder="Select a color" />
                           </SelectTrigger>
                           <SelectContent>
@@ -337,42 +438,49 @@ const AdminPage = () => {
                 </Card>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {events.map((event) => (
-                    <Card key={event.id} className={`border-l-4 ${event.published ? 'border-l-green-500' : 'border-l-gray-300'}`}>
-                      <CardHeader>
-                        <CardTitle>{event.title}</CardTitle>
-                        <CardDescription>{event.shortName} • {event.date}</CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">{event.description}</p>
-                        <p className="text-sm mt-2">{event.location}</p>
-                        {event.featured && (
-                          <span className="mt-2 inline-block bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded dark:bg-blue-900 dark:text-blue-200">
-                            Featured
-                          </span>
-                        )}
-                        {event.imageUrl && (
-                          <div className="mt-3">
-                            <img 
-                              src={event.imageUrl} 
-                              alt={event.title} 
-                              className="h-20 w-full object-cover rounded"
-                            />
-                          </div>
-                        )}
-                      </CardContent>
-                      <CardFooter className="flex justify-between">
-                        <Button variant="outline" size="sm" onClick={() => handleEditEvent(event)} className="flex items-center gap-1">
-                          <Edit className="h-3 w-3" />
-                          Edit
-                        </Button>
-                        <Button variant="destructive" size="sm" onClick={() => handleDeleteEvent(event.id)} className="flex items-center gap-1">
-                          <Trash className="h-3 w-3" />
-                          Delete
-                        </Button>
-                      </CardFooter>
-                    </Card>
-                  ))}
+                  {events.map((event) => {
+                    // Get the event border color based on event ID or color
+                    const borderColorClass = event.id.startsWith("nc") ? 
+                      getEventBorderColor(event.id) : 
+                      `border-l-${event.color.replace('bg-', '')}`;
+
+                    return (
+                      <Card key={event.id} className={`border-l-4 ${event.published ? borderColorClass : 'border-l-gray-300'}`}>
+                        <CardHeader>
+                          <CardTitle>{event.title}</CardTitle>
+                          <CardDescription>{event.shortName} • {event.date}</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">{event.description}</p>
+                          <p className="text-sm mt-2">{event.location}</p>
+                          {event.featured && (
+                            <span className="mt-2 inline-block bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded dark:bg-blue-900 dark:text-blue-200">
+                              Featured
+                            </span>
+                          )}
+                          {event.imageUrl && (
+                            <div className="mt-3">
+                              <img 
+                                src={event.imageUrl} 
+                                alt={event.title} 
+                                className="h-20 w-full object-cover rounded"
+                              />
+                            </div>
+                          )}
+                        </CardContent>
+                        <CardFooter className="flex justify-between">
+                          <Button variant="outline" size="sm" onClick={() => handleEditEvent(event)} className="flex items-center gap-1">
+                            <Edit className="h-3 w-3" />
+                            Edit
+                          </Button>
+                          <Button variant="destructive" size="sm" onClick={() => handleDeleteEvent(event.id)} className="flex items-center gap-1">
+                            <Trash className="h-3 w-3" />
+                            Delete
+                          </Button>
+                        </CardFooter>
+                      </Card>
+                    );
+                  })}
                 </div>
               )}
             </TabsContent>

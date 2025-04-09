@@ -2,6 +2,7 @@
 import { Card } from "@/components/ui/card";
 import { ParticleBackground } from "@/components/ParticleBackground";
 import { Partner } from "@/components/types";
+import { getParticleColor } from "@/utils/eventHelpers";
 
 interface PartnerSectionProps {
   partners: Partner[];
@@ -9,7 +10,7 @@ interface PartnerSectionProps {
   eventId?: string;
 }
 
-export function PartnerSection({ partners, className = "", eventId = "rvs" }: PartnerSectionProps) {
+export function PartnerSection({ partners, className = "", eventId = "nccrvs" }: PartnerSectionProps) {
   // Group partners by type
   const grouped = partners.reduce((acc, partner) => {
     if (!acc[partner.type]) {
@@ -19,21 +20,10 @@ export function PartnerSection({ partners, className = "", eventId = "rvs" }: Pa
     return acc;
   }, {} as Record<string, Partner[]>);
 
-  // Get the correct event particle color
-  const getParticleColor = () => {
-    switch(eventId) {
-      case "rvs": return "#FF6479";
-      case "bms": return "#2A9D8F";
-      case "sm": return "#E63946";
-      case "cs": return "#3F7E44";
-      default: return "#9b87f5";
-    }
-  };
-
   return (
     <div className={`relative ${className}`}>
       <ParticleBackground 
-        color={getParticleColor()} 
+        color={getParticleColor(eventId)} 
         particleCount={40}
         className="absolute inset-0 opacity-10 z-0" 
       />

@@ -1,6 +1,7 @@
 
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { getEventColor } from "@/utils/eventHelpers";
 
 interface EventCardProps {
   id: string;
@@ -10,7 +11,7 @@ interface EventCardProps {
   date: string;
   location: string;
   imageUrl: string;
-  color: string;
+  color?: string;
   disabled?: boolean;
 }
 
@@ -34,8 +35,8 @@ export function EventCard({
   const safeLocation = location || "Location TBD";
   const safeImageUrl = imageUrl || "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=600&h=400&auto=format&fit=crop&q=80";
   
-  // Fix the color mapping - use the proper Tailwind class directly
-  const bgColorClass = color || "bg-blue-600";
+  // Get the correct event color class, fallback to provided color or default
+  const bgColorClass = color || getEventColor(id) || "bg-blue-600";
 
   const Card = () => (
     <div className={`event-card h-full ${bgColorClass} text-white`}>

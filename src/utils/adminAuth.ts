@@ -1,5 +1,6 @@
 
 import { encryptData, decryptData } from "@/services/cmsUtils";
+import { useState, useEffect } from "react";
 
 // Simulated admin credentials for demo purposes
 // In a real application, this would be handled server-side
@@ -76,6 +77,9 @@ export const isAdminAuthenticated = (): boolean => {
   }
 };
 
+// Alias for compatibility
+export const isAdmin = isAdminAuthenticated;
+
 /**
  * Refreshes the admin authentication token
  * @returns Whether the token was successfully refreshed
@@ -107,4 +111,43 @@ export const refreshAdminToken = (): boolean => {
     logoutAdmin();
     return false;
   }
+};
+
+/**
+ * Custom hook for admin authentication
+ * @returns Admin authentication state and functions
+ */
+export const useAdminAuth = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const checkAuth = () => {
+      const authenticated = isAdminAuthenticated();
+      setIsAuthenticated(authenticated);
+      setLoading(false);
+    };
+
+    checkAuth();
+  }, []);
+
+  const login = (username: string, password: string) => {
+    const result = loginAdmin(username, password);
+    if (result.success) {
+      setIsAuthenticated(true);
+    }
+    return result;
+  };
+
+  const logout = () => {
+    logoutAdmin();
+    setIsAuthenticated(false);
+  };
+
+  return {
+    isAuthenticated,
+    loading,
+    login,
+    logout
+  };
 };

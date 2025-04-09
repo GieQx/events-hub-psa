@@ -7,9 +7,10 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Save, Plus, Minus, FileText, Tag } from "lucide-react";
+import { Save, Plus, Minus, FileText, Tag, X } from "lucide-react";
 import cmsService from "@/services/cmsService";
 import { CMSEvent, CMSTopic } from "@/types/cms";
+import { getEventBorderColor } from "@/utils/eventHelpers";
 
 export function TopicsManagement() {
   const [topics, setTopics] = useState<CMSTopic[]>([]);
@@ -18,6 +19,7 @@ export function TopicsManagement() {
   const [editingTopic, setEditingTopic] = useState<CMSTopic | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [currentTag, setCurrentTag] = useState("");
 
   useEffect(() => {
     loadData();
@@ -105,21 +107,34 @@ export function TopicsManagement() {
     });
   };
 
-  const handleTagsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAddTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && currentTag.trim() !== '') {
+      e.preventDefault();
+      if (!editingTopic) return;
+      
+      const newTags = [...(editingTopic.tags || []), currentTag.trim()];
+      setEditingTopic({
+        ...editingTopic,
+        tags: newTags
+      });
+      setCurrentTag('');
+    }
+  };
+
+  const handleRemoveTag = (tagToRemove: string) => {
     if (!editingTopic) return;
     
-    const tagsString = e.target.value;
-    const tagsArray = tagsString.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
-    
+    const newTags = (editingTopic.tags || []).filter(tag => tag !== tagToRemove);
     setEditingTopic({
       ...editingTopic,
-      tags: tagsArray
+      tags: newTags
     });
   };
 
   const resetForm = () => {
     setEditingTopic(null);
     setIsCreating(false);
+    setCurrentTag('');
   };
 
   if (loading) {
@@ -213,14 +228,34 @@ export function TopicsManagement() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="tags">Tags (comma separated)</Label>
+              <Label htmlFor="tags">Tags</Label>
+              <div className="flex flex-wrap gap-2 mb-2">
+                {editingTopic.tags && editingTopic.tags.map((tag, index) => (
+                  <div 
+                    key={index} 
+                    className="flex items-center gap-1 bg-gray-100 text-gray-800 px-2 py-1 rounded-full dark:bg-gray-700 dark:text-gray-300"
+                  >
+                    <span>{tag}</span>
+                    <button 
+                      type="button" 
+                      onClick={() => handleRemoveTag(tag)}
+                      className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
+                ))}
+              </div>
               <Input 
-                id="tags" 
-                name="tags" 
-                value={editingTopic.tags?.join(', ') || ""} 
-                onChange={handleTagsChange} 
-                placeholder="AI, Technology, Marketing, etc." 
+                id="currentTag" 
+                value={currentTag} 
+                onChange={(e) => setCurrentTag(e.target.value)}
+                onKeyDown={handleAddTag}
+                placeholder="Type a tag and press Enter" 
               />
+              <p className="text-sm text-muted-foreground mt-1">
+                Press Enter to add a tag
+              </p>
             </div>
 
             <div className="space-y-2">
@@ -247,7 +282,7 @@ export function TopicsManagement() {
           {topics.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {topics.map((topic) => (
-                <Card key={topic.id} className="border-l-4 border-l-blue-500">
+                <Card key={topic.id} className={`border-l-4 ${getEventBorderColor(topic.eventId)}`}>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <FileText className="h-5 w-5 text-blue-500" />

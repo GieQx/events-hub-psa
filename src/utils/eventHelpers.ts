@@ -9,6 +9,26 @@ export const getEventColor = (eventId: string): string => {
   }
 };
 
+export const getEventTextColor = (eventId: string): string => {
+  switch(eventId) {
+    case "nccrvs": return "text-rvs-primary";
+    case "cbms": return "text-bms-primary";
+    case "nsm": return "text-sm-primary";
+    case "ncs": return "text-cs-primary";
+    default: return "text-blue-600";
+  }
+};
+
+export const getEventHoverColor = (eventId: string): string => {
+  switch(eventId) {
+    case "nccrvs": return "hover:bg-rvs-primary/90";
+    case "cbms": return "hover:bg-bms-primary/90";
+    case "nsm": return "hover:bg-sm-primary/90";
+    case "ncs": return "hover:bg-cs-primary/90";
+    default: return "hover:bg-blue-600/90";
+  }
+};
+
 export const getParticleColor = (eventId: string): string => {
   switch(eventId) {
     case "nccrvs": return "#FF6479";
@@ -29,4 +49,15 @@ export const shouldDisableEvent = (dateString: string, maxDays: number = 600): b
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   
   return diffDays > maxDays;
+};
+
+// Get event border color for admin cards
+export const getEventBorderColor = (eventId: string): string => {
+  switch(eventId) {
+    case "nccrvs": return "border-rvs-primary";
+    case "cbms": return "border-bms-primary";
+    case "nsm": return "border-sm-primary";
+    case "ncs": return "border-cs-primary";
+    default: return "border-blue-600";
+  }
 };
