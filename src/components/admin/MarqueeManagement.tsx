@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Save, Plus, Trash, Info, ArrowRight, ArrowLeft } from "lucide-react";
+import { Save, Plus, Trash, Info, ArrowUp, ArrowDown } from "lucide-react";
 import cmsService from "@/services/cmsService";
 
 export interface MarqueeItem {
