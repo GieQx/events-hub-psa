@@ -13,16 +13,20 @@ import { getEventColor } from "@/utils/eventHelpers";
 
 const HomePage = () => {
   const [homeContent, setHomeContent] = useState<any>(null);
-  const [events, setEvents] = useState(cmsService.events.getPublished());
+  const [events, setEvents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Load the home content
+    // Load the home content and events
     try {
       const content = cmsService.homeContent.get();
       setHomeContent(content);
+      
+      // Get all published events
+      const publishedEvents = cmsService.events.getPublished();
+      setEvents(publishedEvents);
     } catch (error) {
-      console.log("Home content service not initialized yet");
+      console.log("Error loading content:", error);
     }
     setLoading(false);
   }, []);
@@ -54,49 +58,55 @@ const HomePage = () => {
         <div className="mx-auto my-10 max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 className="mb-6 text-3xl font-bold text-center">Featured Events</h2>
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {featuredEvents.map((event) => (
-              <div key={event.id} className="group relative overflow-hidden rounded-lg">
-                <Card className="h-full overflow-hidden transition-all hover:shadow-lg">
-                  <div className={`h-40 ${getEventColor(event.id)}`}>
-                    {event.imageUrl ? (
-                      <img 
-                        src={event.imageUrl} 
-                        alt={event.title} 
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <ParticleBackground 
-                        color="#ffffff" 
-                        particleCount={30}
-                        className="h-full w-full opacity-20" 
-                      />
-                    )}
-                  </div>
-                  <CardContent className="p-6">
-                    <div className="mb-2 flex items-center justify-between">
-                      <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                        {event.date}
-                      </span>
-                      <span className="rounded bg-blue-100 px-2 py-1 text-xs font-semibold text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                        {event.shortName}
-                      </span>
+            {featuredEvents.length > 0 ? (
+              featuredEvents.map((event) => (
+                <div key={event.id} className="group relative overflow-hidden rounded-lg">
+                  <Card className="h-full overflow-hidden transition-all hover:shadow-lg">
+                    <div className={`h-40 ${getEventColor(event.id)}`}>
+                      {event.imageUrl ? (
+                        <img 
+                          src={event.imageUrl} 
+                          alt={event.title} 
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <ParticleBackground 
+                          color="#ffffff" 
+                          particleCount={30}
+                          className="h-full w-full opacity-20" 
+                        />
+                      )}
                     </div>
-                    <h3 className="mb-2 text-xl font-bold">{event.title}</h3>
-                    <p className="mb-4 line-clamp-2 text-gray-600 dark:text-gray-300">
-                      {event.description}
-                    </p>
-                    <p className="mb-6 text-sm text-gray-500 dark:text-gray-400">
-                      {event.location}
-                    </p>
-                    <Link to={`/events/${event.id}`}>
-                      <Button className={`w-full ${event.id === "rvs" ? "bg-rvs-primary hover:bg-rvs-primary/90" : ""}`}>
-                        View Details
-                      </Button>
-                    </Link>
-                  </CardContent>
-                </Card>
+                    <CardContent className="p-6">
+                      <div className="mb-2 flex items-center justify-between">
+                        <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                          {event.date}
+                        </span>
+                        <span className="rounded bg-blue-100 px-2 py-1 text-xs font-semibold text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                          {event.shortName}
+                        </span>
+                      </div>
+                      <h3 className="mb-2 text-xl font-bold">{event.title}</h3>
+                      <p className="mb-4 line-clamp-2 text-gray-600 dark:text-gray-300">
+                        {event.description}
+                      </p>
+                      <p className="mb-6 text-sm text-gray-500 dark:text-gray-400">
+                        {event.location}
+                      </p>
+                      <Link to={`/events/${event.id}`}>
+                        <Button className={`w-full ${event.id === "rvs" ? "bg-rvs-primary hover:bg-rvs-primary/90" : ""}`}>
+                          View Details
+                        </Button>
+                      </Link>
+                    </CardContent>
+                  </Card>
+                </div>
+              ))
+            ) : (
+              <div className="col-span-3 text-center py-10">
+                <p className="text-gray-500">No featured events available. Check back soon!</p>
               </div>
-            ))}
+            )}
           </div>
         </div>
         

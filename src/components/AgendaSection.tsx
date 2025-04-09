@@ -22,7 +22,20 @@ export function AgendaSection({ days, className = "", eventId = "rvs" }: AgendaS
     );
   }
 
-  const [activeDay, setActiveDay] = useState(days[0]?.date || "");
+  // Filter out days with invalid dates
+  const validDays = days.filter(day => day.date && day.date !== "Invalid Date");
+  
+  // If no valid days remain after filtering
+  if (validDays.length === 0) {
+    return (
+      <div className={className}>
+        <h2 className="mb-6 text-center text-3xl font-bold">Event Agenda</h2>
+        <p className="text-center text-gray-500">Agenda details coming soon...</p>
+      </div>
+    );
+  }
+
+  const [activeDay, setActiveDay] = useState(validDays[0]?.date || "");
 
   // Get the correct event color
   const getEventColor = () => {
@@ -38,9 +51,9 @@ export function AgendaSection({ days, className = "", eventId = "rvs" }: AgendaS
   return (
     <div className={className}>
       <h2 className="mb-6 text-center text-3xl font-bold">Event Agenda</h2>
-      <Tabs defaultValue={days[0]?.date} className="w-full">
+      <Tabs defaultValue={validDays[0]?.date} className="w-full">
         <TabsList className="mb-6 grid w-full grid-cols-3">
-          {days.map((day) => (
+          {validDays.map((day) => (
             <TabsTrigger 
               key={day.date} 
               value={day.date} 
@@ -52,7 +65,7 @@ export function AgendaSection({ days, className = "", eventId = "rvs" }: AgendaS
           ))}
         </TabsList>
 
-        {days.map((day) => (
+        {validDays.map((day) => (
           <TabsContent key={day.date} value={day.date} className="animate-fade-in">
             <div className="space-y-6">
               {day.events && day.events.length > 0 ? (
