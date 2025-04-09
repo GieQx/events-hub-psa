@@ -12,11 +12,13 @@ import { FaqsSection } from "@/components/FaqsSection";
 import { MarqueeSection } from "@/components/MarqueeSection";
 import { ScrollSection } from "@/components/ScrollSection";
 import { Speaker } from "@/components/types";
+import { KeySpeakers } from "@/components/KeySpeakers";
 
 interface EventMainContentProps {
   eventId: string;
   event: any;
   speakers: Speaker[] | any[];
+  featuredSpeakers?: Speaker[] | any[];
   rvsNewsUpdates: any[];
   rvsAgenda: any[];
   rvsPartners: any[];
@@ -44,6 +46,7 @@ export function EventMainContent({
   eventId,
   event,
   speakers,
+  featuredSpeakers = [],
   rvsNewsUpdates,
   rvsAgenda,
   rvsPartners,
@@ -89,6 +92,16 @@ export function EventMainContent({
             </ScrollSection>
           </div>
         </section>
+
+        {featuredSpeakers && featuredSpeakers.length > 0 && (
+          <section id="key-speakers" className="scroll-mt-20 py-16 bg-white dark:bg-gray-800">
+            <div className="container mx-auto px-4">
+              <ScrollSection>
+                <KeySpeakers speakers={featuredSpeakers} eventId={eventId} />
+              </ScrollSection>
+            </div>
+          </section>
+        )}
 
         <section id="speakers" className="scroll-mt-20 py-16 relative">
           <div className="container mx-auto px-4 relative z-10">
