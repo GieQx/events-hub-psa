@@ -1,209 +1,208 @@
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  Building, Map, Utensils, HelpCircle, ExternalLink, MapPin, Phone, Globe 
-} from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { getEventColor, getEventTextColor } from "@/utils/eventHelpers";
-
-interface VenueInfo {
-  name: string;
-  address: string;
-  description: string;
-  mapUrl: string;
-}
-
-interface HotelInfo {
-  id: string;
-  name: string;
-  distance: string;
-  priceRange: string;
-  website: string;
-}
-
-interface RestaurantInfo {
-  id: string;
-  name: string;
-  cuisine: string;
-  distance: string;
-  priceRange: string;
-}
-
-interface Faq {
-  question: string;
-  answer: string;
-}
+import { MapPin, Calendar, Clock, User, Users, Info, Download, Phone, AtSign } from "lucide-react";
 
 interface AttendeeGuideProps {
-  venue: VenueInfo;
-  hotels: HotelInfo[];
-  restaurants: RestaurantInfo[];
-  faqs: Faq[];
+  eventId: string;
   className?: string;
-  eventId?: string;
 }
 
-export function AttendeeGuide({ 
-  venue, 
-  hotels, 
-  restaurants, 
-  faqs,
-  className = "",
-  eventId = "nccrvs"
-}: AttendeeGuideProps) {
+export function AttendeeGuide({ eventId, className = "" }: AttendeeGuideProps) {
+  const eventColorClass = getEventColor(eventId);
+  const eventTextColorClass = getEventTextColor(eventId);
+  
   return (
-    <div className={className}>
+    <div className={`max-w-4xl mx-auto ${className}`}>
       <h2 className="mb-6 text-center text-3xl font-bold">Attendee Guide</h2>
       
-      <Tabs defaultValue="venue" className="mx-auto max-w-4xl">
-        <TabsList className="mb-6 w-full justify-center">
-          <TabsTrigger value="venue" className="flex items-center gap-2">
-            <Building className="h-4 w-4" />
-            Venue
+      <Tabs defaultValue="before" className="w-full">
+        <TabsList className="grid w-full grid-cols-3 mb-8">
+          <TabsTrigger value="before" className={`data-[state=active]:${eventTextColorClass}`}>
+            Before Event
           </TabsTrigger>
-          <TabsTrigger value="hotels" className="flex items-center gap-2">
-            <Building className="h-4 w-4" />
-            Accommodations
+          <TabsTrigger value="during" className={`data-[state=active]:${eventTextColorClass}`}>
+            During Event
           </TabsTrigger>
-          <TabsTrigger value="dining" className="flex items-center gap-2">
-            <Utensils className="h-4 w-4" />
-            Dining
-          </TabsTrigger>
-          <TabsTrigger value="help" className="flex items-center gap-2">
-            <HelpCircle className="h-4 w-4" />
-            Help
+          <TabsTrigger value="after" className={`data-[state=active]:${eventTextColorClass}`}>
+            After Event
           </TabsTrigger>
         </TabsList>
         
-        <TabsContent value="venue">
-          <div className="mb-6 text-center">
-            <h3 className="mb-2 text-2xl font-semibold">{venue.name}</h3>
-            <p className="mb-4 text-gray-600 dark:text-gray-300">{venue.address}</p>
-          </div>
-          
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-            <div>
-              <div className="mb-4 rounded-lg bg-gray-100 p-4 dark:bg-gray-800">
-                <p className="text-gray-700 dark:text-gray-300">{venue.description}</p>
-              </div>
-              
-              <Button className={`w-full ${getEventColor(eventId)} text-white hover:opacity-90`}>
-                <Map className="mr-2 h-4 w-4" />
-                View on Map
-              </Button>
-            </div>
-            
-            <div className="h-64 overflow-hidden rounded-lg bg-gray-200 dark:bg-gray-700">
-              {venue.mapUrl ? (
-                <iframe 
-                  src={venue.mapUrl} 
-                  width="100%" 
-                  height="100%" 
-                  style={{ border: 0 }} 
-                  allowFullScreen 
-                  loading="lazy" 
-                  referrerPolicy="no-referrer-when-downgrade"
-                ></iframe>
-              ) : (
-                <div className="flex h-full items-center justify-center text-gray-500">
-                  Map preview not available
-                </div>
-              )}
-            </div>
-          </div>
-        </TabsContent>
-        
-        <TabsContent value="hotels">
-          <h3 className="mb-6 text-center text-xl font-semibold">Recommended Accommodations</h3>
-          
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            {hotels.map((hotel) => (
-              <Card key={hotel.id}>
-                <CardContent className="p-6">
-                  <h4 className={`mb-2 text-lg font-semibold ${getEventTextColor(eventId)}`}>{hotel.name}</h4>
-                  
-                  <div className="mb-4 space-y-2 text-sm text-gray-600 dark:text-gray-300">
-                    <div className="flex items-start">
-                      <MapPin className="mr-2 mt-0.5 h-4 w-4 flex-shrink-0" />
-                      <span>{hotel.distance}</span>
-                    </div>
-                    <div className="flex items-start">
-                      <Phone className="mr-2 mt-0.5 h-4 w-4 flex-shrink-0" />
-                      <span>{hotel.priceRange}</span>
-                    </div>
-                  </div>
-                  
-                  <Button asChild variant="outline" className="w-full">
-                    <a 
-                      href={hotel.website} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className={getEventTextColor(eventId)}
-                    >
-                      <Globe className="mr-2 h-4 w-4" />
-                      Visit Website
-                      <ExternalLink className="ml-2 h-3 w-3" />
-                    </a>
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </TabsContent>
-        
-        <TabsContent value="dining">
-          <h3 className="mb-6 text-center text-xl font-semibold">Nearby Dining Options</h3>
-          
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {restaurants.map((restaurant) => (
-              <Card key={restaurant.id}>
-                <CardContent className="p-4">
-                  <h4 className={`mb-1 font-semibold ${getEventTextColor(eventId)}`}>{restaurant.name}</h4>
-                  <div className="mb-2 flex justify-between text-sm">
-                    <span>{restaurant.cuisine}</span>
-                    <span className="text-gray-500 dark:text-gray-400">{restaurant.priceRange}</span>
-                  </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">{restaurant.distance}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </TabsContent>
-        
-        <TabsContent value="help">
-          <h3 className="mb-6 text-center text-xl font-semibold">Need Assistance?</h3>
-          
-          {faqs.length > 0 ? (
-            <div className="space-y-4">
-              {faqs.map((faq, index) => (
-                <Card key={index}>
-                  <CardContent className="p-4">
-                    <h4 className={`mb-2 font-semibold ${getEventTextColor(eventId)}`}>{faq.question}</h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-300">{faq.answer}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center">
-              <p className="mb-4 text-gray-600 dark:text-gray-300">
-                For any questions or assistance during the event, please contact our support team.
-              </p>
-              
-              <div className="mx-auto max-w-md space-y-4">
-                <Button className={`w-full ${getEventColor(eventId)} text-white hover:opacity-90`}>
-                  <Mail className="mr-2 h-4 w-4" />
-                  Contact Support
-                </Button>
+        <TabsContent value="before" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className={eventTextColorClass}>Registration & Preparation</CardTitle>
+              <CardDescription>
+                Essential steps to complete before attending the event
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <h3 className="text-lg font-medium flex items-center gap-2">
+                  <User className="h-5 w-5" /> Registration
+                </h3>
+                <ul className="ml-9 space-y-1 list-disc text-muted-foreground">
+                  <li>Complete your registration through the official event platform</li>
+                  <li>Watch for a confirmation email with your unique QR code</li>
+                  <li>Update your profile with professional details for networking</li>
+                </ul>
                 
-                <Button variant="outline" className="w-full">
-                  <HelpCircle className="mr-2 h-4 w-4" />
-                  View FAQ
-                </Button>
+                <div className="mt-4">
+                  <Button className={eventColorClass}>
+                    Complete Registration
+                  </Button>
+                </div>
               </div>
-            </div>
-          )}
+              
+              <div className="space-y-2">
+                <h3 className="text-lg font-medium flex items-center gap-2">
+                  <Calendar className="h-5 w-5" /> Calendar & Schedule
+                </h3>
+                <ul className="ml-9 space-y-1 list-disc text-muted-foreground">
+                  <li>Review the full event agenda and select your sessions</li>
+                  <li>Add sessions to your personal calendar</li>
+                  <li>Set reminders for key sessions and networking events</li>
+                </ul>
+              </div>
+              
+              <div className="space-y-2">
+                <h3 className="text-lg font-medium flex items-center gap-2">
+                  <Download className="h-5 w-5" /> Downloads & Resources
+                </h3>
+                <ul className="ml-9 space-y-1 list-disc text-muted-foreground">
+                  <li>Download the event mobile app for real-time updates</li>
+                  <li>Access pre-reading materials and presentation downloads</li>
+                  <li>Review the attendee handbook for important information</li>
+                </ul>
+                
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <Button variant="outline" className={`border-2 hover:bg-transparent hover:${eventTextColorClass}`}>
+                    <Download className="mr-2 h-4 w-4" /> Event App
+                  </Button>
+                  <Button variant="outline" className={`border-2 hover:bg-transparent hover:${eventTextColorClass}`}>
+                    <Download className="mr-2 h-4 w-4" /> Handbook
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        
+        <TabsContent value="during" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className={eventTextColorClass}>During The Event</CardTitle>
+              <CardDescription>
+                Make the most of your time at the event
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <h3 className="text-lg font-medium flex items-center gap-2">
+                  <MapPin className="h-5 w-5" /> Venue Navigation
+                </h3>
+                <ul className="ml-9 space-y-1 list-disc text-muted-foreground">
+                  <li>Use interactive maps in the mobile app to navigate between sessions</li>
+                  <li>Information desks are available at each floor entrance</li>
+                  <li>Digital signage will guide you to breakout rooms and facilities</li>
+                </ul>
+              </div>
+              
+              <div className="space-y-2">
+                <h3 className="text-lg font-medium flex items-center gap-2">
+                  <Users className="h-5 w-5" /> Networking Opportunities
+                </h3>
+                <ul className="ml-9 space-y-1 list-disc text-muted-foreground">
+                  <li>Designated networking zones available during breaks</li>
+                  <li>Use the app's attendee directory to connect with peers</li>
+                  <li>Join topic-specific roundtables for focused discussions</li>
+                </ul>
+              </div>
+              
+              <div className="space-y-2">
+                <h3 className="text-lg font-medium flex items-center gap-2">
+                  <Info className="h-5 w-5" /> Support & Assistance
+                </h3>
+                <ul className="ml-9 space-y-1 list-disc text-muted-foreground">
+                  <li>Technical support is available at all session rooms</li>
+                  <li>Medical assistance is located on the ground floor</li>
+                  <li>Event staff can be identified by their branded lanyards</li>
+                </ul>
+                
+                <div className="mt-4 space-y-2">
+                  <h4 className="font-medium">Event Support Contact</h4>
+                  <div className="flex items-center gap-2">
+                    <Phone className="h-4 w-4" />
+                    <span>+1 (555) 123-4567</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <AtSign className="h-4 w-4" />
+                    <span>support@statisticsevents.gov</span>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        
+        <TabsContent value="after" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className={eventTextColorClass}>After The Event</CardTitle>
+              <CardDescription>
+                Continue the experience after the event concludes
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <h3 className="text-lg font-medium flex items-center gap-2">
+                  <Download className="h-5 w-5" /> Session Materials
+                </h3>
+                <ul className="ml-9 space-y-1 list-disc text-muted-foreground">
+                  <li>Access recordings and slides from all sessions</li>
+                  <li>Download certificates of attendance</li>
+                  <li>Review supplementary materials from speakers</li>
+                </ul>
+                
+                <div className="mt-4">
+                  <Button className={eventColorClass}>
+                    Access Materials Portal
+                  </Button>
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <h3 className="text-lg font-medium flex items-center gap-2">
+                  <Users className="h-5 w-5" /> Stay Connected
+                </h3>
+                <ul className="ml-9 space-y-1 list-disc text-muted-foreground">
+                  <li>Continue discussions in the online community forum</li>
+                  <li>Connect with speakers and attendees through the platform</li>
+                  <li>Join relevant special interest groups for ongoing collaboration</li>
+                </ul>
+              </div>
+              
+              <div className="space-y-2">
+                <h3 className="text-lg font-medium flex items-center gap-2">
+                  <Calendar className="h-5 w-5" /> Future Events
+                </h3>
+                <ul className="ml-9 space-y-1 list-disc text-muted-foreground">
+                  <li>Mark your calendar for follow-up webinars</li>
+                  <li>Get early access to next year's event registration</li>
+                  <li>Subscribe to the events newsletter for updates</li>
+                </ul>
+                
+                <div className="mt-4">
+                  <Button variant="outline" className={`border-2 hover:bg-transparent hover:${eventTextColorClass}`}>
+                    Subscribe to Updates
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </div>
