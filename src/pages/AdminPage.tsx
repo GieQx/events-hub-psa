@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -23,6 +24,7 @@ import { ResourcesManagement } from "@/components/admin/ResourcesManagement";
 import { ChallengesManagement } from "@/components/admin/ChallengesManagement";
 import { HomeContentManagement } from "@/components/admin/HomeContentManagement";
 import { TopicsManagement } from "@/components/admin/TopicsManagement";
+import { MarqueeManagement } from "@/components/admin/MarqueeManagement";
 
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState("events");
@@ -137,6 +139,7 @@ const AdminPage = () => {
               <TabsTrigger value="partners">Partners</TabsTrigger>
               <TabsTrigger value="resources">Resources</TabsTrigger>
               <TabsTrigger value="challenges">Challenges</TabsTrigger>
+              <TabsTrigger value="marquee">Marquee</TabsTrigger>
             </TabsList>
 
             <TabsContent value="home">
@@ -179,7 +182,7 @@ const AdminPage = () => {
                           name="shortName" 
                           value={editingEvent.shortName} 
                           onChange={handleInputChange} 
-                          placeholder="Short name (e.g. RVS)" 
+                          placeholder="Short name (e.g. NCCRVS)" 
                         />
                       </div>
                     </div>
@@ -396,6 +399,10 @@ const AdminPage = () => {
 
             <TabsContent value="challenges">
               <ChallengesManagement />
+            </TabsContent>
+
+            <TabsContent value="marquee">
+              <MarqueeManagement />
             </TabsContent>
           </Tabs>
         </ScrollSection>

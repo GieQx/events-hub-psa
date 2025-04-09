@@ -1,4 +1,6 @@
 
+import { useState, useEffect } from "react";
+
 interface MarqueeSectionProps {
   items: string[];
   className?: string;
@@ -6,14 +8,17 @@ interface MarqueeSectionProps {
 }
 
 export function MarqueeSection({ items, className = "", primaryColor = "#3B82F6" }: MarqueeSectionProps) {
+  // Ensure items is not empty to prevent issues
+  const safeItems = items && items.length > 0 ? items : ["No announcements available"];
+  
   // Duplicate the items to create a seamless loop
-  const marqueeItems = [...items, ...items];
+  const marqueeItems = [...safeItems, ...safeItems];
 
   return (
     <div className={`marquee-container overflow-hidden py-4 ${className}`}>
       <div 
         className="marquee-content flex animate-marquee items-center"
-        style={{ animationDuration: `${items.length * 5}s` }}
+        style={{ animationDuration: `${safeItems.length * 5}s` }}
       >
         {marqueeItems.map((item, index) => (
           <div 

@@ -68,9 +68,9 @@ export function EventMainContent({
       <section className={`bg-${getEventColor()} py-3 text-white`}>
         <MarqueeSection 
           items={rvsNewsUpdates} 
-          primaryColor={event.id === "rvs" ? "#FF6479" : 
-                         event.id === "bms" ? "#2A9D8F" :
-                         event.id === "sm" ? "#E63946" : "#3F7E44"}
+          primaryColor={event.id === "nccrvs" ? "#FF6479" : 
+                         event.id === "cbms" ? "#2A9D8F" :
+                         event.id === "nsm" ? "#E63946" : "#3F7E44"}
         />
       </section>
 

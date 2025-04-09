@@ -11,7 +11,7 @@ interface AgendaSectionProps {
   eventId?: string;
 }
 
-export function AgendaSection({ days, className = "", eventId = "rvs" }: AgendaSectionProps) {
+export function AgendaSection({ days, className = "", eventId = "nccrvs" }: AgendaSectionProps) {
   // Handle empty days array gracefully
   if (!days || days.length === 0) {
     return (
@@ -40,10 +40,10 @@ export function AgendaSection({ days, className = "", eventId = "rvs" }: AgendaS
   // Get the correct event color
   const getEventColor = () => {
     switch(eventId) {
-      case "rvs": return "rvs-primary";
-      case "bms": return "bms-primary";
-      case "sm": return "sm-primary";
-      case "cs": return "cs-primary";
+      case "nccrvs": return "rvs-primary";
+      case "cbms": return "bms-primary";
+      case "nsm": return "sm-primary";
+      case "ncs": return "cs-primary";
       default: return "rvs-primary";
     }
   };
