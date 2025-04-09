@@ -35,7 +35,7 @@ export function ResourcesManagement() {
     setIsCreating(true);
     setEditingResource({
       id: crypto.randomUUID(),
-      eventId: selectedEventId || events[0]?.id || "",
+      eventId: selectedEventId !== "all" ? selectedEventId : events[0]?.id || "",
       title: "",
       description: "",
       type: "pdf",
@@ -53,7 +53,7 @@ export function ResourcesManagement() {
   const handleDeleteResource = (id: string) => {
     if (window.confirm("Are you sure you want to delete this resource?")) {
       cmsService.resources.delete(id);
-      setResources(selectedEventId ? cmsService.resources.getByEventId(selectedEventId) : cmsService.resources.getAll());
+      setResources(selectedEventId !== "all" ? cmsService.resources.getByEventId(selectedEventId) : cmsService.resources.getAll());
       toast.success("Resource deleted successfully");
     }
   };

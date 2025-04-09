@@ -51,7 +51,7 @@ export function PartnersManagement() {
     setIsCreating(true);
     setEditingPartner({
       id: crypto.randomUUID(),
-      eventId: selectedEventId || events[0]?.id || "",
+      eventId: selectedEventId !== "all" ? selectedEventId : events[0]?.id || "",
       name: "",
       logoUrl: "",
       category: "gold",
@@ -69,10 +69,10 @@ export function PartnersManagement() {
       cmsService.partners.delete(id);
       
       let filteredPartners = cmsService.partners.getAll();
-      if (selectedEventId) {
+      if (selectedEventId !== "all") {
         filteredPartners = filteredPartners.filter(partner => partner.eventId === selectedEventId);
       }
-      if (selectedCategory) {
+      if (selectedCategory !== "all") {
         filteredPartners = filteredPartners.filter(partner => partner.category === selectedCategory);
       }
       setPartners(filteredPartners);

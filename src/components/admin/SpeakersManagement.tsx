@@ -59,7 +59,7 @@ export function SpeakersManagement() {
   const handleDeleteSpeaker = (id: string) => {
     if (window.confirm("Are you sure you want to delete this speaker?")) {
       cmsService.speakers.delete(id);
-      setSpeakers(selectedEventId ? cmsService.speakers.getByEventId(selectedEventId) : cmsService.speakers.getAll());
+      setSpeakers(selectedEventId !== "all" ? cmsService.speakers.getByEventId(selectedEventId) : cmsService.speakers.getAll());
       toast.success("Speaker deleted successfully");
     }
   };
@@ -81,7 +81,7 @@ export function SpeakersManagement() {
         toast.success("Speaker updated successfully");
       }
       
-      setSpeakers(selectedEventId ? cmsService.speakers.getByEventId(selectedEventId) : cmsService.speakers.getAll());
+      setSpeakers(selectedEventId !== "all" ? cmsService.speakers.getByEventId(selectedEventId) : cmsService.speakers.getAll());
       resetForm();
     } catch (error) {
       toast.error(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);

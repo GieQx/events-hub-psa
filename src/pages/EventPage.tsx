@@ -84,13 +84,24 @@ const EventPage = () => {
     endDate: event?.eventEndDate || "",
   };
 
+  // Create a safe event object to pass to EventHero - ensure videoUrl is present
+  const heroEvent = {
+    id: event.id,
+    title: event.title,
+    date: event.date || "",
+    location: event.location || "",
+    longDescription: event.longDescription || "",
+    videoUrl: event.videoUrl || "", // Add a fallback empty string if videoUrl is missing
+    eventStartDate: event.eventStartDate || ""
+  };
+
   return (
     <div className="min-h-screen">
       <EventHeader eventId={eventId || ""} />
       
       <EventHero 
         eventId={eventId} 
-        event={event} 
+        event={heroEvent} 
       />
       
       <EventMainContent 
