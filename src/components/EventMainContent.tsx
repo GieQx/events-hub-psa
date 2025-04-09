@@ -13,6 +13,7 @@ import { MarqueeSection } from "@/components/MarqueeSection";
 import { ScrollSection } from "@/components/ScrollSection";
 import { Speaker } from "@/components/types";
 import { KeySpeakers } from "@/components/KeySpeakers";
+import { getEventColor, getParticleColor } from "@/utils/eventHelpers";
 
 interface EventMainContentProps {
   eventId: string;
@@ -59,29 +60,33 @@ export function EventMainContent({
   rvsResources,
   getFaqs,
   getHighlights,
-  getEventColor,
-  getParticleColor,
+  getEventColor: getEventColorProp,
+  getParticleColor: getParticleColorProp,
   eventCalendarDetails
 }: EventMainContentProps) {
+  // Get the actual color based on the event ID
+  const actualEventColor = eventId === "nccrvs" ? "#FF6479" : 
+                           eventId === "cbms" ? "#2A9D8F" :
+                           eventId === "nsm" ? "#E63946" : "#3F7E44";
+
   return (
     <>
-      <section className={`bg-${getEventColor()} py-3 text-white`}>
+      <section className={`${getEventColor(eventId)} py-3`}>
         <MarqueeSection 
           items={rvsNewsUpdates} 
-          primaryColor={event.id === "nccrvs" ? "#FF6479" : 
-                         event.id === "cbms" ? "#2A9D8F" :
-                         event.id === "nsm" ? "#E63946" : "#3F7E44"}
+          primaryColor={actualEventColor}
+          eventId={eventId}
         />
       </section>
 
       <main className="bg-gray-50 pb-20 dark:bg-gray-900">
-        <section id="about" className="scroll-mt-20 bg-white py-16 dark:bg-gray-800 relative">
+        <section id="about" className="relative scroll-mt-20 bg-white py-16 dark:bg-gray-800">
           <ParticleBackground 
-            color={getParticleColor()} 
+            color={getParticleColor(eventId)} 
             particleCount={50}
             className="opacity-10" 
           />
-          <div className="container mx-auto px-4 relative z-10">
+          <div className="container relative z-10 mx-auto px-4">
             <ScrollSection>
               <AboutSection 
                 eventName={event?.title || ""}
@@ -94,7 +99,7 @@ export function EventMainContent({
         </section>
 
         {featuredSpeakers && featuredSpeakers.length > 0 && (
-          <section id="key-speakers" className="scroll-mt-20 py-16 bg-white dark:bg-gray-800">
+          <section id="key-speakers" className="scroll-mt-20 bg-white py-16 dark:bg-gray-800">
             <div className="container mx-auto px-4">
               <ScrollSection>
                 <KeySpeakers speakers={featuredSpeakers} eventId={eventId} />
@@ -103,8 +108,8 @@ export function EventMainContent({
           </section>
         )}
 
-        <section id="speakers" className="scroll-mt-20 py-16 relative">
-          <div className="container mx-auto px-4 relative z-10">
+        <section id="speakers" className="relative scroll-mt-20 py-16">
+          <div className="container relative z-10 mx-auto px-4">
             <ScrollSection>
               <SpeakersSection speakers={speakers} eventId={eventId} />
             </ScrollSection>

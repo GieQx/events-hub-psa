@@ -33,9 +33,9 @@ export function MarqueeSection({
         {marqueeItems.map((item, index) => (
           <div 
             key={index} 
-            className="mx-4 whitespace-nowrap px-4 py-2 font-medium transition-transform duration-300 hover:scale-110"
+            className="mx-4 whitespace-nowrap px-4 py-2 font-medium text-white transition-transform duration-300 hover:scale-110"
             style={{ 
-              borderLeft: `4px solid ${borderColor}`,
+              borderLeft: `4px solid white`,
               boxShadow: '0 2px 10px rgba(0,0,0,0.05)'
             }}
           >

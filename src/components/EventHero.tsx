@@ -1,6 +1,7 @@
 
 import { CountdownTimer } from "@/components/CountdownTimer";
 import { RegistrationButton } from "@/components/RegistrationButton";
+import { GoogleCalendarButton } from "@/components/GoogleCalendarButton";
 import { ScrollSection } from "@/components/ScrollSection";
 import { ParticleBackground } from "@/components/ParticleBackground";
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,7 @@ interface EventHeroProps {
     longDescription: string;
     videoUrl: string;
     eventStartDate: string;
+    eventEndDate: string;
   };
 }
 
@@ -31,6 +33,14 @@ export function EventHero({ eventId = "", event }: EventHeroProps) {
       };
     }
   }, []);
+
+  const eventCalendarDetails = {
+    title: event?.title || "",
+    description: event?.longDescription || "",
+    location: event?.location || "",
+    startDate: event?.eventStartDate || "",
+    endDate: event?.eventEndDate || "",
+  };
 
   return (
     <section id="hero" className="relative min-h-screen overflow-hidden pt-16">
@@ -75,9 +85,11 @@ export function EventHero({ eventId = "", event }: EventHeroProps) {
         <ScrollSection delay={0.7}>
           <div className="mb-10 flex flex-wrap items-center justify-center gap-4">
             <RegistrationButton eventId={eventId} />
-            <Button variant="outline" className="text-white hover:bg-white/10">
-              View Program
-            </Button>
+            <GoogleCalendarButton 
+              eventDetails={eventCalendarDetails} 
+              eventId={eventId} 
+              variant="outline"
+            />
           </div>
         </ScrollSection>
         

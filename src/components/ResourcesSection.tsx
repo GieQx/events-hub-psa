@@ -1,9 +1,9 @@
 
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Calendar, FileText, Video, Link as LinkIcon, Image } from "lucide-react";
+import { FileText, Video, Link as LinkIcon, Image } from "lucide-react";
 import { Resource } from "@/components/types";
 import { CMSResource } from "@/types/cms";
+import { getEventColor } from "@/utils/eventHelpers";
 
 interface ResourcesSectionProps {
   resources: CMSResource[] | Resource[];
@@ -18,35 +18,7 @@ interface ResourcesSectionProps {
   className?: string;
 }
 
-export function ResourcesSection({ resources, eventDetails, eventId = "rvs", className = "" }: ResourcesSectionProps) {
-  // Get the correct event color
-  const getEventColor = () => {
-    switch(eventId) {
-      case "rvs": return "rvs-primary";
-      case "bms": return "bms-primary";
-      case "sm": return "sm-primary";
-      case "cs": return "cs-primary";
-      default: return "rvs-primary";
-    }
-  };
-  
-  const handleAddToCalendar = () => {
-    // Format dates for Google Calendar
-    const from = new Date(eventDetails.startDate);
-    const to = new Date(eventDetails.endDate);
-    
-    // Create Google Calendar URL
-    const googleCalendarUrl = new URL('https://calendar.google.com/calendar/render');
-    googleCalendarUrl.searchParams.append('action', 'TEMPLATE');
-    googleCalendarUrl.searchParams.append('text', eventDetails.title);
-    googleCalendarUrl.searchParams.append('details', eventDetails.description);
-    googleCalendarUrl.searchParams.append('location', eventDetails.location);
-    googleCalendarUrl.searchParams.append('dates', `${from.toISOString().replace(/-|:|\.\d+/g, '')}/${to.toISOString().replace(/-|:|\.\d+/g, '')}`);
-    
-    // Open in new tab
-    window.open(googleCalendarUrl.toString(), '_blank');
-  };
-
+export function ResourcesSection({ resources, eventDetails, eventId = "nccrvs", className = "" }: ResourcesSectionProps) {
   // Determine the appropriate icon for the resource type
   const getResourceIcon = (type: string) => {
     switch(type) {
@@ -58,28 +30,39 @@ export function ResourcesSection({ resources, eventDetails, eventId = "rvs", cla
     }
   };
 
+  // Get text color for the current event
+  const getTextColorClass = () => {
+    switch(eventId) {
+      case "nccrvs": return "text-rvs-primary";
+      case "cbms": return "text-bms-primary";
+      case "nsm": return "text-sm-primary";
+      case "ncs": return "text-cs-primary";
+      default: return "text-rvs-primary";
+    }
+  };
+
+  // Get background color class for the current event
+  const getBgColorClass = () => {
+    switch(eventId) {
+      case "nccrvs": return "bg-rvs-primary/10";
+      case "cbms": return "bg-bms-primary/10";
+      case "nsm": return "bg-sm-primary/10";
+      case "ncs": return "bg-cs-primary/10";
+      default: return "bg-rvs-primary/10";
+    }
+  };
+
   return (
     <div className={className}>
       <h2 className="mb-6 text-center text-3xl font-bold">Event Resources</h2>
       
-      <div className="mb-10 flex flex-col items-center justify-center">
-        <Button 
-          onClick={handleAddToCalendar}
-          className={`flex items-center gap-2 bg-${getEventColor()} hover:bg-${getEventColor()}/90`}
-        >
-          <Calendar className="h-5 w-5" />
-          Add to Google Calendar
-        </Button>
-        <p className="mt-2 text-sm text-gray-500">Add this event to your calendar to receive updates and reminders</p>
-      </div>
-      
       {resources && resources.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {resources.map((resource) => (
-            <Card key={resource.id} className="overflow-hidden hover:shadow-md transition-all">
+            <Card key={resource.id} className="overflow-hidden transition-all hover:shadow-md">
               <CardContent className="p-6">
                 <div className="mb-4 flex items-center">
-                  <div className={`flex h-10 w-10 items-center justify-center rounded-full bg-${getEventColor()}/10 mr-3`}>
+                  <div className={`mr-3 flex h-10 w-10 items-center justify-center rounded-full ${getBgColorClass()}`}>
                     {getResourceIcon(resource.type)}
                   </div>
                   <div>
@@ -101,7 +84,7 @@ export function ResourcesSection({ resources, eventDetails, eventId = "rvs", cla
                     href={resource.url || resource.downloadUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`inline-flex items-center text-sm font-medium text-${getEventColor()} hover:underline`}
+                    className={`inline-flex items-center text-sm font-medium ${getTextColorClass()} hover:underline`}
                   >
                     {resource.type === 'pdf' ? 'Download PDF' :
                      resource.type === 'video' ? 'Watch Video' :
