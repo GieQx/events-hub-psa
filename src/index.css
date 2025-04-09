@@ -97,16 +97,42 @@
   animation: marquee 25s linear infinite;
 }
 
-/* Improve readability in light mode */
+/* Improve readability in light mode - fixed to avoid circular dependencies */
 .text-gray-300 {
-  @apply dark:text-gray-300 text-gray-700;
+  color: rgb(209 213 219);
+}
+.dark .text-gray-300 {
+  color: rgb(209 213 219);
+}
+.text-gray-700 {
+  color: rgb(55 65 81);
+}
+.light .text-gray-300 {
+  color: rgb(55 65 81);
 }
 
 .text-gray-200 {
-  @apply dark:text-gray-200 text-gray-800;
+  color: rgb(229 231 235);
+}
+.dark .text-gray-200 {
+  color: rgb(229 231 235);
+}
+.text-gray-800 {
+  color: rgb(31 41 55);
+}
+.light .text-gray-200 {
+  color: rgb(31 41 55);
 }
 
 /* Custom glassmorphism effect */
 .glass-effect {
-  @apply backdrop-blur-lg bg-white/10 dark:bg-black/10 border border-white/20 dark:border-white/10 rounded-lg;
+  backdrop-filter: blur(16px);
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.5rem;
+}
+
+.dark .glass-effect {
+  background-color: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }

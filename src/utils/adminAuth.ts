@@ -1,5 +1,6 @@
 
 import { encryptData, decryptData } from "@/services/cmsUtils";
+import { useState, useEffect, createContext, useContext } from "react";
 
 // Simulated admin credentials for demo purposes
 // In a real application, this would be handled server-side
@@ -53,7 +54,7 @@ export const logoutAdmin = (): void => {
  * Checks if the admin is authenticated
  * @returns Whether the admin is authenticated
  */
-export const isAdminAuthenticated = (): boolean => {
+export const isAdmin = (): boolean => {
   const tokenString = localStorage.getItem(AUTH_TOKEN_KEY);
   
   if (!tokenString) {
@@ -75,6 +76,9 @@ export const isAdminAuthenticated = (): boolean => {
     return false;
   }
 };
+
+// Alias for isAdmin for backward compatibility
+export const isAdminAuthenticated = isAdmin;
 
 /**
  * Refreshes the admin authentication token
@@ -107,4 +111,33 @@ export const refreshAdminToken = (): boolean => {
     logoutAdmin();
     return false;
   }
+};
+
+// Create an authentication context
+type AdminAuthContextType = {
+  authenticated: boolean;
+  setAuthenticated: (value: boolean) => void;
+};
+
+const AdminAuthContext = createContext<AdminAuthContextType | undefined>(undefined);
+
+// Custom hook for admin authentication
+export const useAdminAuth = () => {
+  const [authenticated, setAuthenticated] = useState(false);
+  
+  useEffect(() => {
+    // Check if admin is authenticated on mount
+    setAuthenticated(isAdmin());
+    
+    // Refresh token periodically
+    const interval = setInterval(() => {
+      if (isAdmin()) {
+        refreshAdminToken();
+      }
+    }, 15 * 60 * 1000); // 15 minutes
+    
+    return () => clearInterval(interval);
+  }, []);
+  
+  return { authenticated, setAuthenticated };
 };
