@@ -10,7 +10,6 @@ import { ParticleBackground } from "@/components/ParticleBackground";
 import { ContactUsSection } from "@/components/ContactUsSection";
 import cmsService from "@/services/cmsService";
 import { getEventColor } from "@/utils/eventHelpers";
-import { ChevronRight, Calendar, MapPin, Users } from "lucide-react";
 
 const HomePage = () => {
   const [homeContent, setHomeContent] = useState<any>(null);
@@ -60,155 +59,122 @@ const HomePage = () => {
     <div className="flex min-h-screen flex-col">
       <main className="flex-1">
         <HeroSection 
-          title={homeContent?.heroTitle || "Statistical Education Events"}
-          description={homeContent?.heroSubtitle || "Join our engaging statistical events designed to enhance stakeholder knowledge and improve accessibility of statistical information."}
+          title={homeContent?.heroTitle || "Welcome to the Convention Hub"}
+          description={homeContent?.heroSubtitle || "Discover and connect with professional communities around the world."}
           buttonText="Explore Events"
           buttonLink="/events"
-          backgroundStyle="bg-gradient-to-r from-blue-600 to-purple-600"
-          darkOverlay={true}
+          backgroundStyle={homeContent?.heroBackgroundStyle || "bg-gradient-to-r from-blue-500 to-purple-600"}
         />
 
-        {/* Featured Events Section with enhanced styling */}
-        <section className="py-20 bg-white dark:bg-gray-900">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Featured Events</h2>
-              <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-                Discover our flagship statistical education events designed for stakeholder engagement
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-              {featuredEvents.length > 0 ? (
-                featuredEvents.map((event) => (
-                  <div key={event.id} className="group relative overflow-hidden rounded-xl transition-all duration-300 hover:shadow-xl">
-                    <Card className="h-full overflow-hidden border-none shadow-md transition-all hover:shadow-lg">
-                      <div className={`h-48 ${getEventColor(event.id)} relative overflow-hidden`}>
-                        {event.imageUrl ? (
-                          <img 
-                            src={event.imageUrl} 
-                            alt={event.title} 
-                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                          />
-                        ) : (
-                          <ParticleBackground 
-                            color="#ffffff" 
-                            particleCount={30}
-                            className="h-full w-full opacity-20" 
-                          />
-                        )}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                        <div className="absolute bottom-0 left-0 p-4">
-                          <span className={`inline-block rounded-full px-3 py-1 text-xs font-semibold text-white ${getEventColor(event.id)}`}>
-                            {event.shortName}
-                          </span>
-                        </div>
-                      </div>
-                      <CardContent className="p-6">
-                        <h3 className="mb-2 text-xl font-bold group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                          {event.title}
-                        </h3>
-                        <p className="mb-4 text-gray-600 dark:text-gray-300 line-clamp-2">
-                          {event.description}
-                        </p>
-                        <div className="mb-4 space-y-2">
-                          <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                            <Calendar className="mr-2 h-4 w-4" />
-                            <span>{event.date || "Upcoming"}</span>
-                          </div>
-                          <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                            <MapPin className="mr-2 h-4 w-4" />
-                            <span>{event.location || "To be announced"}</span>
-                          </div>
-                        </div>
-                        <Link to={`/events/${event.id}`}>
-                          <Button className={`w-full ${getEventColor(event.id)} hover:opacity-90 text-white group-hover:gap-3 transition-all`}>
-                            <span>View Details</span>
-                            <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                          </Button>
-                        </Link>
-                      </CardContent>
-                    </Card>
-                  </div>
-                ))
-              ) : (
-                <div className="col-span-3 text-center py-10">
-                  <p className="text-gray-500">No featured events available. Check back soon!</p>
-                </div>
-              )}
-            </div>
-          </div>
-        </section>
-        
-        {/* Upcoming Events Section with enhanced styling */}
-        <section className="py-20 bg-gray-50 dark:bg-gray-800">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                {homeContent?.upcomingEventsTitle || "Upcoming Events"}
-              </h2>
-              <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-                {homeContent?.upcomingEventsSubtitle || "Mark your calendar for these exciting opportunities to enhance your statistical knowledge"}
-              </p>
-            </div>
-            
-            {upcomingEvents.length > 0 ? (
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {upcomingEvents.map((event) => (
-                  <Card key={event.id} className="overflow-hidden border-t-4 hover:shadow-lg transition-all">
-                    <div className={`border-t-4 ${getEventColor(event.id)} -mt-[4px]`}></div>
-                    <div className="flex items-center gap-4 p-6">
-                      <div className={`flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full ${getEventColor(event.id)}`}>
-                        {event.imageUrl ? (
-                          <img 
-                            src={event.imageUrl} 
-                            alt={event.title} 
-                            className="h-full w-full rounded-full object-cover"
-                          />
-                        ) : (
-                          <span className="text-2xl font-bold text-white">
-                            {event.shortName?.charAt(0) || event.title.charAt(0)}
-                          </span>
-                        )}
-                      </div>
-                      <div>
-                        <h3 className="font-bold">{event.title}</h3>
-                        <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                          <Calendar className="mr-1 h-3 w-3" />
-                          <span className="mr-3">{event.date}</span>
-                          <MapPin className="mr-1 h-3 w-3" />
-                          <span>{event.location}</span>
-                        </div>
-                      </div>
+        <div className="mx-auto my-10 max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="mb-6 text-3xl font-bold text-center">Featured Events</h2>
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {featuredEvents.length > 0 ? (
+              featuredEvents.map((event) => (
+                <div key={event.id} className="group relative overflow-hidden rounded-lg">
+                  <Card className="h-full overflow-hidden transition-all hover:shadow-lg">
+                    <div className={`h-40 ${getEventColor(event.id)}`}>
+                      {event.imageUrl ? (
+                        <img 
+                          src={event.imageUrl} 
+                          alt={event.title} 
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <ParticleBackground 
+                          color="#ffffff" 
+                          particleCount={30}
+                          className="h-full w-full opacity-20" 
+                        />
+                      )}
                     </div>
-                    <div className="border-t p-4 bg-gray-50 dark:bg-gray-700/30">
+                    <CardContent className="p-6">
+                      <div className="mb-2 flex items-center justify-between">
+                        <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                          {event.date}
+                        </span>
+                        <span className="rounded bg-blue-100 px-2 py-1 text-xs font-semibold text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                          {event.shortName}
+                        </span>
+                      </div>
+                      <h3 className="mb-2 text-xl font-bold">{event.title}</h3>
+                      <p className="mb-4 line-clamp-2 text-gray-600 dark:text-gray-300">
+                        {event.description}
+                      </p>
+                      <p className="mb-6 text-sm text-gray-500 dark:text-gray-400">
+                        {event.location}
+                      </p>
                       <Link to={`/events/${event.id}`}>
-                        <Button variant="outline" size="sm" className="w-full hover:bg-white dark:hover:bg-gray-700">
-                          <span>Learn More</span>
-                          <ChevronRight className="ml-2 h-4 w-4" />
+                        <Button className={`w-full ${getEventColor(event.id)} hover:opacity-90 text-white`}>
+                          View Details
                         </Button>
                       </Link>
-                    </div>
+                    </CardContent>
                   </Card>
-                ))}
-              </div>
+                </div>
+              ))
             ) : (
-              <p className="text-center text-gray-500 dark:text-gray-400">
-                No upcoming events scheduled at this time. Check back soon!
-              </p>
+              <div className="col-span-3 text-center py-10">
+                <p className="text-gray-500">No featured events available. Check back soon!</p>
+              </div>
             )}
           </div>
-        </section>
+        </div>
+        
+        <div className="mx-auto my-16 max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="mb-2 text-3xl font-bold text-center">
+            {homeContent?.upcomingEventsTitle || "Upcoming Events"}
+          </h2>
+          <p className="mb-10 text-center text-gray-600 dark:text-gray-300">
+            {homeContent?.upcomingEventsSubtitle || "Mark your calendar for these exciting opportunities"}
+          </p>
+          
+          {upcomingEvents.length > 0 ? (
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {upcomingEvents.map((event) => (
+                <Card key={event.id} className="overflow-hidden">
+                  <div className="flex items-center gap-4 p-6">
+                    <div className={`flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full ${getEventColor(event.id)}`}>
+                      {event.imageUrl ? (
+                        <img 
+                          src={event.imageUrl} 
+                          alt={event.title} 
+                          className="h-full w-full rounded-full object-cover"
+                        />
+                      ) : (
+                        <span className="text-2xl font-bold text-white">
+                          {event.shortName?.charAt(0) || event.title.charAt(0)}
+                        </span>
+                      )}
+                    </div>
+                    <div>
+                      <h3 className="font-bold">{event.title}</h3>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                        {event.date} • {event.location}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="border-t px-6 py-4">
+                    <Link to={`/events/${event.id}`}>
+                      <Button variant="outline" size="sm" className="w-full">
+                        Learn More
+                      </Button>
+                    </Link>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <p className="text-center text-gray-500 dark:text-gray-400">
+              No upcoming events scheduled at this time. Check back soon!
+            </p>
+          )}
+        </div>
         
         {homeContent?.testimonials && homeContent.testimonials.length > 0 && (
-          <section className="py-20 bg-white dark:bg-gray-900">
-            <div className="container mx-auto px-4">
-              <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-bold mb-4">What People Are Saying</h2>
-                <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-                  Hear from participants who have attended our statistical education events
-                </p>
-              </div>
+          <div className="bg-gray-50 dark:bg-gray-800 py-16">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <h2 className="mb-10 text-3xl font-bold text-center">What People Are Saying</h2>
               <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {homeContent.testimonials.map((testimonial: any) => (
                   <Card key={testimonial.id} className="relative border-none shadow-lg">
@@ -218,8 +184,8 @@ const HomePage = () => {
                         {testimonial.text}
                       </p>
                       <div className="flex items-center gap-4">
-                        <div className="h-12 w-12 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
-                          <span className="text-lg font-bold text-blue-600 dark:text-blue-300">
+                        <div className="h-12 w-12 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                          <span className="text-lg font-bold">
                             {testimonial.author.charAt(0)}
                           </span>
                         </div>
@@ -235,30 +201,22 @@ const HomePage = () => {
                 ))}
               </div>
             </div>
-          </section>
+          </div>
         )}
 
         <ContactUsSection />
 
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 py-16 text-white">
-          <div className="mx-auto max-w-3xl px-4 text-center">
+        <div className="bg-blue-50 dark:bg-blue-950 py-16">
+          <div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
             <h2 className="mb-4 text-3xl font-bold">Ready to Join an Event?</h2>
-            <p className="mb-8">
-              Explore our upcoming events and be part of engaging statistical education experiences. Connect with experts, expand your knowledge, and improve your understanding of statistical information.
+            <p className="mb-8 text-gray-600 dark:text-gray-300">
+              Explore our upcoming events and be part of something extraordinary. Connect with industry leaders, expand your knowledge, and grow your network.
             </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Link to="/events">
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
-                  <Users className="mr-2 h-5 w-5" />
-                  Browse Events
-                </Button>
-              </Link>
-              <Link to="/admin">
-                <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100">
-                  Manage Content
-                </Button>
-              </Link>
-            </div>
+            <Link to="/admin">
+              <Button size="lg" className="bg-rvs-primary hover:bg-rvs-primary/90">
+                Manage Content
+              </Button>
+            </Link>
           </div>
         </div>
       </main>

@@ -1,98 +1,488 @@
+
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Link, Navigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { LogOut } from "lucide-react";
-import { EventsManagement } from "@/components/admin/EventsManagement";
-import { HomeContentManagement } from "@/components/admin/HomeContentManagement";
+import { Textarea } from "@/components/ui/textarea";
+import { ScrollSection } from "@/components/ScrollSection";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { toast } from "sonner";
+import { ChevronLeft, Plus, Edit, Trash, Save, LogOut } from "lucide-react";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+
+import cmsService from "@/services/cmsService";
+import { CMSEvent } from "@/types/cms";
+import { isAdmin, useAdminAuth } from "@/utils/adminAuth";
+import { getEventBorderColor } from "@/utils/eventHelpers";
+
+// Import admin management components
 import { SpeakersManagement } from "@/components/admin/SpeakersManagement";
 import { AgendaManagement } from "@/components/admin/AgendaManagement";
 import { PartnersManagement } from "@/components/admin/PartnersManagement";
-import { TopicsManagement } from "@/components/admin/TopicsManagement";
 import { ResourcesManagement } from "@/components/admin/ResourcesManagement";
 import { ChallengesManagement } from "@/components/admin/ChallengesManagement";
+import { HomeContentManagement } from "@/components/admin/HomeContentManagement";
+import { TopicsManagement } from "@/components/admin/TopicsManagement";
 import { MarqueeManagement } from "@/components/admin/MarqueeManagement";
-import { PressReleaseManagement } from "@/components/admin/PressReleaseManagement";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-const AdminPage = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+const AdminLoginForm = ({ onLogin }: { onLogin: (username: string, password: string) => { success: boolean, message?: string } }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [loginError, setLoginError] = useState<string | null>(null);
-  const navigate = useNavigate();
+  const [error, setError] = useState("");
 
-  useEffect(() => {
-    const storedAuth = localStorage.getItem("isAuthenticated");
-    if (storedAuth === "true") {
-      setIsLoggedIn(true);
-    }
-  }, []);
-
-  const handleLoginSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setLoginError(null);
-
-    if (username === "admin" && password === "admin") {
-      setIsLoggedIn(true);
-      localStorage.setItem("isAuthenticated", "true");
-      navigate("/admin");
-    } else {
-      setLoginError("Invalid username or password");
+    setError("");
+    
+    const result = onLogin(username, password);
+    if (!result.success) {
+      setError(result.message || "Login failed");
     }
-  };
-
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    localStorage.removeItem("isAuthenticated");
-    navigate("/");
   };
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <header className="bg-gray-100 py-4 dark:bg-gray-800">
-        <div className="container mx-auto px-4">
-          <Link to="/" className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
-            ← Back to Home
-          </Link>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-4">
+      <Card className="w-full max-w-md">
+        <CardHeader className="space-y-1">
+          <div className="flex justify-between items-center">
+            <div>
+              <CardTitle className="text-2xl font-bold">Admin Login</CardTitle>
+              <CardDescription>
+                Sign in to access the event management system
+              </CardDescription>
+            </div>
+            <ThemeToggle />
+          </div>
+        </CardHeader>
+        <form onSubmit={handleSubmit}>
+          <CardContent className="space-y-4">
+            {error && (
+              <div className="p-3 text-sm bg-red-100 border border-red-200 text-red-600 rounded">
+                {error}
+              </div>
+            )}
+            <div className="space-y-2">
+              <Label htmlFor="username">Username</Label>
+              <Input 
+                id="username" 
+                value={username} 
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="admin" 
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input 
+                id="password" 
+                type="password" 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••" 
+                required
+              />
+              <p className="text-xs text-muted-foreground">
+                Demo credentials: admin / admin123
+              </p>
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Button type="submit" className="w-full">Sign In</Button>
+          </CardFooter>
+        </form>
+      </Card>
+    </div>
+  );
+};
+
+const AdminPage = () => {
+  const { isAuthenticated, loading, login, logout } = useAdminAuth();
+  const [activeTab, setActiveTab] = useState("events");
+  const [events, setEvents] = useState<CMSEvent[]>(cmsService.events.getAll());
+  const [editingEvent, setEditingEvent] = useState<CMSEvent | null>(null);
+  const [isCreating, setIsCreating] = useState(false);
+
+  useEffect(() => {
+    // Refresh events when component mounts
+    setEvents(cmsService.events.getAll());
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-xl">Loading...</p>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <AdminLoginForm onLogin={login} />;
+  }
+
+  const resetForm = () => {
+    setEditingEvent(null);
+    setIsCreating(false);
+  };
+
+  const handleCreateEvent = () => {
+    setIsCreating(true);
+    setEditingEvent({
+      id: crypto.randomUUID(),
+      title: "",
+      shortName: "",
+      description: "",
+      longDescription: "",
+      date: "",
+      eventStartDate: "",
+      eventEndDate: "",
+      location: "",
+      color: "bg-blue-500",
+      published: false,
+    });
+  };
+
+  const handleEditEvent = (event: CMSEvent) => {
+    setEditingEvent({...event});
+    setIsCreating(false);
+  };
+
+  const handleDeleteEvent = (id: string) => {
+    if (window.confirm("Are you sure you want to delete this event?")) {
+      cmsService.events.delete(id);
+      setEvents(cmsService.events.getAll());
+      toast.success("Event deleted successfully");
+    }
+  };
+
+  const handleSaveEvent = () => {
+    if (!editingEvent) return;
+    
+    if (isCreating) {
+      cmsService.events.create(editingEvent);
+      toast.success("Event created successfully");
+    } else {
+      cmsService.events.update(editingEvent.id, editingEvent);
+      toast.success("Event updated successfully");
+    }
+    
+    setEvents(cmsService.events.getAll());
+    resetForm();
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (!editingEvent) return;
+    
+    const { name, value } = e.target;
+    setEditingEvent({
+      ...editingEvent,
+      [name]: value
+    });
+  };
+
+  const handleTogglePublish = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!editingEvent) return;
+    
+    setEditingEvent({
+      ...editingEvent,
+      published: e.target.checked
+    });
+  };
+
+  const handleToggleFeatured = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!editingEvent) return;
+    
+    setEditingEvent({
+      ...editingEvent,
+      featured: e.target.checked
+    });
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+      <header className="bg-white dark:bg-gray-800 shadow-sm">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Link to="/">
+              <Button variant="outline" size="sm" className="flex items-center gap-2">
+                <ChevronLeft className="h-4 w-4" />
+                Back to Site
+              </Button>
+            </Link>
+            <h1 className="text-2xl font-bold">Convention CMS</h1>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={logout}
+              className="flex items-center gap-1 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+            >
+              <LogOut className="h-4 w-4" />
+              Logout
+            </Button>
+            <ThemeToggle />
+          </div>
         </div>
       </header>
 
-      <div className="container mx-auto flex-1 py-8">
-        <div className="mb-8 flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold">Event Management Dashboard</h1>
-            <p className="text-muted-foreground">Manage all aspects of your events</p>
-          </div>
-          <Button onClick={handleLogout} variant="outline">
-            <LogOut className="mr-2 h-4 w-4" />
-            Logout
-          </Button>
-        </div>
-
-        {isLoggedIn ? (
-          <Tabs defaultValue="events">
-            <TabsList className="mb-8 flex flex-wrap gap-1">
+      <main className="container mx-auto px-4 py-8">
+        <ScrollSection>
+          <Tabs defaultValue="events" value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="mb-6">
+              <TabsTrigger value="home">Home</TabsTrigger>
               <TabsTrigger value="events">Events</TabsTrigger>
-              <TabsTrigger value="home-content">Home Content</TabsTrigger>
               <TabsTrigger value="speakers">Speakers</TabsTrigger>
               <TabsTrigger value="agenda">Agenda</TabsTrigger>
-              <TabsTrigger value="partners">Partners</TabsTrigger>
               <TabsTrigger value="topics">Topics</TabsTrigger>
-              <TabsTrigger value="press-releases">Press Releases</TabsTrigger>
+              <TabsTrigger value="partners">Partners</TabsTrigger>
               <TabsTrigger value="resources">Resources</TabsTrigger>
               <TabsTrigger value="challenges">Challenges</TabsTrigger>
               <TabsTrigger value="marquee">Marquee</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="events">
-              <EventsManagement />
+            <TabsContent value="home">
+              <HomeContentManagement />
             </TabsContent>
 
-            <TabsContent value="home-content">
-              <HomeContentManagement />
+            <TabsContent value="events" className="space-y-4">
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-bold">Events Management</h2>
+                <Button onClick={handleCreateEvent} className="flex items-center gap-2">
+                  <Plus className="h-4 w-4" />
+                  Add Event
+                </Button>
+              </div>
+
+              {editingEvent ? (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>{isCreating ? "Create New Event" : "Edit Event"}</CardTitle>
+                    <CardDescription>
+                      {isCreating ? "Add a new event to the platform" : "Modify event details"}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="title">Event Title</Label>
+                        <Input 
+                          id="title" 
+                          name="title" 
+                          value={editingEvent.title} 
+                          onChange={handleInputChange} 
+                          placeholder="Enter event title" 
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="shortName">Short Name</Label>
+                        <Input 
+                          id="shortName" 
+                          name="shortName" 
+                          value={editingEvent.shortName} 
+                          onChange={handleInputChange} 
+                          placeholder="Short name (e.g. NCCRVS)" 
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="description">Description</Label>
+                      <Textarea 
+                        id="description" 
+                        name="description" 
+                        value={editingEvent.description} 
+                        onChange={handleInputChange} 
+                        placeholder="Brief description" 
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="longDescription">Long Description</Label>
+                      <Textarea 
+                        id="longDescription" 
+                        name="longDescription" 
+                        value={editingEvent.longDescription} 
+                        onChange={handleInputChange}
+                        placeholder="Detailed description" 
+                        className="min-h-[120px]" 
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="date">Display Date</Label>
+                        <Input 
+                          id="date" 
+                          name="date" 
+                          value={editingEvent.date} 
+                          onChange={handleInputChange} 
+                          placeholder="May 15-18, 2026" 
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="eventStartDate">Start Date</Label>
+                        <Input 
+                          id="eventStartDate" 
+                          name="eventStartDate" 
+                          type="date"
+                          value={editingEvent.eventStartDate} 
+                          onChange={handleInputChange} 
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="eventEndDate">End Date</Label>
+                        <Input 
+                          id="eventEndDate" 
+                          name="eventEndDate" 
+                          type="date"
+                          value={editingEvent.eventEndDate} 
+                          onChange={handleInputChange} 
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="location">Location</Label>
+                        <Input 
+                          id="location" 
+                          name="location" 
+                          value={editingEvent.location} 
+                          onChange={handleInputChange} 
+                          placeholder="City, Country" 
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="color">Branding Color</Label>
+                        <Select
+                          value={editingEvent.color}
+                          onValueChange={(value) => setEditingEvent({...editingEvent, color: value})}
+                        >
+                          <SelectTrigger id="color" className="w-full">
+                            <SelectValue placeholder="Select a color" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="bg-blue-500">Blue</SelectItem>
+                            <SelectItem value="bg-green-500">Green</SelectItem>
+                            <SelectItem value="bg-red-500">Red</SelectItem>
+                            <SelectItem value="bg-purple-500">Purple</SelectItem>
+                            <SelectItem value="bg-yellow-500">Yellow</SelectItem>
+                            <SelectItem value="bg-pink-500">Pink</SelectItem>
+                            <SelectItem value="bg-orange-500">Orange</SelectItem>
+                            <SelectItem value="bg-teal-500">Teal</SelectItem>
+                            <SelectItem value="bg-indigo-500">Indigo</SelectItem>
+                            <SelectItem value="bg-rvs-primary">RVS Primary</SelectItem>
+                            <SelectItem value="bg-bms-primary">BMS Primary</SelectItem>
+                            <SelectItem value="bg-sm-primary">SM Primary</SelectItem>
+                            <SelectItem value="bg-cs-primary">CS Primary</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="imageUrl">Image URL</Label>
+                        <Input 
+                          id="imageUrl" 
+                          name="imageUrl" 
+                          value={editingEvent.imageUrl || ""} 
+                          onChange={handleInputChange} 
+                          placeholder="https://example.com/image.jpg" 
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="videoUrl">Video URL</Label>
+                        <Input 
+                          id="videoUrl" 
+                          name="videoUrl" 
+                          value={editingEvent.videoUrl || ""} 
+                          onChange={handleInputChange} 
+                          placeholder="https://youtube.com/watch?v=xyz" 
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        id="published"
+                        checked={editingEvent.published}
+                        onChange={handleTogglePublish}
+                        className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                      />
+                      <Label htmlFor="published">Published</Label>
+                    </div>
+
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        id="featured"
+                        checked={editingEvent.featured || false}
+                        onChange={handleToggleFeatured}
+                        className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                      />
+                      <Label htmlFor="featured">Featured</Label>
+                    </div>
+                  </CardContent>
+                  <CardFooter className="flex justify-between">
+                    <Button variant="outline" onClick={resetForm}>Cancel</Button>
+                    <Button onClick={handleSaveEvent} className="flex items-center gap-2">
+                      <Save className="h-4 w-4" />
+                      Save Event
+                    </Button>
+                  </CardFooter>
+                </Card>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {events.map((event) => {
+                    // Get the event border color based on event ID or color
+                    const borderColorClass = event.id.startsWith("nc") ? 
+                      getEventBorderColor(event.id) : 
+                      `border-l-${event.color.replace('bg-', '')}`;
+
+                    return (
+                      <Card key={event.id} className={`border-l-4 ${event.published ? borderColorClass : 'border-l-gray-300'}`}>
+                        <CardHeader>
+                          <CardTitle>{event.title}</CardTitle>
+                          <CardDescription>{event.shortName} • {event.date}</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">{event.description}</p>
+                          <p className="text-sm mt-2">{event.location}</p>
+                          {event.featured && (
+                            <span className="mt-2 inline-block bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded dark:bg-blue-900 dark:text-blue-200">
+                              Featured
+                            </span>
+                          )}
+                          {event.imageUrl && (
+                            <div className="mt-3">
+                              <img 
+                                src={event.imageUrl} 
+                                alt={event.title} 
+                                className="h-20 w-full object-cover rounded"
+                              />
+                            </div>
+                          )}
+                        </CardContent>
+                        <CardFooter className="flex justify-between">
+                          <Button variant="outline" size="sm" onClick={() => handleEditEvent(event)} className="flex items-center gap-1">
+                            <Edit className="h-3 w-3" />
+                            Edit
+                          </Button>
+                          <Button variant="destructive" size="sm" onClick={() => handleDeleteEvent(event.id)} className="flex items-center gap-1">
+                            <Trash className="h-3 w-3" />
+                            Delete
+                          </Button>
+                        </CardFooter>
+                      </Card>
+                    );
+                  })}
+                </div>
+              )}
             </TabsContent>
 
             <TabsContent value="speakers">
@@ -103,16 +493,12 @@ const AdminPage = () => {
               <AgendaManagement />
             </TabsContent>
 
-            <TabsContent value="partners">
-              <PartnersManagement />
-            </TabsContent>
-
             <TabsContent value="topics">
               <TopicsManagement />
             </TabsContent>
 
-            <TabsContent value="press-releases">
-              <PressReleaseManagement />
+            <TabsContent value="partners">
+              <PartnersManagement />
             </TabsContent>
 
             <TabsContent value="resources">
@@ -127,48 +513,8 @@ const AdminPage = () => {
               <MarqueeManagement />
             </TabsContent>
           </Tabs>
-        ) : (
-          <div className="mx-auto mt-12 max-w-md">
-            <Card>
-              <CardHeader>
-                <CardTitle>Admin Login</CardTitle>
-                <CardDescription>
-                  Please enter your credentials to access the admin dashboard
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleLoginSubmit} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="username">Username</Label>
-                    <Input
-                      id="username"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                      placeholder="Enter your username"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="password">Password</Label>
-                    <Input
-                      id="password"
-                      type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder="Enter your password"
-                    />
-                  </div>
-                  <Button type="submit" className="w-full">
-                    Login
-                  </Button>
-                  {loginError && (
-                    <p className="text-center text-sm text-red-500">{loginError}</p>
-                  )}
-                </form>
-              </CardContent>
-            </Card>
-          </div>
-        )}
-      </div>
+        </ScrollSection>
+      </main>
     </div>
   );
 };

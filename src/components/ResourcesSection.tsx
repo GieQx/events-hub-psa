@@ -1,116 +1,98 @@
 
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { 
-  Download, 
-  FileText, 
-  FileImage, 
-  Video, 
-  Link as LinkIcon, 
-  ExternalLink,
-  BookOpen
-} from "lucide-react";
+import { FileText, Video, Link as LinkIcon, Image } from "lucide-react";
+import { Resource } from "@/components/types";
+import { CMSResource } from "@/types/cms";
 import { getEventColor } from "@/utils/eventHelpers";
 
-interface Resource {
-  id: string;
-  title: string;
-  description?: string;
-  type: string;
-  url: string;
-}
-
 interface ResourcesSectionProps {
-  resources: Resource[];
-  className?: string;
-  eventId?: string;
-  eventDetails?: {
+  resources: CMSResource[] | Resource[];
+  eventDetails: {
     title: string;
     description: string;
     location: string;
     startDate: string;
     endDate: string;
   };
+  eventId?: string;
+  className?: string;
 }
 
-export function ResourcesSection({ 
-  resources, 
-  className = "",
-  eventId = "nccrvs",
-  eventDetails
-}: ResourcesSectionProps) {
+export function ResourcesSection({ resources, eventDetails, eventId = "nccrvs", className = "" }: ResourcesSectionProps) {
+  // Determine the appropriate icon for the resource type
   const getResourceIcon = (type: string) => {
-    switch(type.toLowerCase()) {
-      case 'pdf':
-        return <FileText className="h-6 w-6" />;
-      case 'image':
-        return <FileImage className="h-6 w-6" />;
-      case 'video':
-        return <Video className="h-6 w-6" />;
-      case 'link':
-        return <LinkIcon className="h-6 w-6" />;
-      case 'ebook':
-        return <BookOpen className="h-6 w-6" />;
-      default:
-        return <FileText className="h-6 w-6" />;
+    switch(type) {
+      case 'pdf': return <FileText className="h-5 w-5" />;
+      case 'video': return <Video className="h-5 w-5" />;
+      case 'link': return <LinkIcon className="h-5 w-5" />;
+      case 'image': return <Image className="h-5 w-5" />;
+      default: return <FileText className="h-5 w-5" />;
     }
   };
 
-  const getFileExtension = (url: string) => {
-    if (!url) return '';
-    
-    const extension = url.split('.').pop()?.toLowerCase();
-    if (!extension) return '';
-    
-    return extension;
+  // Get text color for the current event
+  const getTextColorClass = () => {
+    switch(eventId) {
+      case "nccrvs": return "text-rvs-primary";
+      case "cbms": return "text-bms-primary";
+      case "nsm": return "text-sm-primary";
+      case "ncs": return "text-cs-primary";
+      default: return "text-rvs-primary";
+    }
+  };
+
+  // Get background color class for the current event
+  const getBgColorClass = () => {
+    switch(eventId) {
+      case "nccrvs": return "bg-rvs-primary/10";
+      case "cbms": return "bg-bms-primary/10";
+      case "nsm": return "bg-sm-primary/10";
+      case "ncs": return "bg-cs-primary/10";
+      default: return "bg-rvs-primary/10";
+    }
   };
 
   return (
     <div className={className}>
-      <h2 className="mb-6 text-center text-3xl font-bold">Resources & Downloads</h2>
+      <h2 className="mb-6 text-center text-3xl font-bold">Event Resources</h2>
       
-      {resources.length > 0 ? (
+      {resources && resources.length > 0 ? (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {resources.map((resource) => (
             <Card key={resource.id} className="overflow-hidden transition-all hover:shadow-md">
-              <CardContent className="p-0">
-                <div className="flex items-start gap-4 p-6">
-                  <div className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full ${getEventColor(eventId)}`}>
+              <CardContent className="p-6">
+                <div className="mb-4 flex items-center">
+                  <div className={`mr-3 flex h-10 w-10 items-center justify-center rounded-full ${getBgColorClass()}`}>
                     {getResourceIcon(resource.type)}
                   </div>
-                  <div className="flex-1">
-                    <h3 className="mb-1 font-semibold">{resource.title}</h3>
-                    {resource.description && (
-                      <p className="mb-2 text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
-                        {resource.description}
-                      </p>
-                    )}
-                    <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
-                      <span className="uppercase">{resource.type}</span>
-                      {getFileExtension(resource.url) && (
-                        <span className="ml-2 rounded bg-gray-100 px-2 py-0.5 dark:bg-gray-700">
-                          {getFileExtension(resource.url)}
-                        </span>
-                      )}
-                    </div>
+                  <div>
+                    <h3 className="text-lg font-semibold">{resource.title}</h3>
+                    <p className="text-xs text-gray-500">
+                      {resource.fileSize ? resource.fileSize : resource.type.toUpperCase()}
+                    </p>
                   </div>
                 </div>
-                <div className="border-t p-4">
+                
+                {resource.description && (
+                  <p className="mb-4 text-sm text-gray-600 dark:text-gray-300">
+                    {resource.description}
+                  </p>
+                )}
+                
+                <div className="mt-2">
                   <a
-                    href={resource.url}
+                    href={resource.url || resource.downloadUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block w-full"
+                    className={`inline-flex items-center text-sm font-medium ${getTextColorClass()} hover:underline`}
                   >
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className={`w-full ${getEventColor(eventId)} text-white hover:bg-opacity-90`}
-                    >
-                      <Download className="mr-2 h-4 w-4" />
-                      {resource.type.toLowerCase() === 'link' ? 'Visit Link' : 'Download'}
-                      {resource.type.toLowerCase() === 'link' && <ExternalLink className="ml-2 h-3 w-3" />}
-                    </Button>
+                    {resource.type === 'pdf' ? 'Download PDF' :
+                     resource.type === 'video' ? 'Watch Video' :
+                     resource.type === 'link' ? 'Visit Link' :
+                     resource.type === 'image' ? 'View Image' : 'Access Resource'}
+                    <svg className="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
                   </a>
                 </div>
               </CardContent>
@@ -118,9 +100,7 @@ export function ResourcesSection({
           ))}
         </div>
       ) : (
-        <p className="text-center text-gray-500 dark:text-gray-400">
-          No resources are available for this event yet.
-        </p>
+        <p className="text-center text-gray-500">No resources available yet. Check back soon!</p>
       )}
     </div>
   );

@@ -1,4 +1,3 @@
-
 import { useParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { BackToTopButton } from "@/components/BackToTopButton";
@@ -8,7 +7,6 @@ import { EventHeader } from "@/components/EventHeader";
 import { EventHero } from "@/components/EventHero";
 import { EventMainContent } from "@/components/EventMainContent";
 import { EventFooter } from "@/components/EventFooter";
-import { PressReleaseSection } from "@/components/PressReleaseSection";
 import { getEventColor, getParticleColor } from "@/utils/eventHelpers";
 import { useEffect, useState } from "react";
 
@@ -69,7 +67,6 @@ const EventPage = () => {
   const topics = cmsService.topics.getByEventId(eventId || "");
   const resources = cmsService.resources.getByEventId(eventId || "");
   const faqs = cmsService.faqs.getByEventId(eventId || "");
-  const pressReleases = cmsService.pressReleases ? cmsService.pressReleases.getByEventId(eventId || "") : [];
   
   let eventChallenge;
   try {
@@ -247,16 +244,6 @@ const EventPage = () => {
         getParticleColor={() => getParticleColor(eventId || "")}
         eventCalendarDetails={eventCalendarDetails}
       />
-
-      {/* Add Press Release Section */}
-      <section className="bg-white dark:bg-gray-800 py-16">
-        <div className="container mx-auto px-4">
-          <PressReleaseSection 
-            pressReleases={pressReleases} 
-            eventId={eventId || ""}
-          />
-        </div>
-      </section>
 
       <EventFooter event={event} eventId={eventId || ""} />
 

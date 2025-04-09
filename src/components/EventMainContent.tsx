@@ -66,12 +66,12 @@ export function EventMainContent({
 }: EventMainContentProps) {
   // Get the actual color based on the event ID
   const actualEventColor = eventId === "nccrvs" ? "#FF6479" : 
-                          eventId === "cbms" ? "#2A9D8F" :
-                          eventId === "nsm" ? "#E63946" : "#3F7E44";
+                           eventId === "cbms" ? "#2A9D8F" :
+                           eventId === "nsm" ? "#E63946" : "#3F7E44";
 
   return (
     <>
-      <section className={`${getEventColor(eventId)} py-3 text-white`}>
+      <section className={`${getEventColor(eventId)} py-3`}>
         <MarqueeSection 
           items={rvsNewsUpdates} 
           primaryColor={actualEventColor}
@@ -81,6 +81,11 @@ export function EventMainContent({
 
       <main className="bg-gray-50 pb-20 dark:bg-gray-900">
         <section id="about" className="relative scroll-mt-20 bg-white py-16 dark:bg-gray-800">
+          <ParticleBackground 
+            color={getParticleColor(eventId)} 
+            particleCount={50}
+            className="opacity-10" 
+          />
           <div className="container relative z-10 mx-auto px-4">
             <ScrollSection>
               <AboutSection 
@@ -130,7 +135,7 @@ export function EventMainContent({
         <section id="topics" className="scroll-mt-20 bg-white py-16 dark:bg-gray-800">
           <div className="container mx-auto px-4">
             <ScrollSection>
-              <TopicsSection topics={rvsTopics} eventId={eventId} />
+              <TopicsSection topics={rvsTopics} />
             </ScrollSection>
           </div>
         </section>
@@ -143,7 +148,6 @@ export function EventMainContent({
                 hotels={rvsHotels}
                 restaurants={rvsRestaurants}
                 faqs={rvsInfoFaqs}
-                eventId={eventId}
               />
             </ScrollSection>
           </div>
@@ -152,7 +156,7 @@ export function EventMainContent({
         <section id="challenge" className="scroll-mt-20 bg-white py-16 dark:bg-gray-800">
           <div className="container mx-auto max-w-3xl px-4">
             <ScrollSection>
-              <ConventionChallenge challenge={rvsChallenge} eventId={eventId} />
+              <ConventionChallenge challenge={rvsChallenge} />
             </ScrollSection>
           </div>
         </section>

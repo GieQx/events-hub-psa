@@ -3,9 +3,10 @@ import { CountdownTimer } from "@/components/CountdownTimer";
 import { RegistrationButton } from "@/components/RegistrationButton";
 import { GoogleCalendarButton } from "@/components/GoogleCalendarButton";
 import { ScrollSection } from "@/components/ScrollSection";
+import { ParticleBackground } from "@/components/ParticleBackground";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
-import { getEventColor } from "@/utils/eventHelpers";
+import { getEventColor, getParticleColor } from "@/utils/eventHelpers";
 
 interface EventHeroProps {
   eventId?: string;
@@ -55,8 +56,11 @@ export function EventHero({ eventId = "", event }: EventHeroProps) {
           <source src={event?.videoUrl} type="video/mp4" />
         </video>
         
-        {/* Removed ParticleBackground as requested */}
-        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+        <ParticleBackground 
+          color={getParticleColor(eventId)} 
+          particleCount={150}
+          className="z-10 opacity-30" 
+        />
       </div>
 
       <div className="relative z-10 mx-auto flex min-h-[calc(100vh-4rem)] max-w-7xl flex-col items-center justify-center px-6 py-16 text-center text-white">
