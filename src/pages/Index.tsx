@@ -103,9 +103,10 @@ const IndexPage = () => {
                       description={event.description}
                       date={event.date}
                       location={event.location}
-                      imageUrl={event.id === "rvs" ? "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=600&h=400&auto=format&fit=crop&q=80" :
-                                event.id === "bms" ? "https://images.unsplash.com/photo-1528605248644-14dd04022da1?w=600&h=400&auto=format&fit=crop&q=80" :
-                                event.id === "sm" ? "https://images.unsplash.com/photo-1596496181871-9681eacf9764?w=600&h=400&auto=format&fit=crop&q=80" :
+                      imageUrl={event.imageUrl !== "/placeholder.svg" ? event.imageUrl : 
+                                event.id === "nccrvs" ? "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=600&h=400&auto=format&fit=crop&q=80" :
+                                event.id === "cbms" ? "https://images.unsplash.com/photo-1528605248644-14dd04022da1?w=600&h=400&auto=format&fit=crop&q=80" :
+                                event.id === "nsm" ? "https://images.unsplash.com/photo-1596496181871-9681eacf9764?w=600&h=400&auto=format&fit=crop&q=80" :
                                 "https://images.unsplash.com/photo-1569025743873-ea3a9ade89f9?w=600&h=400&auto=format&fit=crop&q=80"}
                       color={event.color}
                       disabled={isDisabled}
