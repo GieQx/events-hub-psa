@@ -18,9 +18,20 @@ interface EventHeroProps {
     videoUrl: string;
     eventStartDate: string;
   };
+  eventCalendarDetails?: {
+    title: string;
+    description: string;
+    location: string;
+    startDate: string;
+    endDate: string;
+  };
 }
 
-export function EventHero({ eventId = "", event }: EventHeroProps) {
+export function EventHero({ 
+  eventId = "", 
+  event, 
+  eventCalendarDetails 
+}: EventHeroProps) {
   const [videoLoaded, setVideoLoaded] = useState(false);
 
   useEffect(() => {
@@ -74,10 +85,10 @@ export function EventHero({ eventId = "", event }: EventHeroProps) {
         
         <ScrollSection delay={0.7}>
           <div className="mb-10 flex flex-wrap items-center justify-center gap-4">
-            <RegistrationButton eventId={eventId} />
-            <Button variant="outline" className="text-white hover:bg-white/10">
-              View Program
-            </Button>
+            <RegistrationButton 
+              eventId={eventId} 
+              eventDetails={eventCalendarDetails}
+            />
           </div>
         </ScrollSection>
         

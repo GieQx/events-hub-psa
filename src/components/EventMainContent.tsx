@@ -11,6 +11,7 @@ import { ResourcesSection } from "@/components/ResourcesSection";
 import { FaqsSection } from "@/components/FaqsSection";
 import { MarqueeSection } from "@/components/MarqueeSection";
 import { ScrollSection } from "@/components/ScrollSection";
+import { FloatingScrollDownButton } from "@/components/FloatingScrollDownButton";
 import { Speaker } from "@/components/types";
 import { KeySpeakers } from "@/components/KeySpeakers";
 
@@ -63,16 +64,20 @@ export function EventMainContent({
   getParticleColor,
   eventCalendarDetails
 }: EventMainContentProps) {
+  // Add FloatingScrollDownButton
   return (
     <>
       <section className={`bg-${getEventColor()} py-3 text-white`}>
         <MarqueeSection 
+          eventId={eventId}
           items={rvsNewsUpdates} 
-          primaryColor={event.id === "nccrvs" ? "#FF6479" : 
-                         event.id === "cbms" ? "#2A9D8F" :
-                         event.id === "nsm" ? "#E63946" : "#3F7E44"}
+          primaryColor={eventId === "nccrvs" ? "#FF6479" : 
+                        eventId === "cbms" ? "#2A9D8F" :
+                        eventId === "nsm" ? "#E63946" : "#3F7E44"}
         />
       </section>
+
+      <FloatingScrollDownButton eventId={eventId} />
 
       <main className="bg-gray-50 pb-20 dark:bg-gray-900">
         <section id="about" className="scroll-mt-20 bg-white py-16 dark:bg-gray-800 relative">
@@ -143,6 +148,7 @@ export function EventMainContent({
                 hotels={rvsHotels}
                 restaurants={rvsRestaurants}
                 faqs={rvsInfoFaqs}
+                eventId={eventId}
               />
             </ScrollSection>
           </div>

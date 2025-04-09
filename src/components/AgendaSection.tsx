@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +12,8 @@ interface AgendaSectionProps {
 }
 
 export function AgendaSection({ days, className = "", eventId = "nccrvs" }: AgendaSectionProps) {
+  console.log("AgendaSection received days:", days);
+  
   // Handle empty days array gracefully
   if (!days || days.length === 0) {
     return (
@@ -48,17 +50,25 @@ export function AgendaSection({ days, className = "", eventId = "nccrvs" }: Agen
     }
   };
 
+  useEffect(() => {
+    console.log("Active day set to:", activeDay);
+  }, [activeDay]);
+
   return (
     <div className={className}>
       <h2 className="mb-6 text-center text-3xl font-bold">Event Agenda</h2>
-      <Tabs defaultValue={validDays[0]?.date} className="w-full">
-        <TabsList className="mb-6 grid w-full grid-cols-3">
+      <Tabs value={validDays[0]?.date} className="w-full">
+        <TabsList className="mb-6 grid w-full" style={{ 
+          gridTemplateColumns: `repeat(${Math.min(validDays.length, 3)}, minmax(0, 1fr))` 
+        }}>
           {validDays.map((day) => (
             <TabsTrigger 
               key={day.date} 
               value={day.date} 
               onClick={() => setActiveDay(day.date)}
-              className={`data-[state=active]:bg-${getEventColor()} data-[state=active]:text-white`}
+              style={{
+                "--tab-accent-color": `var(--${getEventColor()})`,
+              } as React.CSSProperties}
             >
               {day.title}
             </TabsTrigger>
@@ -72,8 +82,13 @@ export function AgendaSection({ days, className = "", eventId = "nccrvs" }: Agen
                 day.events.map((event, index) => (
                   <Card key={index} className="overflow-hidden shadow-md transition-all duration-300 hover:shadow-lg">
                     <CardContent className="p-0">
-                      <div className={`flex flex-col border-l-4 border-${getEventColor()} p-5 md:flex-row md:items-start`}>
-                        <div className={`mb-4 flex min-w-[120px] flex-shrink-0 items-center rounded-md bg-${getEventColor()}/10 px-3 py-2 font-medium text-${getEventColor()} md:mb-0 md:mr-6`}>
+                      <div className="flex flex-col border-l-4 p-5 md:flex-row md:items-start"
+                        style={{ borderLeftColor: `var(--${getEventColor()})` }}>
+                        <div className="mb-4 flex min-w-[120px] flex-shrink-0 items-center rounded-md px-3 py-2 font-medium md:mb-0 md:mr-6"
+                          style={{ 
+                            backgroundColor: `hsl(var(--${getEventColor()}) / 0.1)`,
+                            color: `hsl(var(--${getEventColor()}))` 
+                          }}>
                           {event.time}
                         </div>
                         <div className="flex-1 space-y-3">
