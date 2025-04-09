@@ -34,11 +34,29 @@ export function EventCard({
   const safeLocation = location || "Location TBD";
   const safeImageUrl = imageUrl || "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=600&h=400&auto=format&fit=crop&q=80";
   
-  // Fix the color mapping - use the proper Tailwind class directly
-  const bgColorClass = color || "bg-blue-600";
+  // Get the appropriate color class for the event
+  let bgColorClass = "bg-rvs-primary"; // Default to NCCRVS pink
+  
+  if (id === "nccrvs") {
+    bgColorClass = "bg-rvs-primary";
+  } else if (id === "cbms") {
+    bgColorClass = "bg-bms-primary";
+  } else if (id === "nsm") {
+    bgColorClass = "bg-sm-primary";
+  } else if (id === "ncs") {
+    bgColorClass = "bg-cs-primary";
+  } else if (color && color.startsWith("bg-")) {
+    bgColorClass = color;
+  } else if (color) {
+    // If it's a hex color, use inline style instead
+    bgColorClass = "";
+  }
 
   const Card = () => (
-    <div className={`event-card h-full ${bgColorClass} text-white`}>
+    <div 
+      className={`event-card h-full ${bgColorClass} text-white`}
+      style={!bgColorClass && color ? { backgroundColor: color } : undefined}
+    >
       <div className="aspect-video overflow-hidden">
         <img 
           src={safeImageUrl} 

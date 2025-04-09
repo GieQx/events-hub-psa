@@ -10,8 +10,15 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { CMSEvent } from "@/types/cms";
 import { Switch } from "@/components/ui/switch";
 import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger } from "@/components/ui/menubar";
-import { Plus, Trash2, Edit, Circle, Palette } from "lucide-react";
+import { Plus, Trash2, Edit, Circle, Palette, Copy } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { CloneButton } from "./CloneButton";
+import { 
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import cmsService from "@/services/cmsService";
 import { generateId } from "@/services/cmsUtils";
 import { shouldDisableEvent } from "@/utils/eventHelpers";
@@ -108,6 +115,23 @@ const EventsManagement = () => {
     setCurrentEvent({...event});
     setSelectedEvent(event);
     setShowColorPicker(false);
+  };
+
+  const handleCloneEvent = (event: CMSEvent) => {
+    const newId = generateId();
+    const clonedEvent = {
+      ...event,
+      id: newId,
+      title: `${event.title} (Copy)`,
+      shortName: event.shortName ? `${event.shortName} (Copy)` : "",
+      featured: false // Don't feature the clone by default
+    };
+    
+    setIsEditing(false);
+    setCurrentEvent(clonedEvent);
+    setSelectedEvent(null);
+    // Automatically go to edit tab
+    document.querySelector('[data-value="edit"]')?.click();
   };
 
   const handleDeleteEvent = (id: string) => {
@@ -207,7 +231,7 @@ const EventsManagement = () => {
           <TabsList className="mb-4">
             <TabsTrigger value="list">Event List</TabsTrigger>
             {(isEditing || currentEvent.id) && (
-              <TabsTrigger value="edit">
+              <TabsTrigger value="edit" data-value="edit">
                 {isEditing ? "Edit Event" : "New Event"}
               </TabsTrigger>
             )}
@@ -248,13 +272,13 @@ const EventsManagement = () => {
                       <TableCell>{event.location}</TableCell>
                       <TableCell>
                         <div className="flex flex-col gap-1 text-xs">
-                          <span className={`inline-flex items-center px-2 py-1 rounded-full ${event.published ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
+                          <span className={`inline-flex items-center px-2 py-1 rounded-full ${event.published ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100' : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-100'}`}>
                             {event.published ? 'Published' : 'Draft'}
                           </span>
-                          <span className={`inline-flex items-center px-2 py-1 rounded-full ${event.featured ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'}`}>
+                          <span className={`inline-flex items-center px-2 py-1 rounded-full ${event.featured ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100' : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-100'}`}>
                             {event.featured ? 'Featured' : 'Not Featured'}
                           </span>
-                          <span className={`inline-flex items-center px-2 py-1 rounded-full ${isEventDisabled(event.eventStartDate) ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'}`}>
+                          <span className={`inline-flex items-center px-2 py-1 rounded-full ${isEventDisabled(event.eventStartDate) ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-100' : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100'}`}>
                             {isEventDisabled(event.eventStartDate) ? 'Disabled (>600 days)' : 'Enabled'}
                           </span>
                         </div>
@@ -269,6 +293,9 @@ const EventsManagement = () => {
                           >
                             <Edit className="h-4 w-4" />
                           </Button>
+                          
+                          <CloneButton onClone={() => handleCloneEvent(event)} />
+                          
                           <Button 
                             variant="destructive" 
                             size="sm" 

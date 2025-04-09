@@ -227,3 +227,48 @@
 .bg-light-blue {
   background-color: hsl(var(--light-blue));
 }
+
+/* Text color classes for branding */
+.text-rvs-primary {
+  color: hsl(var(--rvs-primary));
+}
+.text-bms-primary {
+  color: hsl(var(--bms-primary));
+}
+.text-sm-primary {
+  color: hsl(var(--sm-primary));
+}
+.text-cs-primary {
+  color: hsl(var(--cs-primary));
+}
+
+/* Border color classes for branding */
+.border-rvs-primary {
+  border-color: hsl(var(--rvs-primary));
+}
+.border-bms-primary {
+  border-color: hsl(var(--bms-primary));
+}
+.border-sm-primary {
+  border-color: hsl(var(--sm-primary));
+}
+.border-cs-primary {
+  border-color: hsl(var(--cs-primary));
+}
+
+/* Event card consistent styling */
+.event-card {
+  @apply rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl;
+}
+.event-card.bg-rvs-primary {
+  background-color: hsl(var(--rvs-primary));
+}
+.event-card.bg-bms-primary {
+  background-color: hsl(var(--bms-primary));
+}
+.event-card.bg-sm-primary {
+  background-color: hsl(var(--sm-primary));
+}
+.event-card.bg-cs-primary {
+  background-color: hsl(var(--cs-primary));
+}

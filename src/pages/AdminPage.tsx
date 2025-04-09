@@ -16,6 +16,7 @@ import { isAdmin, useAdminAuth } from "@/utils/adminAuth";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, LayoutDashboard, Users, Calendar, Book, Handshake, FileText, Trophy, Megaphone, Map, CalendarDays } from "lucide-react";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 const AdminLoginForm = ({ onLogin }: { onLogin: () => void }) => {
   const [password, setPassword] = useState("");
@@ -26,8 +27,10 @@ const AdminLoginForm = ({ onLogin }: { onLogin: () => void }) => {
     if (password === "admin123") {
       localStorage.setItem("cms_admin_auth", "true");
       onLogin();
+      toast.success("Successfully logged in as admin");
     } else {
       setError("Invalid password");
+      toast.error("Invalid password");
     }
   };
 
@@ -46,7 +49,7 @@ const AdminLoginForm = ({ onLogin }: { onLogin: () => void }) => {
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-md border border-gray-300 p-2"
+                className="w-full rounded-md border border-gray-300 p-2 dark:border-gray-600 dark:bg-gray-800"
                 placeholder="Enter admin password"
                 required
               />
@@ -55,7 +58,7 @@ const AdminLoginForm = ({ onLogin }: { onLogin: () => void }) => {
             <Button type="submit" className="w-full">
               Login
             </Button>
-            <p className="mt-2 text-center text-xs text-gray-500">
+            <p className="mt-2 text-center text-xs text-gray-500 dark:text-gray-400">
               Hint: The password is "admin123"
             </p>
           </form>
@@ -83,6 +86,7 @@ const AdminPanel = () => {
           onClick={() => {
             localStorage.removeItem("cms_admin_auth");
             window.location.reload();
+            toast.info("Logged out successfully");
           }}
         >
           Logout

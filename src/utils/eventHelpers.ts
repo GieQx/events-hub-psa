@@ -66,3 +66,25 @@ export const shouldDisableEvent = (dateString: string, maxDays: number = 600): b
   
   return diffDays > maxDays;
 };
+
+// New helper for getting text color based on event
+export const getEventTextColor = (eventId: string): string => {
+  switch(eventId) {
+    case "nccrvs": return "text-rvs-primary";
+    case "cbms": return "text-bms-primary";
+    case "nsm": return "text-sm-primary";
+    case "ncs": return "text-cs-primary";
+    default: return "text-rvs-primary";
+  }
+};
+
+// Get border color based on event ID
+export const getEventBorderColor = (eventId: string): string => {
+  switch(eventId) {
+    case "nccrvs": return "border-rvs-primary";
+    case "cbms": return "border-bms-primary";
+    case "nsm": return "border-sm-primary";
+    case "ncs": return "border-cs-primary";
+    default: return "border-rvs-primary";
+  }
+};
