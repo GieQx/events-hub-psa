@@ -20,7 +20,7 @@ interface Challenge {
 }
 
 interface ConventionChallengeProps {
-  challenge: Challenge | any;
+  challenge: Challenge | null | undefined;
   className?: string;
 }
 
@@ -30,10 +30,10 @@ export function ConventionChallenge({ challenge, className = "" }: ConventionCha
 
   // Ensure challenge and challenge.steps exist before using reduce
   const steps = challenge?.steps || [];
-  const totalPoints = steps.reduce((sum, step) => sum + step.points, 0);
+  const totalPoints = steps.reduce((sum, step) => sum + (step.points || 0), 0);
   const earnedPoints = steps
     .filter((step) => completedSteps.includes(step.id))
-    .reduce((sum, step) => sum + step.points, 0);
+    .reduce((sum, step) => sum + (step.points || 0), 0);
   
   const progress = totalPoints > 0 ? Math.round((earnedPoints / totalPoints) * 100) : 0;
 
