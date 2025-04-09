@@ -21,6 +21,7 @@ interface ChatbotDialogProps {
 }
 
 export function ChatbotDialog({ eventName, options, eventId = "rvs" }: ChatbotDialogProps) {
+  const [open, setOpen] = useState(false);
   const [agreementChecked, setAgreementChecked] = useState(false);
   const [chatStarted, setChatStarted] = useState(false);
   const [currentOptions, setCurrentOptions] = useState<ChatOption[]>(options);
@@ -89,11 +90,12 @@ export function ChatbotDialog({ eventName, options, eventId = "rvs" }: ChatbotDi
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button 
           size="icon" 
-          className={`fixed bottom-24 right-6 h-14 w-14 rounded-full bg-${getEventColor()} shadow-lg hover:bg-${getEventColor()}/90 md:bottom-6`}
+          className={`fixed bottom-6 right-6 h-14 w-14 rounded-full bg-${getEventColor()} shadow-lg hover:bg-${getEventColor()}/90`}
+          onClick={() => setOpen(true)}
         >
           <MessageCircle className="h-6 w-6" />
           <span className="sr-only">Open chatbot</span>

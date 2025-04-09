@@ -15,6 +15,12 @@ import { ChevronLeft, Plus, Edit, Trash, Save } from "lucide-react";
 import cmsService from "@/services/cmsService";
 import { CMSEvent } from "@/types/cms";
 
+// Import admin management components
+import { SpeakersManagement } from "@/components/admin/SpeakersManagement";
+import { AgendaManagement } from "@/components/admin/AgendaManagement";
+import { PartnersManagement } from "@/components/admin/PartnersManagement";
+import { ResourcesManagement } from "@/components/admin/ResourcesManagement";
+
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState("events");
   const [events, setEvents] = useState<CMSEvent[]>(cmsService.events.getAll());
@@ -87,6 +93,15 @@ const AdminPage = () => {
     setEditingEvent({
       ...editingEvent,
       published: e.target.checked
+    });
+  };
+
+  const handleToggleFeatured = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!editingEvent) return;
+    
+    setEditingEvent({
+      ...editingEvent,
+      featured: e.target.checked
     });
   };
 
@@ -248,6 +263,17 @@ const AdminPage = () => {
                       />
                       <Label htmlFor="published">Published</Label>
                     </div>
+
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        id="featured"
+                        checked={editingEvent.featured || false}
+                        onChange={handleToggleFeatured}
+                        className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                      />
+                      <Label htmlFor="featured">Featured</Label>
+                    </div>
                   </CardContent>
                   <CardFooter className="flex justify-between">
                     <Button variant="outline" onClick={resetForm}>Cancel</Button>
@@ -268,6 +294,11 @@ const AdminPage = () => {
                       <CardContent>
                         <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">{event.description}</p>
                         <p className="text-sm mt-2">{event.location}</p>
+                        {event.featured && (
+                          <span className="mt-2 inline-block bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded dark:bg-blue-900 dark:text-blue-200">
+                            Featured
+                          </span>
+                        )}
                       </CardContent>
                       <CardFooter className="flex justify-between">
                         <Button variant="outline" size="sm" onClick={() => handleEditEvent(event)} className="flex items-center gap-1">
@@ -286,39 +317,19 @@ const AdminPage = () => {
             </TabsContent>
 
             <TabsContent value="speakers">
-              <div className="text-center py-12">
-                <h3 className="text-xl font-medium">Speakers Management</h3>
-                <p className="text-gray-500 dark:text-gray-400 mt-2">
-                  This feature will be available soon
-                </p>
-              </div>
+              <SpeakersManagement />
             </TabsContent>
 
             <TabsContent value="agenda">
-              <div className="text-center py-12">
-                <h3 className="text-xl font-medium">Agenda Management</h3>
-                <p className="text-gray-500 dark:text-gray-400 mt-2">
-                  This feature will be available soon
-                </p>
-              </div>
+              <AgendaManagement />
             </TabsContent>
 
             <TabsContent value="partners">
-              <div className="text-center py-12">
-                <h3 className="text-xl font-medium">Partners Management</h3>
-                <p className="text-gray-500 dark:text-gray-400 mt-2">
-                  This feature will be available soon
-                </p>
-              </div>
+              <PartnersManagement />
             </TabsContent>
 
             <TabsContent value="resources">
-              <div className="text-center py-12">
-                <h3 className="text-xl font-medium">Resources Management</h3>
-                <p className="text-gray-500 dark:text-gray-400 mt-2">
-                  This feature will be available soon
-                </p>
-              </div>
+              <ResourcesManagement />
             </TabsContent>
           </Tabs>
         </ScrollSection>

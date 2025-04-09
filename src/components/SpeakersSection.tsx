@@ -7,6 +7,7 @@ import { Linkedin, Twitter, ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { CMSSpeaker } from "@/types/cms";
+import { SpeakerProfileModal } from "@/components/SpeakerProfileModal";
 
 export interface Speaker {
   id: string;
@@ -30,9 +31,12 @@ interface SpeakersSectionProps {
 export function SpeakersSection({ speakers, className = "", eventId = "rvs" }: SpeakersSectionProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [cardsPerView, setCardsPerView] = useState(3);
+  const [selectedSpeaker, setSelectedSpeaker] = useState<CMSSpeaker | Speaker | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
   const isMediumScreen = useMediaQuery("(min-width: 769px) and (max-width: 1024px)");
   const containerRef = useRef<HTMLDivElement>(null);
+  const autoplayRef = useRef<NodeJS.Timeout | null>(null);
   
   useEffect(() => {
     if (isSmallScreen) {
@@ -44,14 +48,54 @@ export function SpeakersSection({ speakers, className = "", eventId = "rvs" }: S
     }
   }, [isSmallScreen, isMediumScreen]);
 
-  const maxIndex = Math.max(0, speakers.length - cardsPerView);
+  const totalSpeakers = speakers.length;
+  
+  const startAutoplay = () => {
+    if (autoplayRef.current) clearInterval(autoplayRef.current);
+    autoplayRef.current = setInterval(() => {
+      nextSlide();
+    }, 5000);
+  };
+
+  useEffect(() => {
+    startAutoplay();
+    return () => {
+      if (autoplayRef.current) clearInterval(autoplayRef.current);
+    };
+  }, [currentIndex, cardsPerView, totalSpeakers]);
 
   const nextSlide = () => {
-    setCurrentIndex(prev => Math.min(prev + 1, maxIndex));
+    setCurrentIndex(prev => {
+      // For looping behavior
+      if (prev + 1 > totalSpeakers - cardsPerView) {
+        return 0;
+      }
+      return prev + 1;
+    });
   };
 
   const prevSlide = () => {
-    setCurrentIndex(prev => Math.max(prev - 1, 0));
+    setCurrentIndex(prev => {
+      // For looping behavior
+      if (prev - 1 < 0) {
+        return totalSpeakers - cardsPerView;
+      }
+      return prev - 1;
+    });
+  };
+
+  const openSpeakerModal = (speaker: CMSSpeaker | Speaker) => {
+    setSelectedSpeaker(speaker);
+    setIsModalOpen(true);
+    // Pause autoplay when modal is open
+    if (autoplayRef.current) clearInterval(autoplayRef.current);
+  };
+
+  const closeSpeakerModal = () => {
+    setIsModalOpen(false);
+    setSelectedSpeaker(null);
+    // Resume autoplay when modal is closed
+    startAutoplay();
   };
 
   // Get the correct event color
@@ -65,21 +109,23 @@ export function SpeakersSection({ speakers, className = "", eventId = "rvs" }: S
     }
   };
 
+  if (totalSpeakers === 0) {
+    return null;
+  }
+
   return (
     <div className={className}>
       <h2 className="mb-6 text-center text-3xl font-bold">Featured Speakers</h2>
       
       <div className="relative">
-        {currentIndex > 0 && (
-          <Button 
-            onClick={prevSlide} 
-            className={`absolute -left-4 top-1/2 z-10 -translate-y-1/2 bg-${getEventColor()} hover:bg-${getEventColor()}/80 md:-left-6`}
-            size="icon"
-            aria-label="Previous speakers"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </Button>
-        )}
+        <Button 
+          onClick={prevSlide} 
+          className={`absolute -left-4 top-1/2 z-10 -translate-y-1/2 bg-${getEventColor()} hover:bg-${getEventColor()}/80 md:-left-6`}
+          size="icon"
+          aria-label="Previous speakers"
+        >
+          <ChevronLeft className="h-5 w-5" />
+        </Button>
         
         <div ref={containerRef} className="overflow-hidden">
           <div 
@@ -92,7 +138,10 @@ export function SpeakersSection({ speakers, className = "", eventId = "rvs" }: S
                 className="w-full shrink-0 px-2"
                 style={{ flex: `0 0 ${100 / cardsPerView}%` }}
               >
-                <Card className="group h-full overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+                <Card 
+                  className="group h-full overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg cursor-pointer"
+                  onClick={() => openSpeakerModal(speaker)}
+                >
                   <CardHeader className="pb-2">
                     <div className="mb-4 flex justify-center">
                       <Avatar className={`h-24 w-24 border-2 border-${getEventColor()}/20`}>
@@ -106,7 +155,7 @@ export function SpeakersSection({ speakers, className = "", eventId = "rvs" }: S
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-sm text-gray-600 dark:text-gray-300">{speaker.bio}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-3">{speaker.bio}</p>
                   </CardContent>
                   {(speaker.social || speaker.socialLinks) && (
                     <CardFooter className="flex justify-center gap-2">
@@ -114,10 +163,16 @@ export function SpeakersSection({ speakers, className = "", eventId = "rvs" }: S
                         {((speaker.social?.linkedin) || (speaker.socialLinks?.linkedin)) && (
                           <Tooltip>
                             <TooltipTrigger asChild>
-                              <Button variant="outline" size="icon" asChild className="h-9 w-9 rounded-full">
-                                <a href={speaker.social?.linkedin || speaker.socialLinks?.linkedin} target="_blank" rel="noopener noreferrer">
-                                  <Linkedin className="h-4 w-4" />
-                                </a>
+                              <Button 
+                                variant="outline" 
+                                size="icon" 
+                                className="h-9 w-9 rounded-full"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  window.open(speaker.social?.linkedin || speaker.socialLinks?.linkedin, '_blank');
+                                }}
+                              >
+                                <Linkedin className="h-4 w-4" />
                               </Button>
                             </TooltipTrigger>
                             <TooltipContent>
@@ -129,10 +184,16 @@ export function SpeakersSection({ speakers, className = "", eventId = "rvs" }: S
                         {((speaker.social?.twitter) || (speaker.socialLinks?.twitter)) && (
                           <Tooltip>
                             <TooltipTrigger asChild>
-                              <Button variant="outline" size="icon" asChild className="h-9 w-9 rounded-full">
-                                <a href={speaker.social?.twitter || speaker.socialLinks?.twitter} target="_blank" rel="noopener noreferrer">
-                                  <Twitter className="h-4 w-4" />
-                                </a>
+                              <Button 
+                                variant="outline" 
+                                size="icon" 
+                                className="h-9 w-9 rounded-full"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  window.open(speaker.social?.twitter || speaker.socialLinks?.twitter, '_blank');
+                                }}
+                              >
+                                <Twitter className="h-4 w-4" />
                               </Button>
                             </TooltipTrigger>
                             <TooltipContent>
@@ -149,20 +210,18 @@ export function SpeakersSection({ speakers, className = "", eventId = "rvs" }: S
           </div>
         </div>
         
-        {currentIndex < maxIndex && (
-          <Button 
-            onClick={nextSlide} 
-            className={`absolute -right-4 top-1/2 z-10 -translate-y-1/2 bg-${getEventColor()} hover:bg-${getEventColor()}/80 md:-right-6`}
-            size="icon"
-            aria-label="Next speakers"
-          >
-            <ChevronRight className="h-5 w-5" />
-          </Button>
-        )}
+        <Button 
+          onClick={nextSlide} 
+          className={`absolute -right-4 top-1/2 z-10 -translate-y-1/2 bg-${getEventColor()} hover:bg-${getEventColor()}/80 md:-right-6`}
+          size="icon"
+          aria-label="Next speakers"
+        >
+          <ChevronRight className="h-5 w-5" />
+        </Button>
       </div>
       
       <div className="mt-6 flex justify-center">
-        {Array.from({ length: Math.ceil(speakers.length / cardsPerView) }).map((_, index) => (
+        {Array.from({ length: Math.min(totalSpeakers, Math.ceil(totalSpeakers / cardsPerView)) }).map((_, index) => (
           <Button
             key={index}
             variant="outline"
@@ -173,6 +232,13 @@ export function SpeakersSection({ speakers, className = "", eventId = "rvs" }: S
           />
         ))}
       </div>
+
+      <SpeakerProfileModal 
+        speaker={selectedSpeaker} 
+        isOpen={isModalOpen} 
+        onClose={closeSpeakerModal}
+        eventId={eventId}
+      />
     </div>
   );
 }
