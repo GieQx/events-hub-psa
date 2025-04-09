@@ -93,7 +93,7 @@ export function EventsManagement() {
   const handleDeleteEvent = (id: string) => {
     if (confirm("Are you sure you want to delete this event?")) {
       try {
-        cmsService.events.remove(id);
+        cmsService.events.delete(id);
         loadEvents();
         toast.success("Event deleted successfully");
       } catch (error) {
@@ -111,10 +111,10 @@ export function EventsManagement() {
 
     try {
       if (isEditing) {
-        cmsService.events.update(currentEvent);
+        cmsService.events.update(currentEvent.id, currentEvent);
         toast.success("Event updated successfully");
       } else {
-        cmsService.events.add(currentEvent);
+        cmsService.events.create(currentEvent);
         toast.success("Event added successfully");
       }
       setIsDialogOpen(false);
