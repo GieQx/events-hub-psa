@@ -20,6 +20,8 @@ import { SpeakersManagement } from "@/components/admin/SpeakersManagement";
 import { AgendaManagement } from "@/components/admin/AgendaManagement";
 import { PartnersManagement } from "@/components/admin/PartnersManagement";
 import { ResourcesManagement } from "@/components/admin/ResourcesManagement";
+import { ChallengesManagement } from "@/components/admin/ChallengesManagement";
+import { HomeContentManagement } from "@/components/admin/HomeContentManagement";
 
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState("events");
@@ -126,12 +128,18 @@ const AdminPage = () => {
         <ScrollSection>
           <Tabs defaultValue="events" value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="mb-6">
+              <TabsTrigger value="home">Home</TabsTrigger>
               <TabsTrigger value="events">Events</TabsTrigger>
               <TabsTrigger value="speakers">Speakers</TabsTrigger>
               <TabsTrigger value="agenda">Agenda</TabsTrigger>
               <TabsTrigger value="partners">Partners</TabsTrigger>
               <TabsTrigger value="resources">Resources</TabsTrigger>
+              <TabsTrigger value="challenges">Challenges</TabsTrigger>
             </TabsList>
+
+            <TabsContent value="home">
+              <HomeContentManagement />
+            </TabsContent>
 
             <TabsContent value="events" className="space-y-4">
               <div className="flex justify-between items-center">
@@ -253,6 +261,29 @@ const AdminPage = () => {
                       </div>
                     </div>
 
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="imageUrl">Image URL</Label>
+                        <Input 
+                          id="imageUrl" 
+                          name="imageUrl" 
+                          value={editingEvent.imageUrl || ""} 
+                          onChange={handleInputChange} 
+                          placeholder="https://example.com/image.jpg" 
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="videoUrl">Video URL</Label>
+                        <Input 
+                          id="videoUrl" 
+                          name="videoUrl" 
+                          value={editingEvent.videoUrl || ""} 
+                          onChange={handleInputChange} 
+                          placeholder="https://youtube.com/watch?v=xyz" 
+                        />
+                      </div>
+                    </div>
+
                     <div className="flex items-center space-x-2">
                       <input
                         type="checkbox"
@@ -299,6 +330,15 @@ const AdminPage = () => {
                             Featured
                           </span>
                         )}
+                        {event.imageUrl && (
+                          <div className="mt-3">
+                            <img 
+                              src={event.imageUrl} 
+                              alt={event.title} 
+                              className="h-20 w-full object-cover rounded"
+                            />
+                          </div>
+                        )}
                       </CardContent>
                       <CardFooter className="flex justify-between">
                         <Button variant="outline" size="sm" onClick={() => handleEditEvent(event)} className="flex items-center gap-1">
@@ -330,6 +370,10 @@ const AdminPage = () => {
 
             <TabsContent value="resources">
               <ResourcesManagement />
+            </TabsContent>
+
+            <TabsContent value="challenges">
+              <ChallengesManagement />
             </TabsContent>
           </Tabs>
         </ScrollSection>

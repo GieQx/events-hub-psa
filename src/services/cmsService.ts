@@ -9,6 +9,8 @@ import {
   CMSResource 
 } from "@/types/cms";
 
+import { Challenge } from "@/types/challenge";
+
 import { 
   sanitizeInput, 
   validateInput, 
@@ -31,6 +33,8 @@ const LOCAL_STORAGE_KEYS = {
   PARTNERS: 'cms_partners',
   FAQS: 'cms_faqs',
   RESOURCES: 'cms_resources',
+  CHALLENGES: 'cms_challenges',
+  HOME_CONTENT: 'cms_home_content',
 };
 
 // Initialize with data from the src/data folder
@@ -53,6 +57,90 @@ import {
 import { 
   rvsResources 
 } from "@/data/rvs-event-data";
+
+// Sample challenges for initialization
+const sampleChallenges: Challenge[] = [
+  {
+    id: "challenge-1",
+    eventId: "rvs",
+    title: "Convention Challenge",
+    description: "Participate in our hackathon",
+    steps: [
+      {
+        id: "step-1",
+        description: "Register for the hackathon",
+        points: 10
+      },
+      {
+        id: "step-2",
+        description: "Form a team or join one",
+        points: 20
+      },
+      {
+        id: "step-3",
+        description: "Submit your project idea",
+        points: 30
+      },
+      {
+        id: "step-4",
+        description: "Complete your project",
+        points: 40
+      }
+    ],
+    reward: "First Prize: $5,000",
+    active: true
+  },
+  {
+    id: "challenge-2",
+    eventId: "bms",
+    title: "BMS Challenge",
+    description: "Complete these tasks to earn rewards",
+    steps: [
+      {
+        id: "step-1",
+        description: "Attend 3 sessions",
+        points: 15
+      },
+      {
+        id: "step-2",
+        description: "Collect 5 partner badges",
+        points: 25
+      },
+      {
+        id: "step-3",
+        description: "Post on social media with #BMS2025",
+        points: 20
+      }
+    ],
+    reward: "BMS Premium Membership",
+    active: true
+  }
+];
+
+// Sample home content for initialization
+const sampleHomeContent = {
+  heroTitle: "Discover the Best Industry Events",
+  heroSubtitle: "Connect with professionals, learn from experts, and grow your network",
+  featuredEvents: ["rvs", "bms", "sm"],
+  upcomingEventsTitle: "Upcoming Events",
+  upcomingEventsSubtitle: "Mark your calendar for these exciting opportunities",
+  testimonials: [
+    {
+      id: "t1",
+      text: "The conference was incredibly valuable. I made connections that led to three new clients!",
+      author: "Sarah Johnson",
+      position: "Marketing Director",
+      company: "TechGrowth Inc"
+    },
+    {
+      id: "t2",
+      text: "Best industry event I've attended in years. The speakers were top-notch.",
+      author: "Michael Chen",
+      position: "CTO",
+      company: "Innovate Systems"
+    }
+  ]
+};
 
 // Initialize storage with data
 const initializeStorage = () => {
@@ -95,6 +183,14 @@ const initializeStorage = () => {
 
   if (!localStorage.getItem(LOCAL_STORAGE_KEYS.RESOURCES)) {
     localStorage.setItem(LOCAL_STORAGE_KEYS.RESOURCES, JSON.stringify(rvsResources));
+  }
+
+  if (!localStorage.getItem(LOCAL_STORAGE_KEYS.CHALLENGES)) {
+    localStorage.setItem(LOCAL_STORAGE_KEYS.CHALLENGES, JSON.stringify(sampleChallenges));
+  }
+
+  if (!localStorage.getItem(LOCAL_STORAGE_KEYS.HOME_CONTENT)) {
+    localStorage.setItem(LOCAL_STORAGE_KEYS.HOME_CONTENT, JSON.stringify(sampleHomeContent));
   }
 };
 
@@ -348,6 +444,47 @@ export const resourceService = {
   },
 };
 
+// Challenge-specific functions
+export const challengeService = {
+  getAll: () => getAll<Challenge>(LOCAL_STORAGE_KEYS.CHALLENGES),
+  getById: (id: string) => getById<Challenge>(LOCAL_STORAGE_KEYS.CHALLENGES, id),
+  getByEventId: (eventId: string) => getByEventId<Challenge>(LOCAL_STORAGE_KEYS.CHALLENGES, eventId),
+  getActive: (eventId: string) => getByEventId<Challenge>(LOCAL_STORAGE_KEYS.CHALLENGES, eventId).filter(c => c.active),
+  create: (challenge: Challenge) => create<Challenge>(LOCAL_STORAGE_KEYS.CHALLENGES, challenge),
+  update: (id: string, challenge: Challenge) => update<Challenge>(LOCAL_STORAGE_KEYS.CHALLENGES, id, challenge),
+  delete: (id: string) => remove<Challenge>(LOCAL_STORAGE_KEYS.CHALLENGES, id),
+};
+
+// Home content management functions
+export const homeContentService = {
+  get: () => {
+    try {
+      const data = localStorage.getItem(LOCAL_STORAGE_KEYS.HOME_CONTENT);
+      return data ? JSON.parse(data) : sampleHomeContent;
+    } catch (error) {
+      console.error('Error retrieving home content:', error);
+      return sampleHomeContent;
+    }
+  },
+  update: (content: any) => {
+    try {
+      // Sanitize text inputs
+      const sanitizedContent = { ...content };
+      Object.keys(sanitizedContent).forEach(prop => {
+        if (typeof sanitizedContent[prop] === 'string') {
+          sanitizedContent[prop] = sanitizeInput(sanitizedContent[prop]);
+        }
+      });
+      
+      localStorage.setItem(LOCAL_STORAGE_KEYS.HOME_CONTENT, JSON.stringify(sanitizedContent));
+      return sanitizedContent;
+    } catch (error) {
+      console.error('Error updating home content:', error);
+      return null;
+    }
+  },
+};
+
 // Export a combined object for easier imports
 const cmsService = {
   events: eventService,
@@ -357,6 +494,8 @@ const cmsService = {
   partners: partnerService,
   faqs: faqService,
   resources: resourceService,
+  challenges: challengeService,
+  homeContent: homeContentService,
 };
 
 export default cmsService;

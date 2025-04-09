@@ -46,6 +46,7 @@ const EventPage = () => {
     );
   }
 
+  // Fetch data from CMS
   const speakers = cmsService.speakers.getByEventId(eventId || "");
   const featuredSpeakers = cmsService.speakers.getFeatured(eventId || "");
   const agenda = cmsService.agenda.getByEventId(eventId || "");
@@ -53,6 +54,16 @@ const EventPage = () => {
   const topics = cmsService.topics.getByEventId(eventId || "");
   const resources = cmsService.resources.getByEventId(eventId || "");
   const faqs = cmsService.faqs.getByEventId(eventId || "");
+  
+  // Get the active challenge for this event
+  let eventChallenge;
+  try {
+    const challenges = cmsService.challenges.getActive(eventId || "");
+    eventChallenge = challenges.length > 0 ? challenges[0] : null;
+  } catch (error) {
+    console.log("Challenge service not initialized yet");
+    eventChallenge = null;
+  }
 
   const formattedAgenda = agenda.map(day => ({
     date: day.id,
@@ -188,36 +199,6 @@ const EventPage = () => {
     longDescription: event.longDescription || "",
     videoUrl: event.videoUrl || "",
     eventStartDate: event.eventStartDate || ""
-  };
-
-  // Properly structure the challenge object with required fields
-  const eventChallenge = {
-    id: "challenge-1",
-    title: "Convention Challenge",
-    description: "Participate in our hackathon",
-    steps: [
-      {
-        id: "step-1",
-        description: "Register for the hackathon",
-        points: 10
-      },
-      {
-        id: "step-2",
-        description: "Form a team or join one",
-        points: 20
-      },
-      {
-        id: "step-3",
-        description: "Submit your project idea",
-        points: 30
-      },
-      {
-        id: "step-4",
-        description: "Complete your project",
-        points: 40
-      }
-    ],
-    reward: "First Prize: $5,000"
   };
 
   return (
