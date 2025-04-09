@@ -99,11 +99,17 @@
 
 /* Improve readability in light mode */
 .text-gray-300 {
-  @apply dark:text-gray-300 text-gray-700;
+  @apply text-gray-700;
+}
+.dark .text-gray-300 {
+  color: rgb(209 213 219); /* This is the color for gray-300 */
 }
 
 .text-gray-200 {
-  @apply dark:text-gray-200 text-gray-800;
+  @apply text-gray-800;
+}
+.dark .text-gray-200 {
+  color: rgb(229 231 235); /* This is the color for gray-200 */
 }
 
 /* Custom glassmorphism effect */
