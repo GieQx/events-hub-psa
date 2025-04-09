@@ -18,7 +18,7 @@ import {
   rvsVenueInfo,
   rvsHotels,
   rvsRestaurants,
-  rvsFaqs as rvsInfoFaqs,
+  rvsFaqs as rvsInfoFaqs, // Fixed to use rvsFaqs as rvsInfoFaqs
   rvsChallenge,
   rvsResources,
   rvsChatbotOptions

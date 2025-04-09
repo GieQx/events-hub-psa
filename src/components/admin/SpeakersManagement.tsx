@@ -16,13 +16,13 @@ export function SpeakersManagement() {
   const [editingSpeaker, setEditingSpeaker] = useState<CMSSpeaker | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [events, setEvents] = useState(cmsService.events.getAll());
-  const [selectedEventId, setSelectedEventId] = useState<string>("");
+  const [selectedEventId, setSelectedEventId] = useState<string>("all");
 
   useEffect(() => {
-    if (selectedEventId) {
-      setSpeakers(cmsService.speakers.getByEventId(selectedEventId));
-    } else {
+    if (selectedEventId === "all") {
       setSpeakers(cmsService.speakers.getAll());
+    } else {
+      setSpeakers(cmsService.speakers.getByEventId(selectedEventId));
     }
   }, [selectedEventId]);
   
@@ -35,7 +35,7 @@ export function SpeakersManagement() {
     setIsCreating(true);
     setEditingSpeaker({
       id: crypto.randomUUID(),
-      eventId: selectedEventId || events[0]?.id || "",
+      eventId: selectedEventId !== "all" ? selectedEventId : events[0]?.id || "",
       name: "",
       role: "",
       company: "",
@@ -143,7 +143,7 @@ export function SpeakersManagement() {
                 <SelectValue placeholder="Filter by event" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Events</SelectItem>
+                <SelectItem value="all">All Events</SelectItem>
                 {events.map(event => (
                   <SelectItem key={event.id} value={event.id}>{event.title}</SelectItem>
                 ))}

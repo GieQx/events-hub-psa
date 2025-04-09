@@ -16,8 +16,8 @@ export function PartnersManagement() {
   const [editingPartner, setEditingPartner] = useState<CMSPartner | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [events, setEvents] = useState(cmsService.events.getAll());
-  const [selectedEventId, setSelectedEventId] = useState<string>("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [selectedEventId, setSelectedEventId] = useState<string>("all");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
   const categories = [
     { value: "platinum", label: "Platinum" },
@@ -31,11 +31,11 @@ export function PartnersManagement() {
   useEffect(() => {
     let filteredPartners = cmsService.partners.getAll();
     
-    if (selectedEventId) {
+    if (selectedEventId !== "all") {
       filteredPartners = filteredPartners.filter(partner => partner.eventId === selectedEventId);
     }
     
-    if (selectedCategory) {
+    if (selectedCategory !== "all") {
       filteredPartners = filteredPartners.filter(partner => partner.category === selectedCategory);
     }
     
@@ -99,10 +99,10 @@ export function PartnersManagement() {
       }
       
       let filteredPartners = cmsService.partners.getAll();
-      if (selectedEventId) {
+      if (selectedEventId !== "all") {
         filteredPartners = filteredPartners.filter(partner => partner.eventId === selectedEventId);
       }
-      if (selectedCategory) {
+      if (selectedCategory !== "all") {
         filteredPartners = filteredPartners.filter(partner => partner.category === selectedCategory);
       }
       setPartners(filteredPartners);
@@ -155,7 +155,7 @@ export function PartnersManagement() {
                 <SelectValue placeholder="Filter by event" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Events</SelectItem>
+                <SelectItem value="all">All Events</SelectItem>
                 {events.map(event => (
                   <SelectItem key={event.id} value={event.id}>{event.title}</SelectItem>
                 ))}
@@ -168,7 +168,7 @@ export function PartnersManagement() {
                 <SelectValue placeholder="Filter by category" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Categories</SelectItem>
+                <SelectItem value="all">All Categories</SelectItem>
                 {categories.map(category => (
                   <SelectItem key={category.value} value={category.value}>{category.label}</SelectItem>
                 ))}

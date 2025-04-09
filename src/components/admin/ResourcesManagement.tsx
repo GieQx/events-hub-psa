@@ -16,13 +16,13 @@ export function ResourcesManagement() {
   const [editingResource, setEditingResource] = useState<CMSResource | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [events, setEvents] = useState(cmsService.events.getAll());
-  const [selectedEventId, setSelectedEventId] = useState<string>("");
+  const [selectedEventId, setSelectedEventId] = useState<string>("all");
 
   useEffect(() => {
-    if (selectedEventId) {
-      setResources(cmsService.resources.getByEventId(selectedEventId));
-    } else {
+    if (selectedEventId === "all") {
       setResources(cmsService.resources.getAll());
+    } else {
+      setResources(cmsService.resources.getByEventId(selectedEventId));
     }
   }, [selectedEventId]);
   
@@ -75,7 +75,11 @@ export function ResourcesManagement() {
         toast.success("Resource updated successfully");
       }
       
-      setResources(selectedEventId ? cmsService.resources.getByEventId(selectedEventId) : cmsService.resources.getAll());
+      if (selectedEventId === "all") {
+        setResources(cmsService.resources.getAll());
+      } else {
+        setResources(cmsService.resources.getByEventId(selectedEventId));
+      }
       resetForm();
     } catch (error) {
       toast.error(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -122,7 +126,7 @@ export function ResourcesManagement() {
                 <SelectValue placeholder="Filter by event" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Events</SelectItem>
+                <SelectItem value="all">All Events</SelectItem>
                 {events.map(event => (
                   <SelectItem key={event.id} value={event.id}>{event.title}</SelectItem>
                 ))}
