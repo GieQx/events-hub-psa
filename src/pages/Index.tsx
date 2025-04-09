@@ -7,20 +7,42 @@ import { events } from "@/data/events";
 import { ScrollSection } from "@/components/ScrollSection";
 import { motion } from "framer-motion";
 import { ParticleBackground } from "@/components/ParticleBackground";
-
-const getRemainigDays = (dateString: string) => {
-  const eventDate = new Date(dateString);
-  const today = new Date();
-  const diffTime = eventDate.getTime() - today.getTime();
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  return diffDays;
-};
+import { shouldDisableEvent } from "@/utils/eventHelpers";
+import cmsService from "@/services/cmsService";
+import { useEffect, useState } from "react";
 
 const IndexPage = () => {
-  // Filter valid events - check for required properties
-  const validEvents = events.filter(event => 
-    event && event.id && event.title && event.eventStartDate
-  );
+  const [validEvents, setValidEvents] = useState<any[]>([]);
+  const [featuredEvents, setFeaturedEvents] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Get CMS content (including featured events settings)
+    const homeContent = cmsService.homeContent.get();
+    
+    // Get published events from CMS
+    const publishedEvents = cmsService.events.getPublished();
+    
+    // Filter valid events - check for required properties
+    const filteredEvents = publishedEvents.filter(event => 
+      event && event.id && event.title && event.eventStartDate
+    );
+    
+    setValidEvents(filteredEvents);
+    
+    // If homeContent specifies featured events, filter those
+    if (homeContent?.featuredEvents && homeContent.featuredEvents.length > 0) {
+      const featured = filteredEvents.filter(event => 
+        homeContent.featuredEvents.includes(event.id)
+      );
+      setFeaturedEvents(featured);
+    } else {
+      // Default to showing all events as featured if none specified
+      setFeaturedEvents(filteredEvents);
+    }
+    
+    setLoading(false);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 overflow-hidden">
@@ -57,7 +79,7 @@ const IndexPage = () => {
             <div className="mb-8 flex justify-center">
               <Link to="#events">
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
+                  <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white">
                     Explore Events
                   </Button>
                 </motion.div>
@@ -96,8 +118,8 @@ const IndexPage = () => {
           {validEvents.length > 0 ? (
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
               {validEvents.map((event, index) => {
-                const remainingDays = getRemainigDays(event.eventStartDate);
-                const isDisabled = remainingDays > 700;
+                // Check if event should be disabled based on countdown
+                const isDisabled = shouldDisableEvent(event.eventStartDate, 600);
                 
                 return (
                   <ScrollSection key={event.id} delay={0.2 + index * 0.1}>
@@ -118,8 +140,8 @@ const IndexPage = () => {
                         disabled={isDisabled}
                       />
                       {isDisabled && (
-                        <div className="mt-2 text-center text-sm text-gray-500">
-                          Coming in {remainingDays} days
+                        <div className="mt-2 text-center text-sm text-gray-500 dark:text-gray-400">
+                          Coming in {Math.ceil((new Date(event.eventStartDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))} days
                         </div>
                       )}
                     </div>

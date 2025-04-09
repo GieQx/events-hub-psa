@@ -63,31 +63,23 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Event specific color themes
-				rvs: {
-					primary: '#FF6479',
-					secondary: '#D3E4FD',
-					accent: '#9b87f5',
-					light: '#FFDEE2',
-				},
-				bms: {
-					primary: '#2A9D8F',
-					secondary: '#264653',
-					accent: '#E9C46A',
-					light: '#E9F5F4',
-				},
-				sm: {
-					primary: '#E63946',
-					secondary: '#1D3557',
-					accent: '#457B9D',
-					light: '#F1FAEE',
-				},
-				cs: {
-					primary: '#3F7E44',
-					secondary: '#0A97D9',
-					accent: '#E5243B',
-					light: '#F1F9F1',
-				}
+				// Event specific color themes - CBMS colors corrected
+				'rvs-primary': '#FF6479',
+				'rvs-secondary': '#D3E4FD',
+				'rvs-accent': '#9b87f5',
+				'rvs-light': '#FFDEE2',
+				'bms-primary': '#2A9D8F',  // Fixed teal color for CBMS
+				'bms-secondary': '#264653',
+				'bms-accent': '#E9C46A',
+				'bms-light': '#E9F5F4',
+				'sm-primary': '#E63946',
+				'sm-secondary': '#1D3557',
+				'sm-accent': '#457B9D',
+				'sm-light': '#F1FAEE',
+				'cs-primary': '#3F7E44',
+				'cs-secondary': '#0A97D9',
+				'cs-accent': '#E5243B',
+				'cs-light': '#F1F9F1',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

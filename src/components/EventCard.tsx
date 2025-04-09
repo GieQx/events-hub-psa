@@ -33,10 +33,12 @@ export function EventCard({
   const safeDate = date || "TBD";
   const safeLocation = location || "Location TBD";
   const safeImageUrl = imageUrl || "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=600&h=400&auto=format&fit=crop&q=80";
-  const safeColor = color || "bg-blue-600";
+  
+  // Fix the color mapping - use the proper Tailwind class directly
+  const bgColorClass = color || "bg-blue-600";
 
   const Card = () => (
-    <div className={`event-card h-full ${safeColor} text-white`}>
+    <div className={`event-card h-full ${bgColorClass} text-white`}>
       <div className="aspect-video overflow-hidden">
         <img 
           src={safeImageUrl} 

@@ -83,7 +83,7 @@
 
   /* Enhanced heading styles with better contrast */
   h1, h2, h3, h4, h5, h6 {
-    @apply tracking-tight text-gray-900 dark:text-white;
+    @apply tracking-tight text-gray-900 dark:text-white font-bold;
   }
 
   /* Improve default text contrast */
@@ -103,19 +103,19 @@
 
   /* Enhanced branding gradients with better contrast */
   .hero-gradient-rvs {
-    @apply bg-gradient-to-br from-rvs-primary/90 via-rvs-light to-rvs-secondary;
+    @apply bg-gradient-to-br from-rvs-primary via-rvs-light to-rvs-secondary;
   }
 
   .hero-gradient-bms {
-    @apply bg-gradient-to-br from-bms-primary/90 via-bms-light to-bms-secondary;
+    @apply bg-gradient-to-br from-bms-primary via-bms-light to-bms-secondary;
   }
 
   .hero-gradient-sm {
-    @apply bg-gradient-to-br from-sm-primary/90 via-sm-light to-sm-secondary;
+    @apply bg-gradient-to-br from-sm-primary via-sm-light to-sm-secondary;
   }
 
   .hero-gradient-cs {
-    @apply bg-gradient-to-br from-cs-primary/90 via-cs-light to-cs-secondary;
+    @apply bg-gradient-to-br from-cs-primary via-cs-light to-cs-secondary;
   }
 
   /* Improved marquee container */
@@ -150,7 +150,7 @@
 
   /* Navigation categories */
   .nav-category {
-    @apply mb-2 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400;
+    @apply mb-2 text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-300;
   }
 
   /* Interactive scrollable sections */

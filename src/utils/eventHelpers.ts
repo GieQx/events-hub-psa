@@ -5,7 +5,7 @@ export const getEventColor = (eventId: string): string => {
     case "cbms": return "bg-bms-primary";
     case "nsm": return "bg-sm-primary";
     case "ncs": return "bg-cs-primary";
-    default: return "bg-rvs-primary";
+    default: return "bg-blue-600";
   }
 };
 
@@ -17,4 +17,16 @@ export const getParticleColor = (eventId: string): string => {
     case "ncs": return "#3F7E44";
     default: return "#9b87f5";
   }
+};
+
+// Helper to determine if event should be disabled based on countdown days
+export const shouldDisableEvent = (dateString: string, maxDays: number = 600): boolean => {
+  if (!dateString) return true;
+  
+  const eventDate = new Date(dateString);
+  const today = new Date();
+  const diffTime = eventDate.getTime() - today.getTime();
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  
+  return diffDays > maxDays;
 };
