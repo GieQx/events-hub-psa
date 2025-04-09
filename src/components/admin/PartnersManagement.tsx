@@ -300,8 +300,8 @@ export function PartnersManagement() {
                 <CardHeader>
                   <div className="flex justify-between items-center">
                     <CardTitle className="text-lg">{partner.name}</CardTitle>
-                    <span className={`text-xs px-2 py-1 rounded ${getCategoryColor(partner.category)}`}>
-                      {partner.category.toUpperCase()}
+                    <span className={`text-xs px-2 py-1 rounded ${getCategoryColor(partner.category || '')}`}>
+                      {partner.category ? partner.category.toUpperCase() : 'UNCATEGORIZED'}
                     </span>
                   </div>
                 </CardHeader>
@@ -347,7 +347,7 @@ export function PartnersManagement() {
             ))
           ) : (
             <div className="col-span-full text-center py-8 text-gray-500">
-              {selectedEventId 
+              {selectedEventId !== "all" || selectedCategory !== "all"
                 ? "No partners found for this event or category. Add some partners!" 
                 : "No partners found. Add some partners!"}
             </div>
