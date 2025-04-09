@@ -31,26 +31,6 @@
     --bms-primary: 173 58% 39%;
     --sm-primary: 355 77% 56%;
     --cs-primary: 126 28% 37%;
-    
-    /* SDG-inspired palette */
-    --sdg-green: 126 28% 37%;
-    --sdg-blue: 198 89% 45%;
-    --sdg-red: 355 77% 52%;
-    --sdg-orange: 22 98% 57%;
-    --sdg-yellow: 39 64% 55%;
-    --sdg-magenta: 352 75% 45%;
-    --sdg-teal: 192 76% 52%;
-    --sdg-purple: 341 71% 33%;
-    
-    /* Blue-Orange palette */
-    --bright-orange: 24 94% 53%;
-    --deep-orange: 25 95% 48%;
-    --light-orange: 27 96% 61%;
-    --soft-orange: 29 96% 82%;
-    --ocean-blue: 199 89% 48%;
-    --deep-blue: 200 98% 32%;
-    --sky-blue: 198 93% 60%;
-    --light-blue: 199 94% 86%;
   }
  
   .dark {
@@ -79,26 +59,6 @@
     --bms-primary: 173 58% 45%;
     --sm-primary: 355 77% 60%;
     --cs-primary: 126 38% 45%;
-    
-    /* SDG-inspired palette - dark mode */
-    --sdg-green: 126 38% 45%;
-    --sdg-blue: 198 89% 55%;
-    --sdg-red: 355 77% 60%;
-    --sdg-orange: 22 98% 65%;
-    --sdg-yellow: 39 64% 65%;
-    --sdg-magenta: 352 75% 55%;
-    --sdg-teal: 192 76% 60%;
-    --sdg-purple: 341 71% 43%;
-    
-    /* Blue-Orange palette - dark mode */
-    --bright-orange: 24 94% 60%;
-    --deep-orange: 25 95% 55%;
-    --light-orange: 27 96% 68%;
-    --soft-orange: 29 96% 85%;
-    --ocean-blue: 199 89% 55%;
-    --deep-blue: 200 98% 45%;
-    --sky-blue: 198 93% 65%;
-    --light-blue: 199 94% 90%;
   }
 }
 
@@ -137,138 +97,16 @@
   animation: marquee 25s linear infinite;
 }
 
-/* Improve readability in light mode - fixed to avoid circular dependencies */
+/* Improve readability in light mode */
 .text-gray-300 {
-  color: rgb(209 213 219);
-}
-.dark .text-gray-300 {
-  color: rgb(209 213 219);
-}
-.text-gray-700 {
-  color: rgb(55 65 81);
-}
-.light .text-gray-300 {
-  color: rgb(55 65 81);
+  @apply dark:text-gray-300 text-gray-700;
 }
 
 .text-gray-200 {
-  color: rgb(229 231 235);
-}
-.dark .text-gray-200 {
-  color: rgb(229 231 235);
-}
-.text-gray-800 {
-  color: rgb(31 41 55);
-}
-.light .text-gray-200 {
-  color: rgb(31 41 55);
+  @apply dark:text-gray-200 text-gray-800;
 }
 
 /* Custom glassmorphism effect */
 .glass-effect {
-  backdrop-filter: blur(16px);
-  background-color: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 0.5rem;
-}
-
-.dark .glass-effect {
-  background-color: rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Color palette classes for SDG and Blue-Orange themes */
-.bg-sdg-green {
-  background-color: hsl(var(--sdg-green));
-}
-.bg-sdg-blue {
-  background-color: hsl(var(--sdg-blue));
-}
-.bg-sdg-red {
-  background-color: hsl(var(--sdg-red));
-}
-.bg-sdg-orange {
-  background-color: hsl(var(--sdg-orange));
-}
-.bg-sdg-yellow {
-  background-color: hsl(var(--sdg-yellow));
-}
-.bg-sdg-magenta {
-  background-color: hsl(var(--sdg-magenta));
-}
-.bg-sdg-teal {
-  background-color: hsl(var(--sdg-teal));
-}
-.bg-sdg-purple {
-  background-color: hsl(var(--sdg-purple));
-}
-
-.bg-bright-orange {
-  background-color: hsl(var(--bright-orange));
-}
-.bg-deep-orange {
-  background-color: hsl(var(--deep-orange));
-}
-.bg-light-orange {
-  background-color: hsl(var(--light-orange));
-}
-.bg-soft-orange {
-  background-color: hsl(var(--soft-orange));
-}
-.bg-ocean-blue {
-  background-color: hsl(var(--ocean-blue));
-}
-.bg-deep-blue {
-  background-color: hsl(var(--deep-blue));
-}
-.bg-sky-blue {
-  background-color: hsl(var(--sky-blue));
-}
-.bg-light-blue {
-  background-color: hsl(var(--light-blue));
-}
-
-/* Text color classes for branding */
-.text-rvs-primary {
-  color: hsl(var(--rvs-primary));
-}
-.text-bms-primary {
-  color: hsl(var(--bms-primary));
-}
-.text-sm-primary {
-  color: hsl(var(--sm-primary));
-}
-.text-cs-primary {
-  color: hsl(var(--cs-primary));
-}
-
-/* Border color classes for branding */
-.border-rvs-primary {
-  border-color: hsl(var(--rvs-primary));
-}
-.border-bms-primary {
-  border-color: hsl(var(--bms-primary));
-}
-.border-sm-primary {
-  border-color: hsl(var(--sm-primary));
-}
-.border-cs-primary {
-  border-color: hsl(var(--cs-primary));
-}
-
-/* Event card consistent styling */
-.event-card {
-  @apply rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl;
-}
-.event-card.bg-rvs-primary {
-  background-color: hsl(var(--rvs-primary));
-}
-.event-card.bg-bms-primary {
-  background-color: hsl(var(--bms-primary));
-}
-.event-card.bg-sm-primary {
-  background-color: hsl(var(--sm-primary));
-}
-.event-card.bg-cs-primary {
-  background-color: hsl(var(--cs-primary));
+  @apply backdrop-blur-lg bg-white/10 dark:bg-black/10 border border-white/20 dark:border-white/10 rounded-lg;
 }
