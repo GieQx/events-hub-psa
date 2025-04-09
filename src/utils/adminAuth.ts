@@ -1,4 +1,5 @@
 
+import { useState, useEffect } from "react";
 import { encryptData, decryptData } from "@/services/cmsUtils";
 
 // Simulated admin credentials for demo purposes
@@ -17,6 +18,14 @@ interface AuthToken {
   username: string;
   timestamp: number;
 }
+
+/**
+ * Checks if the admin is authenticated (alias for isAdminAuthenticated for backward compatibility)
+ * @returns Whether the admin is authenticated
+ */
+export const isAdmin = (): boolean => {
+  return isAdminAuthenticated();
+};
 
 /**
  * Logs in the admin user
@@ -107,4 +116,44 @@ export const refreshAdminToken = (): boolean => {
     logoutAdmin();
     return false;
   }
+};
+
+/**
+ * React hook for managing admin authentication state
+ * @returns The admin authentication state and functions to update it
+ */
+export const useAdminAuth = () => {
+  const [authenticated, setAuthenticated] = useState<boolean>(false);
+  
+  useEffect(() => {
+    // Check authentication status on mount
+    setAuthenticated(isAdminAuthenticated());
+    
+    // Set up interval to refresh token periodically
+    const refreshInterval = setInterval(() => {
+      if (isAdminAuthenticated()) {
+        refreshAdminToken();
+      }
+    }, 5 * 60 * 1000); // Refresh every 5 minutes
+    
+    return () => {
+      clearInterval(refreshInterval);
+    };
+  }, []);
+  
+  return {
+    authenticated,
+    setAuthenticated,
+    login: (username: string, password: string) => {
+      const result = loginAdmin(username, password);
+      if (result.success) {
+        setAuthenticated(true);
+      }
+      return result;
+    },
+    logout: () => {
+      logoutAdmin();
+      setAuthenticated(false);
+    }
+  };
 };

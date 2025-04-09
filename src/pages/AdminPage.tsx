@@ -17,16 +17,18 @@ import { ArrowLeft, LayoutDashboard, Users, Calendar, Book, Handshake, FileText,
 import { Link } from "react-router-dom";
 
 const AdminLoginForm = ({ onLogin }: { onLogin: () => void }) => {
+  const [username, setUsername] = useState("admin");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const { login } = useAdminAuth();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === "admin123") {
-      localStorage.setItem("cms_admin_auth", "true");
+    const result = login(username, password);
+    if (result.success) {
       onLogin();
     } else {
-      setError("Invalid password");
+      setError(result.message || "Invalid credentials");
     }
   };
 
@@ -36,6 +38,20 @@ const AdminLoginForm = ({ onLogin }: { onLogin: () => void }) => {
         <CardContent className="p-6">
           <h1 className="mb-6 text-center text-2xl font-bold">Admin Login</h1>
           <form onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <label htmlFor="username" className="mb-2 block text-sm font-medium">
+                Username
+              </label>
+              <input
+                type="text"
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="w-full rounded-md border border-gray-300 p-2"
+                placeholder="Enter admin username"
+                required
+              />
+            </div>
             <div className="mb-4">
               <label htmlFor="password" className="mb-2 block text-sm font-medium">
                 Password
@@ -55,7 +71,7 @@ const AdminLoginForm = ({ onLogin }: { onLogin: () => void }) => {
               Login
             </Button>
             <p className="mt-2 text-center text-xs text-gray-500">
-              Hint: The password is "admin123"
+              Hint: The username is "admin" and password is "admin123"
             </p>
           </form>
         </CardContent>
@@ -65,6 +81,8 @@ const AdminLoginForm = ({ onLogin }: { onLogin: () => void }) => {
 };
 
 const AdminPanel = () => {
+  const { logout } = useAdminAuth();
+  
   return (
     <div className="min-h-screen bg-gray-50 p-6 dark:bg-gray-900">
       <div className="mb-8 flex items-center justify-between">
@@ -80,7 +98,7 @@ const AdminPanel = () => {
         <Button
           variant="destructive"
           onClick={() => {
-            localStorage.removeItem("cms_admin_auth");
+            logout();
             window.location.reload();
           }}
         >
