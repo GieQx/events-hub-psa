@@ -1,149 +1,209 @@
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Building, Coffee, Map, Info } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { 
+  Building, Map, Utensils, HelpCircle, ExternalLink, MapPin, Phone, Globe 
+} from "lucide-react";
+import { getEventColor, getEventTextColor } from "@/utils/eventHelpers";
 
-interface AttendeeGuideProps {
-  venue: {
-    name: string;
-    address: string;
-    description: string;
-    mapUrl: string;
-  };
-  hotels: Array<{
-    id: string;
-    name: string;
-    distance: string;
-    priceRange: string;
-    website?: string;
-  }>;
-  restaurants: Array<{
-    id: string;
-    name: string;
-    cuisine: string;
-    distance: string;
-    priceRange: string;
-  }>;
-  faqs: Array<{
-    question: string;
-    answer: string;
-  }>;
-  className?: string;
+interface VenueInfo {
+  name: string;
+  address: string;
+  description: string;
+  mapUrl: string;
 }
 
-export function AttendeeGuide({
-  venue,
-  hotels,
-  restaurants,
+interface HotelInfo {
+  id: string;
+  name: string;
+  distance: string;
+  priceRange: string;
+  website: string;
+}
+
+interface RestaurantInfo {
+  id: string;
+  name: string;
+  cuisine: string;
+  distance: string;
+  priceRange: string;
+}
+
+interface Faq {
+  question: string;
+  answer: string;
+}
+
+interface AttendeeGuideProps {
+  venue: VenueInfo;
+  hotels: HotelInfo[];
+  restaurants: RestaurantInfo[];
+  faqs: Faq[];
+  className?: string;
+  eventId?: string;
+}
+
+export function AttendeeGuide({ 
+  venue, 
+  hotels, 
+  restaurants, 
   faqs,
   className = "",
+  eventId = "nccrvs"
 }: AttendeeGuideProps) {
   return (
     <div className={className}>
       <h2 className="mb-6 text-center text-3xl font-bold">Attendee Guide</h2>
       
-      <Tabs defaultValue="venue" className="w-full">
-        <TabsList className="mb-6 grid w-full grid-cols-4">
+      <Tabs defaultValue="venue" className="mx-auto max-w-4xl">
+        <TabsList className="mb-6 w-full justify-center">
           <TabsTrigger value="venue" className="flex items-center gap-2">
-            <Map className="h-4 w-4" />
-            <span className="hidden sm:inline">Venue</span>
+            <Building className="h-4 w-4" />
+            Venue
           </TabsTrigger>
           <TabsTrigger value="hotels" className="flex items-center gap-2">
             <Building className="h-4 w-4" />
-            <span className="hidden sm:inline">Hotels</span>
+            Accommodations
           </TabsTrigger>
-          <TabsTrigger value="restaurants" className="flex items-center gap-2">
-            <Coffee className="h-4 w-4" />
-            <span className="hidden sm:inline">Dining</span>
+          <TabsTrigger value="dining" className="flex items-center gap-2">
+            <Utensils className="h-4 w-4" />
+            Dining
           </TabsTrigger>
-          <TabsTrigger value="faqs" className="flex items-center gap-2">
-            <Info className="h-4 w-4" />
-            <span className="hidden sm:inline">FAQs</span>
+          <TabsTrigger value="help" className="flex items-center gap-2">
+            <HelpCircle className="h-4 w-4" />
+            Help
           </TabsTrigger>
         </TabsList>
-
-        <TabsContent value="venue" className="animate-fade-in">
-          <Card>
-            <CardContent className="pt-6">
-              <h3 className="mb-2 text-xl font-bold">{venue.name}</h3>
-              <p className="mb-4 text-gray-600 dark:text-gray-300">{venue.address}</p>
-              <p className="mb-4">{venue.description}</p>
-
-              <div className="mt-6 aspect-video w-full overflow-hidden rounded-lg shadow-md">
-                <iframe
-                  src={venue.mapUrl}
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0 }}
-                  allowFullScreen
-                  loading="lazy"
+        
+        <TabsContent value="venue">
+          <div className="mb-6 text-center">
+            <h3 className="mb-2 text-2xl font-semibold">{venue.name}</h3>
+            <p className="mb-4 text-gray-600 dark:text-gray-300">{venue.address}</p>
+          </div>
+          
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+            <div>
+              <div className="mb-4 rounded-lg bg-gray-100 p-4 dark:bg-gray-800">
+                <p className="text-gray-700 dark:text-gray-300">{venue.description}</p>
+              </div>
+              
+              <Button className={`w-full ${getEventColor(eventId)} text-white hover:opacity-90`}>
+                <Map className="mr-2 h-4 w-4" />
+                View on Map
+              </Button>
+            </div>
+            
+            <div className="h-64 overflow-hidden rounded-lg bg-gray-200 dark:bg-gray-700">
+              {venue.mapUrl ? (
+                <iframe 
+                  src={venue.mapUrl} 
+                  width="100%" 
+                  height="100%" 
+                  style={{ border: 0 }} 
+                  allowFullScreen 
+                  loading="lazy" 
                   referrerPolicy="no-referrer-when-downgrade"
                 ></iframe>
-              </div>
-            </CardContent>
-          </Card>
+              ) : (
+                <div className="flex h-full items-center justify-center text-gray-500">
+                  Map preview not available
+                </div>
+              )}
+            </div>
+          </div>
         </TabsContent>
-
-        <TabsContent value="hotels" className="animate-fade-in">
-          <div className="grid gap-4 md:grid-cols-2">
+        
+        <TabsContent value="hotels">
+          <h3 className="mb-6 text-center text-xl font-semibold">Recommended Accommodations</h3>
+          
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {hotels.map((hotel) => (
               <Card key={hotel.id}>
                 <CardContent className="p-6">
-                  <h3 className="mb-2 text-lg font-semibold">{hotel.name}</h3>
-                  <p className="mb-1 text-sm">
-                    <span className="font-medium">Distance:</span> {hotel.distance}
-                  </p>
-                  <p className="mb-2 text-sm">
-                    <span className="font-medium">Price Range:</span> {hotel.priceRange}
-                  </p>
-                  {hotel.website && (
-                    <a
-                      href={hotel.website}
-                      target="_blank"
+                  <h4 className={`mb-2 text-lg font-semibold ${getEventTextColor(eventId)}`}>{hotel.name}</h4>
+                  
+                  <div className="mb-4 space-y-2 text-sm text-gray-600 dark:text-gray-300">
+                    <div className="flex items-start">
+                      <MapPin className="mr-2 mt-0.5 h-4 w-4 flex-shrink-0" />
+                      <span>{hotel.distance}</span>
+                    </div>
+                    <div className="flex items-start">
+                      <Phone className="mr-2 mt-0.5 h-4 w-4 flex-shrink-0" />
+                      <span>{hotel.priceRange}</span>
+                    </div>
+                  </div>
+                  
+                  <Button asChild variant="outline" className="w-full">
+                    <a 
+                      href={hotel.website} 
+                      target="_blank" 
                       rel="noopener noreferrer"
-                      className="mt-2 inline-block text-sm text-rvs-primary hover:underline"
+                      className={getEventTextColor(eventId)}
                     >
+                      <Globe className="mr-2 h-4 w-4" />
                       Visit Website
+                      <ExternalLink className="ml-2 h-3 w-3" />
                     </a>
-                  )}
+                  </Button>
                 </CardContent>
               </Card>
             ))}
           </div>
         </TabsContent>
-
-        <TabsContent value="restaurants" className="animate-fade-in">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        
+        <TabsContent value="dining">
+          <h3 className="mb-6 text-center text-xl font-semibold">Nearby Dining Options</h3>
+          
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {restaurants.map((restaurant) => (
               <Card key={restaurant.id}>
-                <CardContent className="p-6">
-                  <h3 className="mb-2 text-lg font-semibold">{restaurant.name}</h3>
-                  <p className="mb-1 text-sm">
-                    <span className="font-medium">Cuisine:</span> {restaurant.cuisine}
-                  </p>
-                  <p className="mb-1 text-sm">
-                    <span className="font-medium">Distance:</span> {restaurant.distance}
-                  </p>
-                  <p className="text-sm">
-                    <span className="font-medium">Price Range:</span> {restaurant.priceRange}
-                  </p>
+                <CardContent className="p-4">
+                  <h4 className={`mb-1 font-semibold ${getEventTextColor(eventId)}`}>{restaurant.name}</h4>
+                  <div className="mb-2 flex justify-between text-sm">
+                    <span>{restaurant.cuisine}</span>
+                    <span className="text-gray-500 dark:text-gray-400">{restaurant.priceRange}</span>
+                  </div>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">{restaurant.distance}</p>
                 </CardContent>
               </Card>
             ))}
           </div>
         </TabsContent>
-
-        <TabsContent value="faqs" className="animate-fade-in">
-          <div className="space-y-4">
-            {faqs.map((faq, index) => (
-              <Card key={index}>
-                <CardContent className="p-6">
-                  <h3 className="mb-2 text-lg font-semibold">{faq.question}</h3>
-                  <p className="text-gray-600 dark:text-gray-300">{faq.answer}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+        
+        <TabsContent value="help">
+          <h3 className="mb-6 text-center text-xl font-semibold">Need Assistance?</h3>
+          
+          {faqs.length > 0 ? (
+            <div className="space-y-4">
+              {faqs.map((faq, index) => (
+                <Card key={index}>
+                  <CardContent className="p-4">
+                    <h4 className={`mb-2 font-semibold ${getEventTextColor(eventId)}`}>{faq.question}</h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">{faq.answer}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center">
+              <p className="mb-4 text-gray-600 dark:text-gray-300">
+                For any questions or assistance during the event, please contact our support team.
+              </p>
+              
+              <div className="mx-auto max-w-md space-y-4">
+                <Button className={`w-full ${getEventColor(eventId)} text-white hover:opacity-90`}>
+                  <Mail className="mr-2 h-4 w-4" />
+                  Contact Support
+                </Button>
+                
+                <Button variant="outline" className="w-full">
+                  <HelpCircle className="mr-2 h-4 w-4" />
+                  View FAQ
+                </Button>
+              </div>
+            </div>
+          )}
         </TabsContent>
       </Tabs>
     </div>

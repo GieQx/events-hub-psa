@@ -34,6 +34,7 @@ const LOCAL_STORAGE_KEYS = {
   RESOURCES: 'cms_resources',
   CHALLENGES: 'cms_challenges',
   HOME_CONTENT: 'cms_home_content',
+  PRESS_RELEASES: 'cms_press_releases',
 };
 
 // Initialize with data from the src/data folder
@@ -493,6 +494,58 @@ export const homeContentService = {
   },
 };
 
+// Press releases service
+const pressReleasesService = (() => {
+  const storageKey = "cms_press_releases";
+
+  const getAll = () => {
+    const releases = localStorage.getItem(storageKey);
+    return releases ? JSON.parse(releases) : [];
+  };
+
+  const getByEventId = (eventId: string) => {
+    const releases = getAll();
+    return releases.filter((release: any) => release.eventId === eventId);
+  };
+  
+  const getFeatured = (eventId: string) => {
+    const releases = getByEventId(eventId);
+    return releases.filter((release: any) => release.featured);
+  };
+
+  const add = (release: any) => {
+    const releases = getAll();
+    releases.push(release);
+    localStorage.setItem(storageKey, JSON.stringify(releases));
+    return release;
+  };
+
+  const update = (release: any) => {
+    const releases = getAll();
+    const index = releases.findIndex((r: any) => r.id === release.id);
+    if (index !== -1) {
+      releases[index] = release;
+      localStorage.setItem(storageKey, JSON.stringify(releases));
+    }
+    return release;
+  };
+
+  const remove = (id: string) => {
+    const releases = getAll();
+    const filteredReleases = releases.filter((r: any) => r.id !== id);
+    localStorage.setItem(storageKey, JSON.stringify(filteredReleases));
+  };
+
+  return {
+    getAll,
+    getByEventId,
+    getFeatured,
+    add,
+    update,
+    remove,
+  };
+})();
+
 // Export a combined object for easier imports
 const cmsService = {
   events: eventService,
@@ -504,6 +557,7 @@ const cmsService = {
   resources: resourceService,
   challenges: challengeService,
   homeContent: homeContentService,
+  pressReleases: pressReleasesService,
 };
 
 export default cmsService;

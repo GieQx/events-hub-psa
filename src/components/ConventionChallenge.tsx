@@ -1,175 +1,97 @@
 
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { toast } from "sonner";
-import { Trophy } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { ArrowRight, Trophy, Clock, Users } from "lucide-react";
+import { getEventColor, getEventTextColor } from "@/utils/eventHelpers";
 
 interface Challenge {
   id: string;
   title: string;
   description: string;
-  steps: Array<{
-    id: string;
-    description: string;
-    points: number;
-  }>;
-  reward: string;
+  deadline?: string;
+  participants?: number;
+  progress?: number;
+  prizes?: string[];
 }
 
 interface ConventionChallengeProps {
-  challenge: Challenge | null | undefined;
+  challenge: Challenge | null;
   className?: string;
+  eventId?: string;
 }
 
-export function ConventionChallenge({ challenge, className = "" }: ConventionChallengeProps) {
-  const [completedSteps, setCompletedSteps] = useState<string[]>([]);
-  const [isCompleted, setIsCompleted] = useState(false);
-
-  // Ensure challenge and challenge.steps exist before using reduce
-  const steps = challenge?.steps || [];
-  const totalPoints = steps.reduce((sum, step) => sum + (step.points || 0), 0);
-  const earnedPoints = steps
-    .filter((step) => completedSteps.includes(step.id))
-    .reduce((sum, step) => sum + (step.points || 0), 0);
-  
-  const progress = totalPoints > 0 ? Math.round((earnedPoints / totalPoints) * 100) : 0;
-
-  const toggleStep = (stepId: string) => {
-    if (isCompleted) return;
-    
-    setCompletedSteps((prev) => {
-      if (prev.includes(stepId)) {
-        return prev.filter((id) => id !== stepId);
-      } else {
-        const newCompleted = [...prev, stepId];
-        // Check if all steps are completed
-        if (newCompleted.length === steps.length && steps.length > 0) {
-          setTimeout(() => {
-            setIsCompleted(true);
-            toast.success("Challenge completed!", {
-              description: `Congratulations! You've earned ${totalPoints} points and unlocked: ${challenge?.reward || 'a reward'}`,
-            });
-          }, 500);
-        }
-        return newCompleted;
-      }
-    });
-  };
-
-  const resetChallenge = () => {
-    setCompletedSteps([]);
-    setIsCompleted(false);
-  };
-
-  // If challenge is not provided or malformed, render a fallback
-  if (!challenge || !challenge.steps) {
-    return (
-      <div className={className}>
-        <h2 className="mb-6 text-center text-3xl font-bold">Convention Challenge</h2>
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-xl">Challenge Not Available</CardTitle>
-            <CardDescription>Check back later for challenges!</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-center text-gray-500">No active challenges at this time</p>
-          </CardContent>
-        </Card>
-      </div>
-    );
+export function ConventionChallenge({ 
+  challenge, 
+  className = "",
+  eventId = "nccrvs"
+}: ConventionChallengeProps) {
+  if (!challenge) {
+    return null;
   }
 
   return (
     <div className={className}>
       <h2 className="mb-6 text-center text-3xl font-bold">Convention Challenge</h2>
       
-      <Card className={`transition-all duration-300 ${isCompleted ? 'border-rvs-primary shadow-lg' : ''}`}>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-xl">{challenge.title || 'Challenge'}</CardTitle>
-            <Badge 
-              variant={isCompleted ? "default" : "outline"}
-              className={isCompleted ? "bg-rvs-primary" : ""}
-            >
-              {earnedPoints} / {totalPoints} Points
-            </Badge>
-          </div>
-          <CardDescription>{challenge.description || 'Complete this challenge to earn rewards'}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Progress value={progress} className="mb-6 h-2" />
+      <Card className="overflow-hidden">
+        <div className={`h-2 ${getEventColor(eventId)}`}></div>
+        <CardContent className="p-6">
+          <h3 className={`mb-3 text-xl font-bold ${getEventTextColor(eventId)}`}>{challenge.title}</h3>
           
-          <div className="space-y-4">
-            {steps.map((step) => (
-              <div key={step.id} 
-                className={`flex cursor-pointer items-start space-x-2 rounded-md border p-4 transition-all
-                  ${completedSteps.includes(step.id) 
-                    ? 'border-rvs-primary bg-rvs-primary/5' 
-                    : 'hover:border-gray-400 hover:bg-gray-50 dark:hover:border-gray-600 dark:hover:bg-gray-900/50'
-                  }
-                `}
-                onClick={() => toggleStep(step.id)}
-              >
-                <div className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full 
-                  ${completedSteps.includes(step.id) 
-                    ? 'bg-rvs-primary text-white' 
-                    : 'border border-gray-300 dark:border-gray-600'
-                  }`}
-                >
-                  {completedSteps.includes(step.id) && (
-                    <svg 
-                      xmlns="http://www.w3.org/2000/svg" 
-                      viewBox="0 0 24 24" 
-                      fill="none" 
-                      stroke="currentColor" 
-                      strokeWidth="2" 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round" 
-                      className="h-3 w-3"
-                    >
-                      <polyline points="20 6 9 17 4 12" />
-                    </svg>
-                  )}
-                </div>
-                <div className="flex-1">
-                  <p className={`${completedSteps.includes(step.id) ? 'font-medium' : ''}`}>
-                    {step.description}
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    {step.points} points
-                  </p>
+          <p className="mb-6 text-gray-700 dark:text-gray-300">{challenge.description}</p>
+          
+          <div className="mb-6 flex flex-wrap gap-6">
+            {challenge.deadline && (
+              <div className="flex items-center">
+                <Clock className="mr-2 h-5 w-5 text-gray-500" />
+                <div>
+                  <p className="text-sm font-medium">Deadline</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{challenge.deadline}</p>
                 </div>
               </div>
-            ))}
+            )}
+            
+            {challenge.participants !== undefined && (
+              <div className="flex items-center">
+                <Users className="mr-2 h-5 w-5 text-gray-500" />
+                <div>
+                  <p className="text-sm font-medium">Participants</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{challenge.participants} registered</p>
+                </div>
+              </div>
+            )}
           </div>
           
-          {isCompleted && (
-            <div className="mt-6 flex items-center justify-center rounded-md bg-rvs-primary/10 p-4 text-center">
-              <div>
-                <div className="mb-2 flex justify-center">
-                  <Trophy className="h-8 w-8 text-rvs-primary" />
-                </div>
-                <h3 className="mb-1 text-lg font-semibold">Challenge Completed!</h3>
-                <p className="text-sm">You've earned {totalPoints} points</p>
-                <p className="mt-2 text-sm font-medium">Reward: {challenge.reward || 'Congratulations!'}</p>
+          {challenge.progress !== undefined && (
+            <div className="mb-6">
+              <div className="mb-2 flex justify-between text-sm">
+                <span className="font-medium">Challenge Progress</span>
+                <span>{challenge.progress}%</span>
               </div>
+              <Progress value={challenge.progress} className="h-2" />
             </div>
           )}
+          
+          {challenge.prizes && challenge.prizes.length > 0 && (
+            <div className="mb-6">
+              <p className="mb-2 font-medium">Prizes</p>
+              <ul className="space-y-1 text-sm">
+                {challenge.prizes.map((prize, index) => (
+                  <li key={index} className="flex items-start">
+                    <Trophy className="mr-2 mt-0.5 h-4 w-4 text-amber-500" />
+                    <span>{prize}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          
+          <Button className={`w-full ${getEventColor(eventId)} text-white hover:opacity-90`}>
+            <span>Join the Challenge</span>
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
         </CardContent>
-        <CardFooter>
-          {isCompleted ? (
-            <Button variant="outline" onClick={resetChallenge} className="w-full">
-              Reset Challenge
-            </Button>
-          ) : (
-            <div className="w-full text-center text-sm text-gray-500">
-              Complete all steps to earn your reward
-            </div>
-          )}
-        </CardFooter>
       </Card>
     </div>
   );

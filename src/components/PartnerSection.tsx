@@ -24,8 +24,8 @@ export function PartnerSection({ partners, className = "", eventId = "nccrvs" }:
     <div className={`relative ${className}`}>
       <ParticleBackground 
         color={getParticleColor(eventId)} 
-        particleCount={40}
-        className="absolute inset-0 opacity-10 z-0" 
+        particleCount={60}
+        className="absolute inset-0 opacity-20 z-0" 
       />
       <div className="relative z-10">
         <h2 className="mb-6 text-center text-3xl font-bold">Our Partners</h2>
@@ -35,7 +35,7 @@ export function PartnerSection({ partners, className = "", eventId = "nccrvs" }:
             <h3 className="mb-4 text-center text-xl font-semibold">Organizers</h3>
             <div className="flex flex-wrap items-center justify-center gap-6">
               {grouped.organizer.map((partner) => (
-                <Card key={partner.id} className="flex h-24 w-48 items-center justify-center p-4">
+                <Card key={partner.id} className="flex h-24 w-48 items-center justify-center p-4 hover:shadow-md transition-shadow">
                   <img
                     src={partner.logo}
                     alt={partner.name}
@@ -52,7 +52,7 @@ export function PartnerSection({ partners, className = "", eventId = "nccrvs" }:
             <h3 className="mb-4 text-center text-xl font-semibold">Sponsors</h3>
             <div className="flex flex-wrap items-center justify-center gap-4">
               {grouped.sponsor.map((partner) => (
-                <Card key={partner.id} className="flex h-20 w-40 items-center justify-center p-3">
+                <Card key={partner.id} className="flex h-20 w-40 items-center justify-center p-3 hover:shadow-md transition-shadow">
                   <img
                     src={partner.logo}
                     alt={partner.name}
@@ -69,7 +69,7 @@ export function PartnerSection({ partners, className = "", eventId = "nccrvs" }:
             <h3 className="mb-4 text-center text-xl font-semibold">Partners</h3>
             <div className="flex flex-wrap items-center justify-center gap-4">
               {grouped.partner.map((partner) => (
-                <Card key={partner.id} className="flex h-16 w-32 items-center justify-center p-2">
+                <Card key={partner.id} className="flex h-16 w-32 items-center justify-center p-2 hover:shadow-md transition-shadow">
                   <img
                     src={partner.logo}
                     alt={partner.name}

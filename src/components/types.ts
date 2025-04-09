@@ -1,4 +1,3 @@
-
 // Define shared types for consistent use across components
 
 export interface Speaker {
@@ -60,4 +59,15 @@ export interface Resource {
 export interface Faq {
   question: string;
   answer: string;
+}
+
+export interface PressRelease {
+  id: string;
+  title: string;
+  date: string;
+  content: string;
+  eventId: string;
+  source?: string;
+  url?: string;
+  featured?: boolean;
 }
