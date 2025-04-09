@@ -4,19 +4,13 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { FileText, Download, Calendar } from "lucide-react";
 import { toast } from "sonner";
 import { addToGoogleCalendar } from "@/utils/calendarUtils";
-
-export interface Resource {
-  id: string;
-  title: string;
-  description: string;
-  type: 'brochure' | 'schedule' | 'paper' | 'presentation';
-  fileSize: string;
-  downloadUrl: string;
-}
+import { Resource } from "@/components/types";
+import { ParticleBackground } from "./ParticleBackground";
 
 interface ResourcesSectionProps {
   resources: Resource[];
   className?: string;
+  eventId?: string;
   eventDetails?: {
     title: string;
     description: string;
@@ -26,7 +20,7 @@ interface ResourcesSectionProps {
   };
 }
 
-export function ResourcesSection({ resources, className = "", eventDetails }: ResourcesSectionProps) {
+export function ResourcesSection({ resources, className = "", eventId = "rvs", eventDetails }: ResourcesSectionProps) {
   const handleDownload = (resource: Resource) => {
     // In a real app, you would trigger the actual download
     console.log("Downloading:", resource);
@@ -69,10 +63,21 @@ export function ResourcesSection({ resources, className = "", eventDetails }: Re
     }
   };
 
+  // Get the correct particle color based on event ID
+  const getParticleColor = () => {
+    switch(eventId) {
+      case "rvs": return "#FF6479";
+      case "bms": return "#2A9D8F";
+      case "sm": return "#E63946";
+      case "cs": return "#3F7E44";
+      default: return "#9b87f5";
+    }
+  };
+
   return (
     <div className={`relative ${className}`}>
       <ParticleBackground 
-        color="#6e59a5" 
+        color={getParticleColor()} 
         particleCount={50} 
         className="absolute inset-0 opacity-20" 
       />
@@ -118,6 +123,3 @@ export function ResourcesSection({ resources, className = "", eventDetails }: Re
     </div>
   );
 }
-
-// Import at the top to avoid errors
-import { ParticleBackground } from "./ParticleBackground";
