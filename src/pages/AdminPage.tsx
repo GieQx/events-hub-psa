@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ScrollSection } from "@/components/ScrollSection";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { toast } from "sonner";
-import { ChevronLeft, Plus, Edit, Trash, Save } from "lucide-react";
+import { ChevronLeft, Plus, Edit, Trash, Save, Users, Calendar, Building, FileText } from "lucide-react";
 
 import cmsService from "@/services/cmsService";
 import { CMSEvent } from "@/types/cms";
@@ -110,7 +110,7 @@ const AdminPage = () => {
       <main className="container mx-auto px-4 py-8">
         <ScrollSection>
           <Tabs defaultValue="events" value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="mb-6">
+            <TabsList className="mb-6 grid grid-cols-5">
               <TabsTrigger value="events">Events</TabsTrigger>
               <TabsTrigger value="speakers">Speakers</TabsTrigger>
               <TabsTrigger value="agenda">Agenda</TabsTrigger>
@@ -286,39 +286,131 @@ const AdminPage = () => {
             </TabsContent>
 
             <TabsContent value="speakers">
-              <div className="text-center py-12">
-                <h3 className="text-xl font-medium">Speakers Management</h3>
-                <p className="text-gray-500 dark:text-gray-400 mt-2">
-                  This feature will be available soon
-                </p>
+              <div className="flex justify-between items-center mb-6">
+                <div>
+                  <h2 className="text-2xl font-bold">Speakers Management</h2>
+                  <p className="text-gray-500 dark:text-gray-400 mt-1">
+                    Manage speaker profiles for all events
+                  </p>
+                </div>
+                <Link to="/admin/speakers">
+                  <Button className="flex items-center gap-2">
+                    <Users className="h-4 w-4" />
+                    Manage Speakers
+                  </Button>
+                </Link>
               </div>
+              
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex flex-col items-center justify-center py-8 text-center">
+                    <Users className="h-12 w-12 text-gray-400 mb-4" />
+                    <h3 className="text-xl font-medium mb-2">Speakers Management</h3>
+                    <p className="text-gray-500 dark:text-gray-400 max-w-md mb-6">
+                      Add and manage speakers for your events. Create speaker profiles, assign them to sessions, and showcase their expertise.
+                    </p>
+                    <Link to="/admin/speakers">
+                      <Button>Go to Speakers Management</Button>
+                    </Link>
+                  </div>
+                </CardContent>
+              </Card>
             </TabsContent>
 
             <TabsContent value="agenda">
-              <div className="text-center py-12">
-                <h3 className="text-xl font-medium">Agenda Management</h3>
-                <p className="text-gray-500 dark:text-gray-400 mt-2">
-                  This feature will be available soon
-                </p>
+              <div className="flex justify-between items-center mb-6">
+                <div>
+                  <h2 className="text-2xl font-bold">Agenda Management</h2>
+                  <p className="text-gray-500 dark:text-gray-400 mt-1">
+                    Manage event schedules and sessions
+                  </p>
+                </div>
+                <Link to="/admin/agenda">
+                  <Button className="flex items-center gap-2">
+                    <Calendar className="h-4 w-4" />
+                    Manage Agenda
+                  </Button>
+                </Link>
               </div>
+              
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex flex-col items-center justify-center py-8 text-center">
+                    <Calendar className="h-12 w-12 text-gray-400 mb-4" />
+                    <h3 className="text-xl font-medium mb-2">Agenda Management</h3>
+                    <p className="text-gray-500 dark:text-gray-400 max-w-md mb-6">
+                      Create and manage detailed schedules for your events. Organize by days, add sessions, assign speakers, and more.
+                    </p>
+                    <Link to="/admin/agenda">
+                      <Button>Go to Agenda Management</Button>
+                    </Link>
+                  </div>
+                </CardContent>
+              </Card>
             </TabsContent>
 
             <TabsContent value="partners">
-              <div className="text-center py-12">
-                <h3 className="text-xl font-medium">Partners Management</h3>
-                <p className="text-gray-500 dark:text-gray-400 mt-2">
-                  This feature will be available soon
-                </p>
+              <div className="flex justify-between items-center mb-6">
+                <div>
+                  <h2 className="text-2xl font-bold">Partners Management</h2>
+                  <p className="text-gray-500 dark:text-gray-400 mt-1">
+                    Manage sponsors and partners
+                  </p>
+                </div>
+                <Link to="/admin/partners">
+                  <Button className="flex items-center gap-2">
+                    <Building className="h-4 w-4" />
+                    Manage Partners
+                  </Button>
+                </Link>
               </div>
+              
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex flex-col items-center justify-center py-8 text-center">
+                    <Building className="h-12 w-12 text-gray-400 mb-4" />
+                    <h3 className="text-xl font-medium mb-2">Partners Management</h3>
+                    <p className="text-gray-500 dark:text-gray-400 max-w-md mb-6">
+                      Add and categorize event sponsors and partners. Manage logos, descriptions, and sponsorship levels.
+                    </p>
+                    <Link to="/admin/partners">
+                      <Button>Go to Partners Management</Button>
+                    </Link>
+                  </div>
+                </CardContent>
+              </Card>
             </TabsContent>
 
             <TabsContent value="resources">
-              <div className="text-center py-12">
-                <h3 className="text-xl font-medium">Resources Management</h3>
-                <p className="text-gray-500 dark:text-gray-400 mt-2">
-                  This feature will be available soon
-                </p>
+              <div className="flex justify-between items-center mb-6">
+                <div>
+                  <h2 className="text-2xl font-bold">Resources Management</h2>
+                  <p className="text-gray-500 dark:text-gray-400 mt-1">
+                    Manage downloadable content and materials
+                  </p>
+                </div>
+                <Link to="/admin/resources">
+                  <Button className="flex items-center gap-2">
+                    <FileText className="h-4 w-4" />
+                    Manage Resources
+                  </Button>
+                </Link>
               </div>
+              
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex flex-col items-center justify-center py-8 text-center">
+                    <FileText className="h-12 w-12 text-gray-400 mb-4" />
+                    <h3 className="text-xl font-medium mb-2">Resources Management</h3>
+                    <p className="text-gray-500 dark:text-gray-400 max-w-md mb-6">
+                      Upload and manage resources like PDFs, videos, and presentations. Categorize content for attendees.
+                    </p>
+                    <Link to="/admin/resources">
+                      <Button>Go to Resources Management</Button>
+                    </Link>
+                  </div>
+                </CardContent>
+              </Card>
             </TabsContent>
           </Tabs>
         </ScrollSection>
