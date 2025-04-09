@@ -1,3 +1,4 @@
+
 import { useParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { BackToTopButton } from "@/components/BackToTopButton";
@@ -189,6 +190,36 @@ const EventPage = () => {
     eventStartDate: event.eventStartDate || ""
   };
 
+  // Properly structure the challenge object with required fields
+  const eventChallenge = {
+    id: "challenge-1",
+    title: "Convention Challenge",
+    description: "Participate in our hackathon",
+    steps: [
+      {
+        id: "step-1",
+        description: "Register for the hackathon",
+        points: 10
+      },
+      {
+        id: "step-2",
+        description: "Form a team or join one",
+        points: 20
+      },
+      {
+        id: "step-3",
+        description: "Submit your project idea",
+        points: 30
+      },
+      {
+        id: "step-4",
+        description: "Complete your project",
+        points: 40
+      }
+    ],
+    reward: "First Prize: $5,000"
+  };
+
   return (
     <div className="min-h-screen">
       <EventHeader eventId={eventId || ""} />
@@ -211,13 +242,7 @@ const EventPage = () => {
         rvsHotels={hotelInfo}
         rvsRestaurants={restaurantInfo}
         rvsInfoFaqs={[]}
-        rvsChallenge={{
-          title: "Convention Challenge",
-          description: "Participate in our hackathon",
-          prizes: ["First Prize: $5,000", "Second Prize: $2,500", "Third Prize: $1,000"],
-          rules: ["Teams of 1-4 people", "24 hours to complete", "Must use provided API"],
-          deadline: "June 16, 2026"
-        }}
+        rvsChallenge={eventChallenge}
         rvsResources={resources}
         getFaqs={getFaqs}
         getHighlights={getHighlights}

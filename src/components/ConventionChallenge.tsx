@@ -20,7 +20,7 @@ interface Challenge {
 }
 
 interface ConventionChallengeProps {
-  challenge: Challenge;
+  challenge: Challenge | any;
   className?: string;
 }
 
@@ -28,12 +28,14 @@ export function ConventionChallenge({ challenge, className = "" }: ConventionCha
   const [completedSteps, setCompletedSteps] = useState<string[]>([]);
   const [isCompleted, setIsCompleted] = useState(false);
 
-  const totalPoints = challenge.steps.reduce((sum, step) => sum + step.points, 0);
-  const earnedPoints = challenge.steps
+  // Ensure challenge and challenge.steps exist before using reduce
+  const steps = challenge?.steps || [];
+  const totalPoints = steps.reduce((sum, step) => sum + step.points, 0);
+  const earnedPoints = steps
     .filter((step) => completedSteps.includes(step.id))
     .reduce((sum, step) => sum + step.points, 0);
   
-  const progress = Math.round((earnedPoints / totalPoints) * 100);
+  const progress = totalPoints > 0 ? Math.round((earnedPoints / totalPoints) * 100) : 0;
 
   const toggleStep = (stepId: string) => {
     if (isCompleted) return;
@@ -44,11 +46,11 @@ export function ConventionChallenge({ challenge, className = "" }: ConventionCha
       } else {
         const newCompleted = [...prev, stepId];
         // Check if all steps are completed
-        if (newCompleted.length === challenge.steps.length) {
+        if (newCompleted.length === steps.length && steps.length > 0) {
           setTimeout(() => {
             setIsCompleted(true);
             toast.success("Challenge completed!", {
-              description: `Congratulations! You've earned ${totalPoints} points and unlocked: ${challenge.reward}`,
+              description: `Congratulations! You've earned ${totalPoints} points and unlocked: ${challenge?.reward || 'a reward'}`,
             });
           }, 500);
         }
@@ -62,6 +64,24 @@ export function ConventionChallenge({ challenge, className = "" }: ConventionCha
     setIsCompleted(false);
   };
 
+  // If challenge is not provided or malformed, render a fallback
+  if (!challenge || !challenge.steps) {
+    return (
+      <div className={className}>
+        <h2 className="mb-6 text-center text-3xl font-bold">Convention Challenge</h2>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-xl">Challenge Not Available</CardTitle>
+            <CardDescription>Check back later for challenges!</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-center text-gray-500">No active challenges at this time</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className={className}>
       <h2 className="mb-6 text-center text-3xl font-bold">Convention Challenge</h2>
@@ -69,7 +89,7 @@ export function ConventionChallenge({ challenge, className = "" }: ConventionCha
       <Card className={`transition-all duration-300 ${isCompleted ? 'border-rvs-primary shadow-lg' : ''}`}>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle className="text-xl">{challenge.title}</CardTitle>
+            <CardTitle className="text-xl">{challenge.title || 'Challenge'}</CardTitle>
             <Badge 
               variant={isCompleted ? "default" : "outline"}
               className={isCompleted ? "bg-rvs-primary" : ""}
@@ -77,13 +97,13 @@ export function ConventionChallenge({ challenge, className = "" }: ConventionCha
               {earnedPoints} / {totalPoints} Points
             </Badge>
           </div>
-          <CardDescription>{challenge.description}</CardDescription>
+          <CardDescription>{challenge.description || 'Complete this challenge to earn rewards'}</CardDescription>
         </CardHeader>
         <CardContent>
           <Progress value={progress} className="mb-6 h-2" />
           
           <div className="space-y-4">
-            {challenge.steps.map((step) => (
+            {steps.map((step) => (
               <div key={step.id} 
                 className={`flex cursor-pointer items-start space-x-2 rounded-md border p-4 transition-all
                   ${completedSteps.includes(step.id) 
@@ -134,7 +154,7 @@ export function ConventionChallenge({ challenge, className = "" }: ConventionCha
                 </div>
                 <h3 className="mb-1 text-lg font-semibold">Challenge Completed!</h3>
                 <p className="text-sm">You've earned {totalPoints} points</p>
-                <p className="mt-2 text-sm font-medium">Reward: {challenge.reward}</p>
+                <p className="mt-2 text-sm font-medium">Reward: {challenge.reward || 'Congratulations!'}</p>
               </div>
             </div>
           )}
