@@ -10,10 +10,11 @@ import { ResourcesManagement } from "@/components/admin/ResourcesManagement";
 import { ChallengesManagement } from "@/components/admin/ChallengesManagement";
 import { MarqueeManagement } from "@/components/admin/MarqueeManagement";
 import { AttendeeGuideManagement } from "@/components/admin/AttendeeGuideManagement";
+import EventsManagement from "@/components/admin/EventsManagement";
 import { Card, CardContent } from "@/components/ui/card";
 import { isAdmin, useAdminAuth } from "@/utils/adminAuth";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, LayoutDashboard, Users, Calendar, Book, Handshake, FileText, Trophy, Megaphone, Map } from "lucide-react";
+import { ArrowLeft, LayoutDashboard, Users, Calendar, Book, Handshake, FileText, Trophy, Megaphone, Map, CalendarDays } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const AdminLoginForm = ({ onLogin }: { onLogin: () => void }) => {
@@ -89,10 +90,14 @@ const AdminPanel = () => {
       </div>
 
       <Tabs defaultValue="home" className="w-full">
-        <TabsList className="mb-8 grid w-full grid-cols-3 md:grid-cols-5 lg:grid-cols-9">
+        <TabsList className="mb-8 grid w-full grid-cols-3 md:grid-cols-5 lg:grid-cols-10">
           <TabsTrigger value="home" className="flex items-center gap-2">
             <LayoutDashboard className="h-4 w-4" />
             <span className="hidden md:inline">Home</span>
+          </TabsTrigger>
+          <TabsTrigger value="events" className="flex items-center gap-2">
+            <CalendarDays className="h-4 w-4" />
+            <span className="hidden md:inline">Events</span>
           </TabsTrigger>
           <TabsTrigger value="speakers" className="flex items-center gap-2">
             <Users className="h-4 w-4" />
@@ -130,6 +135,10 @@ const AdminPanel = () => {
 
         <TabsContent value="home">
           <HomeContentManagement />
+        </TabsContent>
+        
+        <TabsContent value="events">
+          <EventsManagement />
         </TabsContent>
         
         <TabsContent value="speakers">
