@@ -1,4 +1,3 @@
-
 import { 
   CMSEvent, 
   CMSSpeaker, 
@@ -303,7 +302,10 @@ const remove = <T extends { id: string }>(key: string, id: string): boolean => {
 
 // Event-specific functions with validation
 export const eventService = {
-  getAll: () => getAll<CMSEvent>(LOCAL_STORAGE_KEYS.EVENTS),
+  getAll: () => {
+    const events = getAll<CMSEvent>(LOCAL_STORAGE_KEYS.EVENTS);
+    return events || [];
+  },
   getById: (id: string) => getById<CMSEvent>(LOCAL_STORAGE_KEYS.EVENTS, id),
   create: (event: CMSEvent) => {
     // Validate required fields
@@ -320,8 +322,14 @@ export const eventService = {
   },
   update: (id: string, event: CMSEvent) => update<CMSEvent>(LOCAL_STORAGE_KEYS.EVENTS, id, event),
   delete: (id: string) => remove<CMSEvent>(LOCAL_STORAGE_KEYS.EVENTS, id),
-  getPublished: () => getAll<CMSEvent>(LOCAL_STORAGE_KEYS.EVENTS).filter(event => event.published),
-  getFeatured: () => getAll<CMSEvent>(LOCAL_STORAGE_KEYS.EVENTS).filter(event => event.featured && event.published),
+  getPublished: () => {
+    const events = getAll<CMSEvent>(LOCAL_STORAGE_KEYS.EVENTS);
+    return events ? events.filter(event => event && event.published) : [];
+  },
+  getFeatured: () => {
+    const events = getAll<CMSEvent>(LOCAL_STORAGE_KEYS.EVENTS);
+    return events ? events.filter(event => event && event.featured && event.published) : [];
+  },
 };
 
 // Speaker-specific functions

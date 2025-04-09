@@ -35,20 +35,21 @@ const HomePage = () => {
   }, []);
 
   // Filter featured events if we have homeContent
-  const featuredEvents = homeContent?.featuredEvents 
+  const featuredEvents = homeContent?.featuredEvents && events.length > 0
     ? events.filter(event => homeContent.featuredEvents.includes(event.id))
-    : events.filter(event => event.featured);
+    : [];
 
   // Filter upcoming events (those with a future start date)
   const today = new Date();
   const upcomingEvents = events.filter(event => {
-    if (!event.eventStartDate) return false;
+    if (!event || !event.eventStartDate) return false;
     const eventDate = new Date(event.eventStartDate);
     return eventDate >= today;
   });
 
   // Sort events by date
   upcomingEvents.sort((a, b) => {
+    if (!a.eventStartDate || !b.eventStartDate) return 0;
     const dateA = new Date(a.eventStartDate);
     const dateB = new Date(b.eventStartDate);
     return dateA.getTime() - dateB.getTime();

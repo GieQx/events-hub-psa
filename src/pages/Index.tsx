@@ -17,6 +17,11 @@ const getRemainigDays = (dateString: string) => {
 };
 
 const IndexPage = () => {
+  // Filter valid events - check for required properties
+  const validEvents = events.filter(event => 
+    event && event.id && event.title && event.eventStartDate
+  );
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 overflow-hidden">
       <header className="container mx-auto flex items-center justify-between p-6 relative z-10">
@@ -88,39 +93,51 @@ const IndexPage = () => {
             </h2>
           </ScrollSection>
           
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {events.map((event, index) => {
-              const remainingDays = getRemainigDays(event.eventStartDate);
-              const isDisabled = remainingDays > 700;
-              
-              return (
-                <ScrollSection key={event.id} delay={0.2 + index * 0.1}>
-                  <div className={`${isDisabled ? 'opacity-60' : ''} transition-opacity duration-300`}>
-                    <EventCard 
-                      id={event.id}
-                      title={event.title}
-                      shortName={event.shortName}
-                      description={event.description}
-                      date={event.date}
-                      location={event.location}
-                      imageUrl={event.imageUrl !== "/placeholder.svg" ? event.imageUrl : 
-                                event.id === "nccrvs" ? "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=600&h=400&auto=format&fit=crop&q=80" :
-                                event.id === "cbms" ? "https://images.unsplash.com/photo-1528605248644-14dd04022da1?w=600&h=400&auto=format&fit=crop&q=80" :
-                                event.id === "nsm" ? "https://images.unsplash.com/photo-1596496181871-9681eacf9764?w=600&h=400&auto=format&fit=crop&q=80" :
-                                "https://images.unsplash.com/photo-1569025743873-ea3a9ade89f9?w=600&h=400&auto=format&fit=crop&q=80"}
-                      color={event.color}
-                      disabled={isDisabled}
-                    />
-                    {isDisabled && (
-                      <div className="mt-2 text-center text-sm text-gray-500">
-                        Coming in {remainingDays} days
-                      </div>
-                    )}
-                  </div>
-                </ScrollSection>
-              );
-            })}
-          </div>
+          {validEvents.length > 0 ? (
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+              {validEvents.map((event, index) => {
+                const remainingDays = getRemainigDays(event.eventStartDate);
+                const isDisabled = remainingDays > 700;
+                
+                return (
+                  <ScrollSection key={event.id} delay={0.2 + index * 0.1}>
+                    <div className={`${isDisabled ? 'opacity-60' : ''} transition-opacity duration-300`}>
+                      <EventCard 
+                        id={event.id}
+                        title={event.title}
+                        shortName={event.shortName}
+                        description={event.description}
+                        date={event.date}
+                        location={event.location}
+                        imageUrl={event.imageUrl !== "/placeholder.svg" ? event.imageUrl : 
+                                  event.id === "nccrvs" ? "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=600&h=400&auto=format&fit=crop&q=80" :
+                                  event.id === "cbms" ? "https://images.unsplash.com/photo-1528605248644-14dd04022da1?w=600&h=400&auto=format&fit=crop&q=80" :
+                                  event.id === "nsm" ? "https://images.unsplash.com/photo-1596496181871-9681eacf9764?w=600&h=400&auto=format&fit=crop&q=80" :
+                                  "https://images.unsplash.com/photo-1569025743873-ea3a9ade89f9?w=600&h=400&auto=format&fit=crop&q=80"}
+                        color={event.color}
+                        disabled={isDisabled}
+                      />
+                      {isDisabled && (
+                        <div className="mt-2 text-center text-sm text-gray-500">
+                          Coming in {remainingDays} days
+                        </div>
+                      )}
+                    </div>
+                  </ScrollSection>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="text-center py-8">
+              <p className="text-gray-500 dark:text-gray-400 mb-4">No upcoming events found</p>
+              <p className="text-gray-600 dark:text-gray-300">Check back later for new events or visit the admin page to add events.</p>
+              <div className="mt-6">
+                <Link to="/admin">
+                  <Button variant="outline">Go to Admin</Button>
+                </Link>
+              </div>
+            </div>
+          )}
         </section>
       </main>
 
