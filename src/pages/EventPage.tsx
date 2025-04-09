@@ -256,7 +256,7 @@ const EventPage = () => {
         <section id="partners" className="scroll-mt-20 py-16">
           <div className="container mx-auto px-4">
             <ScrollSection>
-              <PartnerSection partners={rvsPartners} />
+              <PartnerSection partners={rvsPartners} eventId={eventId} />
             </ScrollSection>
           </div>
         </section>
@@ -296,6 +296,7 @@ const EventPage = () => {
               <ResourcesSection 
                 resources={rvsResources} 
                 eventDetails={eventCalendarDetails}
+                eventId={eventId}
               />
             </ScrollSection>
           </div>
@@ -304,7 +305,7 @@ const EventPage = () => {
         <section id="faqs" className="scroll-mt-20 bg-white py-16 dark:bg-gray-800">
           <div className="container mx-auto px-4">
             <ScrollSection>
-              <FaqsSection faqs={getFaqs()} />
+              <FaqsSection faqs={getFaqs()} eventId={eventId} />
             </ScrollSection>
           </div>
         </section>

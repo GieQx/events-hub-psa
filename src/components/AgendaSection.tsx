@@ -3,21 +3,7 @@ import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-
-export type Event = {
-  time: string;
-  title: string;
-  speaker?: string;
-  description?: string;
-  location?: string;
-  type?: 'keynote' | 'workshop' | 'panel' | 'break';
-};
-
-export type Day = {
-  date: string;
-  title: string;
-  events: Event[];
-};
+import { Event, Day } from "@/components/types";
 
 interface AgendaSectionProps {
   days: Day[];
@@ -76,6 +62,9 @@ export function AgendaSection({ days, className = "", eventId = "rvs" }: AgendaS
                                 ${event.type === 'workshop' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300' : ''}
                                 ${event.type === 'panel' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300' : ''}
                                 ${event.type === 'break' ? 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300' : ''}
+                                ${event.type === 'talk' ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300' : ''}
+                                ${event.type === 'networking' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' : ''}
+                                ${event.type === 'other' ? 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300' : ''}
                               `}
                             >
                               {event.type.charAt(0).toUpperCase() + event.type.slice(1)}

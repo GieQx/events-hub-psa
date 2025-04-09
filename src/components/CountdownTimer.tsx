@@ -44,21 +44,21 @@ export function CountdownTimer({ targetDate, className = "" }: CountdownTimerPro
 
   return (
     <div className={`grid grid-cols-4 gap-2 md:gap-4 ${className}`}>
-      <div className="flex flex-col items-center rounded-lg bg-white/90 p-2 shadow-md dark:bg-gray-800/90 md:p-4">
-        <span className="text-2xl font-bold md:text-4xl">{timeLeft.days}</span>
-        <span className="text-xs md:text-sm">Days</span>
+      <div className="flex flex-col items-center rounded-lg bg-white/90 p-2 shadow-md dark:bg-gray-800/90 md:p-4 border border-gray-200 dark:border-gray-700">
+        <span className="text-2xl font-bold md:text-4xl text-gray-900 dark:text-white">{timeLeft.days}</span>
+        <span className="text-xs md:text-sm text-gray-600 dark:text-gray-300">Days</span>
       </div>
-      <div className="flex flex-col items-center rounded-lg bg-white/90 p-2 shadow-md dark:bg-gray-800/90 md:p-4">
-        <span className="text-2xl font-bold md:text-4xl">{timeLeft.hours}</span>
-        <span className="text-xs md:text-sm">Hours</span>
+      <div className="flex flex-col items-center rounded-lg bg-white/90 p-2 shadow-md dark:bg-gray-800/90 md:p-4 border border-gray-200 dark:border-gray-700">
+        <span className="text-2xl font-bold md:text-4xl text-gray-900 dark:text-white">{timeLeft.hours}</span>
+        <span className="text-xs md:text-sm text-gray-600 dark:text-gray-300">Hours</span>
       </div>
-      <div className="flex flex-col items-center rounded-lg bg-white/90 p-2 shadow-md dark:bg-gray-800/90 md:p-4">
-        <span className="text-2xl font-bold md:text-4xl">{timeLeft.minutes}</span>
-        <span className="text-xs md:text-sm">Minutes</span>
+      <div className="flex flex-col items-center rounded-lg bg-white/90 p-2 shadow-md dark:bg-gray-800/90 md:p-4 border border-gray-200 dark:border-gray-700">
+        <span className="text-2xl font-bold md:text-4xl text-gray-900 dark:text-white">{timeLeft.minutes}</span>
+        <span className="text-xs md:text-sm text-gray-600 dark:text-gray-300">Minutes</span>
       </div>
-      <div className="flex flex-col items-center rounded-lg bg-white/90 p-2 shadow-md dark:bg-gray-800/90 md:p-4">
-        <span className="text-2xl font-bold md:text-4xl">{timeLeft.seconds}</span>
-        <span className="text-xs md:text-sm">Seconds</span>
+      <div className="flex flex-col items-center rounded-lg bg-white/90 p-2 shadow-md dark:bg-gray-800/90 md:p-4 border border-gray-200 dark:border-gray-700">
+        <span className="text-2xl font-bold md:text-4xl text-gray-900 dark:text-white">{timeLeft.seconds}</span>
+        <span className="text-xs md:text-sm text-gray-600 dark:text-gray-300">Seconds</span>
       </div>
     </div>
   );
