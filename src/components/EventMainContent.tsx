@@ -1,7 +1,8 @@
+
 import { ParticleBackground } from "@/components/ParticleBackground";
 import { AboutSection } from "@/components/AboutSection";
 import { SpeakersSection } from "@/components/SpeakersSection";
-import { AgendaSection from "@/components/AgendaSection";
+import { AgendaSection } from "@/components/AgendaSection";  // Corrected import
 import { PartnerSection } from "@/components/PartnerSection";
 import { TopicsSection } from "@/components/TopicsSection";
 import { AttendeeGuide } from "@/components/AttendeeGuide";
