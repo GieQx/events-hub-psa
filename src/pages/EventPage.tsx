@@ -65,11 +65,7 @@ const EventPage = () => {
   // Fetch data from CMS
   const speakers = cmsService.speakers.getByEventId(eventId || "");
   const featuredSpeakers = cmsService.speakers.getFeatured(eventId || "");
-  
-  // Fix for agenda display issue
   const agenda = cmsService.agenda.getByEventId(eventId || "");
-  console.log("Retrieved agenda for eventId:", eventId, agenda);
-  
   const partners = cmsService.partners.getByEventId(eventId || "");
   const topics = cmsService.topics.getByEventId(eventId || "");
   const resources = cmsService.resources.getByEventId(eventId || "");
@@ -227,8 +223,7 @@ const EventPage = () => {
       
       <EventHero 
         eventId={eventId} 
-        event={heroEvent}
-        eventCalendarDetails={eventCalendarDetails}
+        event={heroEvent} 
       />
       
       <EventMainContent 
@@ -260,6 +255,6 @@ const EventPage = () => {
       <BackToTopButton eventId={eventId} />
     </div>
   );
-}
+};
 
 export default EventPage;
