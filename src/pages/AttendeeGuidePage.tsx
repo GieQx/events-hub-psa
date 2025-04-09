@@ -13,7 +13,7 @@ import {
   rvsVenueInfo,
   rvsHotels,
   rvsRestaurants,
-  rvsInfoFaqs
+  rvsFaqs // Using rvsFaqs instead of rvsInfoFaqs
 } from "@/data/rvs-event-data";
 
 const AttendeeGuidePage = () => {
@@ -45,7 +45,7 @@ const AttendeeGuidePage = () => {
         venue={rvsVenueInfo}
         hotels={rvsHotels}
         restaurants={rvsRestaurants}
-        faqs={rvsInfoFaqs}
+        faqs={rvsFaqs} // Using rvsFaqs instead of rvsInfoFaqs
         className="container mx-auto px-4 py-16"
       />
       

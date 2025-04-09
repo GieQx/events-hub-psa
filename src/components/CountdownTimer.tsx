@@ -1,12 +1,12 @@
-
 import { useEffect, useState } from "react";
 
 interface CountdownTimerProps {
   targetDate: string;
   className?: string;
+  eventId?: string;
 }
 
-export function CountdownTimer({ targetDate, className = "" }: CountdownTimerProps) {
+export function CountdownTimer({ targetDate, className = "", eventId }: CountdownTimerProps) {
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
