@@ -1,4 +1,3 @@
-
 import { useParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { BackToTopButton } from "@/components/BackToTopButton";
@@ -36,7 +35,6 @@ const EventPage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Get the event from CMS
     const foundEvent = cmsService.events.getById(eventId || "");
     setEvent(foundEvent);
     setLoading(false);
@@ -62,7 +60,6 @@ const EventPage = () => {
     );
   }
 
-  // Fetch data from CMS
   const speakers = cmsService.speakers.getByEventId(eventId || "");
   const featuredSpeakers = cmsService.speakers.getFeatured(eventId || "");
   const agenda = cmsService.agenda.getByEventId(eventId || "");
@@ -71,7 +68,6 @@ const EventPage = () => {
   const resources = cmsService.resources.getByEventId(eventId || "");
   const faqs = cmsService.faqs.getByEventId(eventId || "");
   
-  // Get the active challenge for this event
   let eventChallenge;
   try {
     const challenges = cmsService.challenges.getActive(eventId || "");
@@ -214,7 +210,8 @@ const EventPage = () => {
     location: event.location || "",
     longDescription: event.longDescription || "",
     videoUrl: event.videoUrl || "",
-    eventStartDate: event.eventStartDate || ""
+    eventStartDate: event.eventStartDate || "",
+    eventEndDate: event.eventEndDate || ""
   };
 
   return (
