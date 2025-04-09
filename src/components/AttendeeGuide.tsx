@@ -5,12 +5,23 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { getEventColor, getEventTextColor } from "@/utils/eventHelpers";
 import { MapPin, Calendar, Clock, User, Users, Info, Download, Phone, AtSign } from "lucide-react";
 
-interface AttendeeGuideProps {
+export interface AttendeeGuideProps {
   eventId: string;
+  venue?: any;
+  hotels?: any[];
+  restaurants?: any[];
+  faqs?: any[];
   className?: string;
 }
 
-export function AttendeeGuide({ eventId, className = "" }: AttendeeGuideProps) {
+export function AttendeeGuide({ 
+  eventId, 
+  venue, 
+  hotels = [], 
+  restaurants = [], 
+  faqs = [], 
+  className = "" 
+}: AttendeeGuideProps) {
   const eventColorClass = getEventColor(eventId);
   const eventTextColorClass = getEventTextColor(eventId);
   
