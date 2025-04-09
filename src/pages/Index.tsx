@@ -74,7 +74,7 @@ const IndexPage = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
               <div className="absolute bottom-0 left-0 p-6 text-left text-white">
-                <h3 className="text-2xl font-bold">Major Conventions for 2026-2027</h3>
+                <h3 className="text-2xl font-bold">Major Conventions for 2025</h3>
                 <p className="max-w-lg">From cutting-edge technology to community engagement, our conventions bring together the best minds and innovators.</p>
               </div>
             </motion.div>
@@ -91,7 +91,7 @@ const IndexPage = () => {
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {events.map((event, index) => {
               const remainingDays = getRemainigDays(event.eventStartDate);
-              const isDisabled = remainingDays > 600;
+              const isDisabled = remainingDays > 700;
               
               return (
                 <ScrollSection key={event.id} delay={0.2 + index * 0.1}>
