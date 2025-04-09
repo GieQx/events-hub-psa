@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowUp } from "lucide-react";
-import { getEventColor } from "@/utils/eventHelpers";
 
 interface BackToTopButtonProps {
   eventId?: string;
@@ -10,6 +9,17 @@ interface BackToTopButtonProps {
 
 export function BackToTopButton({ eventId = "rvs" }: BackToTopButtonProps) {
   const [isVisible, setIsVisible] = useState(false);
+
+  // Get the correct event color
+  const getEventColor = () => {
+    switch(eventId) {
+      case "rvs": return "rvs-primary";
+      case "bms": return "bms-primary";
+      case "sm": return "sm-primary";
+      case "cs": return "cs-primary";
+      default: return "rvs-primary";
+    }
+  };
 
   useEffect(() => {
     const toggleVisibility = () => {
@@ -31,13 +41,11 @@ export function BackToTopButton({ eventId = "rvs" }: BackToTopButtonProps) {
     });
   };
 
-  const eventColor = getEventColor(eventId);
-
   return (
     <Button
       onClick={scrollToTop}
       size="icon"
-      className={`fixed bottom-24 right-6 h-14 w-14 rounded-full bg-${eventColor} shadow-lg hover:bg-${eventColor}/90 transition-opacity z-50 ${
+      className={`fixed bottom-6 right-6 h-14 w-14 rounded-full bg-${getEventColor()} shadow-lg hover:bg-${getEventColor()}/90 transition-opacity z-40 ${
         isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
       }`}
       aria-label="Back to top"

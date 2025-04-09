@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,10 +23,9 @@ export interface Topic {
 interface TopicsSectionProps {
   topics: Topic[];
   className?: string;
-  eventId?: string;
 }
 
-export function TopicsSection({ topics, className = "", eventId }: TopicsSectionProps) {
+export function TopicsSection({ topics, className = "" }: TopicsSectionProps) {
   const [filteredType, setFilteredType] = useState<string | null>(null);
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
   const [formData, setFormData] = useState({
@@ -48,12 +48,14 @@ export function TopicsSection({ topics, className = "", eventId }: TopicsSection
   };
 
   const handleEnroll = () => {
+    // In a real app, you would send this data to your backend
     console.log("Enrolling:", { topic: selectedTopic, user: formData });
     
     toast.success("Successfully enrolled!", {
       description: `You've been enrolled in "${selectedTopic?.title}". Check your email for confirmation.`,
     });
     
+    // Reset form
     setFormData({ name: "", email: "", organization: "" });
     setSelectedTopic(null);
   };

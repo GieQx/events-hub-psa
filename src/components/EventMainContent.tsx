@@ -2,7 +2,7 @@
 import { ParticleBackground } from "@/components/ParticleBackground";
 import { AboutSection } from "@/components/AboutSection";
 import { SpeakersSection } from "@/components/SpeakersSection";
-import { AgendaSection } from "@/components/AgendaSection";  // Corrected import
+import { AgendaSection } from "@/components/AgendaSection";
 import { PartnerSection } from "@/components/PartnerSection";
 import { TopicsSection } from "@/components/TopicsSection";
 import { AttendeeGuide } from "@/components/AttendeeGuide";
@@ -24,7 +24,7 @@ interface EventMainContentProps {
   rvsVenueInfo: any;
   rvsHotels: any[];
   rvsRestaurants: any[];
-  rvsInfoFaqs: any[]; // We'll keep this name in the interface
+  rvsInfoFaqs: any[];
   rvsChallenge: any;
   rvsResources: any[];
   getFaqs: () => any[];
@@ -117,7 +117,7 @@ export function EventMainContent({
         <section id="topics" className="scroll-mt-20 bg-white py-16 dark:bg-gray-800">
           <div className="container mx-auto px-4">
             <ScrollSection>
-              <TopicsSection topics={rvsTopics} eventId={eventId} />
+              <TopicsSection topics={rvsTopics} />
             </ScrollSection>
           </div>
         </section>

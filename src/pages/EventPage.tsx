@@ -9,7 +9,6 @@ import { EventHero } from "@/components/EventHero";
 import { EventMainContent } from "@/components/EventMainContent";
 import { EventFooter } from "@/components/EventFooter";
 import { getEventColor, getParticleColor } from "@/utils/eventHelpers";
-import { SpeakersSection } from "@/components/SpeakersSection";
 
 import { 
   rvsNewsUpdates, 
@@ -120,15 +119,6 @@ const EventPage = () => {
       <ChatbotDialog eventName={event?.title || ""} options={rvsChatbotOptions} eventId={eventId} />
       
       <BackToTopButton eventId={eventId} />
-
-      <div className="py-16 container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center mb-12">Featured Speakers</h2>
-        <SpeakersSection 
-          speakers={speakers.filter(speaker => speaker.featured)}
-          eventId={eventId}
-          className="mb-8"
-        />
-      </div>
     </div>
   );
 };
