@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -23,7 +22,6 @@ import cmsService from "@/services/cmsService";
 import { generateId } from "@/services/cmsUtils";
 import { shouldDisableEvent } from "@/utils/eventHelpers";
 
-// Color palettes
 const SDG_INSPIRED_PALETTE = [
   { name: "SDG Green", color: "#3F7E44", variable: "126 28% 37%" },
   { name: "SDG Blue", color: "#0A97D9", variable: "198 89% 45%" },
@@ -53,9 +51,7 @@ const DEFAULT_COLORS = [
   { name: "CS Green", color: "#3F7E44", variable: "126 28% 37%" },
 ];
 
-// Helper to convert color to HSL variable value
 const getColorVariable = (color: string): string => {
-  // Find in all palettes
   const allPalettes = [...SDG_INSPIRED_PALETTE, ...BLUE_ORANGE_PALETTE, ...DEFAULT_COLORS];
   const colorObj = allPalettes.find(c => c.color === color);
   return colorObj ? colorObj.variable : "";
@@ -68,7 +64,6 @@ const EventsManagement = () => {
   const [colorPalette, setColorPalette] = useState<"default" | "sdg" | "blueOrange">("default");
   const [showColorPicker, setShowColorPicker] = useState(false);
 
-  // Initial empty event state
   const emptyEvent: CMSEvent = {
     id: "",
     title: "",
@@ -79,7 +74,7 @@ const EventsManagement = () => {
     eventStartDate: "",
     eventEndDate: "",
     location: "",
-    color: "#FF6479", // Default to RVS pink
+    color: "#FF6479",
     videoUrl: "",
     imageUrl: "/placeholder.svg",
     featured: false,
@@ -124,14 +119,17 @@ const EventsManagement = () => {
       id: newId,
       title: `${event.title} (Copy)`,
       shortName: event.shortName ? `${event.shortName} (Copy)` : "",
-      featured: false // Don't feature the clone by default
+      featured: false
     };
     
     setIsEditing(false);
     setCurrentEvent(clonedEvent);
     setSelectedEvent(null);
-    // Automatically go to edit tab
-    document.querySelector('[data-value="edit"]')?.click();
+    
+    const editTab = document.querySelector('[data-value="edit"]') as HTMLElement;
+    if (editTab) {
+      editTab.click();
+    }
   };
 
   const handleDeleteEvent = (id: string) => {
@@ -170,16 +168,13 @@ const EventsManagement = () => {
 
   const handleSaveEvent = () => {
     try {
-      // Validate required fields
       if (!currentEvent.title || !currentEvent.description || !currentEvent.eventStartDate) {
         alert("Please fill in all required fields: Title, Description, and Start Date");
         return;
       }
       
-      // Get the HSL variable value
       const colorVariable = getColorVariable(currentEvent.color);
       
-      // Build the event with the correct format
       const eventToSave = {
         ...currentEvent,
         color: `bg-[${currentEvent.color}]`,
@@ -200,7 +195,7 @@ const EventsManagement = () => {
       alert(`Error saving event: ${error}`);
     }
   };
-  
+
   const getCurrentPalette = () => {
     switch (colorPalette) {
       case "sdg":
