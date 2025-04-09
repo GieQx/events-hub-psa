@@ -30,6 +30,13 @@ export function HomeContentManagement() {
     }));
   };
 
+  const handleSelectChange = (name: string, value: string) => {
+    setContent(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
   const handleAddTestimonial = () => {
     setContent(prev => ({
       ...prev,
@@ -140,6 +147,29 @@ export function HomeContentManagement() {
               onChange={handleInputChange} 
               placeholder="Hero subtitle" 
             />
+          </div>
+          <div>
+            <Label htmlFor="heroBackgroundStyle">Hero Background Style</Label>
+            <Select
+              value={content.heroBackgroundStyle || "bg-gradient-to-r from-blue-500 to-purple-600"}
+              onValueChange={(value) => handleSelectChange('heroBackgroundStyle', value)}
+            >
+              <SelectTrigger id="heroBackgroundStyle">
+                <SelectValue placeholder="Select a background style" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="bg-gradient-to-r from-blue-500 to-purple-600">Blue to Purple</SelectItem>
+                <SelectItem value="bg-gradient-to-r from-green-400 to-blue-500">Green to Blue</SelectItem>
+                <SelectItem value="bg-gradient-to-r from-pink-500 to-yellow-500">Pink to Yellow</SelectItem>
+                <SelectItem value="bg-gradient-to-r from-purple-500 to-indigo-500">Purple to Indigo</SelectItem>
+                <SelectItem value="bg-gradient-to-r from-yellow-400 to-orange-500">Yellow to Orange</SelectItem>
+                <SelectItem value="bg-gradient-to-r from-blue-500 to-teal-400">Blue to Teal</SelectItem>
+                <SelectItem value="bg-rvs-primary">RVS Primary</SelectItem>
+                <SelectItem value="bg-bms-primary">BMS Primary</SelectItem>
+                <SelectItem value="bg-sm-primary">SM Primary</SelectItem>
+                <SelectItem value="bg-cs-primary">CS Primary</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </CardContent>
       </Card>

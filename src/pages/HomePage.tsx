@@ -7,6 +7,7 @@ import { BackToTopButton } from "@/components/BackToTopButton";
 import { HeroSection } from "@/components/HeroSection";
 import { Footer } from "@/components/Footer";
 import { ParticleBackground } from "@/components/ParticleBackground";
+import { ContactUsSection } from "@/components/ContactUsSection";
 import cmsService from "@/services/cmsService";
 import { getEventColor } from "@/utils/eventHelpers";
 
@@ -45,6 +46,9 @@ const HomePage = () => {
         <HeroSection 
           title={homeContent?.heroTitle || "Welcome to the Convention Hub"}
           description={homeContent?.heroSubtitle || "Discover and connect with professional communities around the world."}
+          buttonText="Explore Events"
+          buttonLink="/events"
+          backgroundStyle={homeContent?.heroBackgroundStyle || "bg-gradient-to-r from-blue-500 to-purple-600"}
         />
 
         <div className="mx-auto my-10 max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -178,6 +182,8 @@ const HomePage = () => {
             </div>
           </div>
         )}
+
+        <ContactUsSection />
 
         <div className="bg-blue-50 dark:bg-blue-950 py-16">
           <div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">

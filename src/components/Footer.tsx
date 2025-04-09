@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Mail, Phone, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 
 export const Footer: React.FC = () => {
   return (
@@ -16,13 +17,30 @@ export const Footer: React.FC = () => {
         </div>
         <div>
           <h3 className="text-xl font-bold mb-4">Contact</h3>
-          <p>Email: support@conventionhub.com</p>
-          <p>Phone: +1 (555) 123-4567</p>
+          <p className="flex items-center gap-2 mb-2">
+            <Mail size={16} />
+            <span>support@conventionhub.com</span>
+          </p>
+          <p className="flex items-center gap-2">
+            <Phone size={16} />
+            <span>+1 (555) 123-4567</span>
+          </p>
         </div>
         <div>
           <h3 className="text-xl font-bold mb-4">Follow Us</h3>
           <div className="flex space-x-4">
-            {/* Add social media icons/links here */}
+            <a href="#" className="hover:text-blue-400">
+              <Facebook size={24} />
+            </a>
+            <a href="#" className="hover:text-blue-400">
+              <Twitter size={24} />
+            </a>
+            <a href="#" className="hover:text-blue-400">
+              <Instagram size={24} />
+            </a>
+            <a href="#" className="hover:text-blue-400">
+              <Linkedin size={24} />
+            </a>
           </div>
         </div>
       </div>

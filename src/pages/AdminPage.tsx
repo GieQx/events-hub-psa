@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -11,6 +10,7 @@ import { ScrollSection } from "@/components/ScrollSection";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { toast } from "sonner";
 import { ChevronLeft, Plus, Edit, Trash, Save } from "lucide-react";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 
 import cmsService from "@/services/cmsService";
 import { CMSEvent } from "@/types/cms";
@@ -22,6 +22,7 @@ import { PartnersManagement } from "@/components/admin/PartnersManagement";
 import { ResourcesManagement } from "@/components/admin/ResourcesManagement";
 import { ChallengesManagement } from "@/components/admin/ChallengesManagement";
 import { HomeContentManagement } from "@/components/admin/HomeContentManagement";
+import { TopicsManagement } from "@/components/admin/TopicsManagement";
 
 const AdminPage = () => {
   const [activeTab, setActiveTab] = useState("events");
@@ -132,6 +133,7 @@ const AdminPage = () => {
               <TabsTrigger value="events">Events</TabsTrigger>
               <TabsTrigger value="speakers">Speakers</TabsTrigger>
               <TabsTrigger value="agenda">Agenda</TabsTrigger>
+              <TabsTrigger value="topics">Topics</TabsTrigger>
               <TabsTrigger value="partners">Partners</TabsTrigger>
               <TabsTrigger value="resources">Resources</TabsTrigger>
               <TabsTrigger value="challenges">Challenges</TabsTrigger>
@@ -250,14 +252,30 @@ const AdminPage = () => {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="color">Theme Color</Label>
-                        <Input 
-                          id="color" 
-                          name="color" 
-                          value={editingEvent.color} 
-                          onChange={handleInputChange} 
-                          placeholder="bg-blue-500" 
-                        />
+                        <Label htmlFor="color">Branding Color</Label>
+                        <Select
+                          value={editingEvent.color}
+                          onValueChange={(value) => setEditingEvent({...editingEvent, color: value})}
+                        >
+                          <SelectTrigger id="color">
+                            <SelectValue placeholder="Select a color" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="bg-blue-500">Blue</SelectItem>
+                            <SelectItem value="bg-green-500">Green</SelectItem>
+                            <SelectItem value="bg-red-500">Red</SelectItem>
+                            <SelectItem value="bg-purple-500">Purple</SelectItem>
+                            <SelectItem value="bg-yellow-500">Yellow</SelectItem>
+                            <SelectItem value="bg-pink-500">Pink</SelectItem>
+                            <SelectItem value="bg-orange-500">Orange</SelectItem>
+                            <SelectItem value="bg-teal-500">Teal</SelectItem>
+                            <SelectItem value="bg-indigo-500">Indigo</SelectItem>
+                            <SelectItem value="bg-rvs-primary">RVS Primary</SelectItem>
+                            <SelectItem value="bg-bms-primary">BMS Primary</SelectItem>
+                            <SelectItem value="bg-sm-primary">SM Primary</SelectItem>
+                            <SelectItem value="bg-cs-primary">CS Primary</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
                     </div>
 
@@ -362,6 +380,10 @@ const AdminPage = () => {
 
             <TabsContent value="agenda">
               <AgendaManagement />
+            </TabsContent>
+
+            <TabsContent value="topics">
+              <TopicsManagement />
             </TabsContent>
 
             <TabsContent value="partners">
