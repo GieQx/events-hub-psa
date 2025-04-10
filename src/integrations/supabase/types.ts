@@ -9,7 +9,290 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      attendee_guides: {
+        Row: {
+          content: string | null
+          created_at: string | null
+          event_id: string | null
+          id: string
+          order_position: number | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string | null
+          event_id?: string | null
+          id?: string
+          order_position?: number | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          content?: string | null
+          created_at?: string | null
+          event_id?: string | null
+          id?: string
+          order_position?: number | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attendee_guides_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chatbot_qna: {
+        Row: {
+          answer: string
+          created_at: string | null
+          event_id: string | null
+          id: string
+          question: string
+          updated_at: string | null
+        }
+        Insert: {
+          answer: string
+          created_at?: string | null
+          event_id?: string | null
+          id?: string
+          question: string
+          updated_at?: string | null
+        }
+        Update: {
+          answer?: string
+          created_at?: string | null
+          event_id?: string | null
+          id?: string
+          question?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chatbot_qna_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      events: {
+        Row: {
+          address: string | null
+          capacity: number | null
+          created_at: string | null
+          description: string | null
+          end_date: string
+          id: string
+          image_url: string | null
+          location: string | null
+          primary_color: string | null
+          start_date: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          address?: string | null
+          capacity?: number | null
+          created_at?: string | null
+          description?: string | null
+          end_date: string
+          id?: string
+          image_url?: string | null
+          location?: string | null
+          primary_color?: string | null
+          start_date: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          address?: string | null
+          capacity?: number | null
+          created_at?: string | null
+          description?: string | null
+          end_date?: string
+          id?: string
+          image_url?: string | null
+          location?: string | null
+          primary_color?: string | null
+          start_date?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          email: string
+          full_name: string | null
+          id: string
+          is_admin: boolean | null
+          updated_at: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          email: string
+          full_name?: string | null
+          id: string
+          is_admin?: boolean | null
+          updated_at?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          email?: string
+          full_name?: string | null
+          id?: string
+          is_admin?: boolean | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      sessions: {
+        Row: {
+          created_at: string | null
+          day_label: string | null
+          description: string | null
+          end_time: string
+          event_id: string | null
+          id: string
+          location: string | null
+          speaker_id: string | null
+          start_time: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          day_label?: string | null
+          description?: string | null
+          end_time: string
+          event_id?: string | null
+          id?: string
+          location?: string | null
+          speaker_id?: string | null
+          start_time: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          day_label?: string | null
+          description?: string | null
+          end_time?: string
+          event_id?: string | null
+          id?: string
+          location?: string | null
+          speaker_id?: string | null
+          start_time?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sessions_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sessions_speaker_id_fkey"
+            columns: ["speaker_id"]
+            isOneToOne: false
+            referencedRelation: "speakers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      speakers: {
+        Row: {
+          bio: string | null
+          company: string | null
+          created_at: string | null
+          event_id: string | null
+          id: string
+          image_url: string | null
+          name: string
+          role: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          bio?: string | null
+          company?: string | null
+          created_at?: string | null
+          event_id?: string | null
+          id?: string
+          image_url?: string | null
+          name: string
+          role?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          bio?: string | null
+          company?: string | null
+          created_at?: string | null
+          event_id?: string | null
+          id?: string
+          image_url?: string | null
+          name?: string
+          role?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "speakers_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      topics: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          event_id: string | null
+          id: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          event_id?: string | null
+          id?: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          event_id?: string | null
+          id?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "topics_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

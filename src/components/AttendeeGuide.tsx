@@ -1,149 +1,190 @@
 
+import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent } from "@/components/ui/card";
-import { Building, Coffee, Map, Info } from "lucide-react";
+import { MapPin, Hotel, Utensils, HelpCircle } from "lucide-react";
 
-interface AttendeeGuideProps {
-  venue: {
+export interface AttendeeGuideProps {
+  venue?: {
     name: string;
     address: string;
     description: string;
     mapUrl: string;
   };
-  hotels: Array<{
-    id: string;
-    name: string;
-    distance: string;
-    priceRange: string;
-    website?: string;
-  }>;
-  restaurants: Array<{
-    id: string;
-    name: string;
-    cuisine: string;
-    distance: string;
-    priceRange: string;
-  }>;
-  faqs: Array<{
-    question: string;
-    answer: string;
-  }>;
-  className?: string;
+  hotels?: any[];
+  restaurants?: any[];
+  faqs?: any[];
+  eventId?: string;
 }
 
-export function AttendeeGuide({
-  venue,
-  hotels,
-  restaurants,
-  faqs,
-  className = "",
+export function AttendeeGuide({ 
+  venue = { name: "", address: "", description: "", mapUrl: "" },
+  hotels = [],
+  restaurants = [],
+  faqs = [],
+  eventId = "nccrvs"
 }: AttendeeGuideProps) {
+  const [activeTab, setActiveTab] = useState("venue");
+
   return (
-    <div className={className}>
+    <div>
       <h2 className="mb-6 text-center text-3xl font-bold">Attendee Guide</h2>
       
-      <Tabs defaultValue="venue" className="w-full">
-        <TabsList className="mb-6 grid w-full grid-cols-4">
-          <TabsTrigger value="venue" className="flex items-center gap-2">
-            <Map className="h-4 w-4" />
+      <Tabs defaultValue="venue" value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="venue" className="flex items-center gap-1">
+            <MapPin className="h-4 w-4" />
             <span className="hidden sm:inline">Venue</span>
           </TabsTrigger>
-          <TabsTrigger value="hotels" className="flex items-center gap-2">
-            <Building className="h-4 w-4" />
+          <TabsTrigger value="hotels" className="flex items-center gap-1">
+            <Hotel className="h-4 w-4" />
             <span className="hidden sm:inline">Hotels</span>
           </TabsTrigger>
-          <TabsTrigger value="restaurants" className="flex items-center gap-2">
-            <Coffee className="h-4 w-4" />
+          <TabsTrigger value="restaurants" className="flex items-center gap-1">
+            <Utensils className="h-4 w-4" />
             <span className="hidden sm:inline">Dining</span>
           </TabsTrigger>
-          <TabsTrigger value="faqs" className="flex items-center gap-2">
-            <Info className="h-4 w-4" />
+          <TabsTrigger value="faqs" className="flex items-center gap-1">
+            <HelpCircle className="h-4 w-4" />
             <span className="hidden sm:inline">FAQs</span>
           </TabsTrigger>
         </TabsList>
-
-        <TabsContent value="venue" className="animate-fade-in">
+        
+        <TabsContent value="venue" className="mt-6">
           <Card>
-            <CardContent className="pt-6">
-              <h3 className="mb-2 text-xl font-bold">{venue.name}</h3>
-              <p className="mb-4 text-gray-600 dark:text-gray-300">{venue.address}</p>
-              <p className="mb-4">{venue.description}</p>
-
-              <div className="mt-6 aspect-video w-full overflow-hidden rounded-lg shadow-md">
-                <iframe
-                  src={venue.mapUrl}
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0 }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                ></iframe>
-              </div>
+            <CardHeader>
+              <CardTitle>{venue?.name || "Venue Information"}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {venue?.name ? (
+                <div className="space-y-4">
+                  <p className="text-gray-600 dark:text-gray-300">
+                    <strong>Address:</strong> {venue.address}
+                  </p>
+                  <p className="text-gray-600 dark:text-gray-300">{venue.description}</p>
+                  
+                  {venue.mapUrl && (
+                    <div className="mt-4 rounded-lg overflow-hidden h-64 w-full">
+                      <iframe
+                        src={venue.mapUrl}
+                        width="100%"
+                        height="100%"
+                        style={{ border: 0 }}
+                        allowFullScreen
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        title="Venue Map"
+                      ></iframe>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <p className="text-gray-500 dark:text-gray-400 text-center py-6">
+                  Venue information will be available soon.
+                </p>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
-
-        <TabsContent value="hotels" className="animate-fade-in">
+        
+        <TabsContent value="hotels" className="mt-6">
           <div className="grid gap-4 md:grid-cols-2">
-            {hotels.map((hotel) => (
-              <Card key={hotel.id}>
-                <CardContent className="p-6">
-                  <h3 className="mb-2 text-lg font-semibold">{hotel.name}</h3>
-                  <p className="mb-1 text-sm">
-                    <span className="font-medium">Distance:</span> {hotel.distance}
+            {hotels.length > 0 ? (
+              hotels.map((hotel, index) => (
+                <Card key={index}>
+                  <CardHeader>
+                    <CardTitle className="text-lg">{hotel.name}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
+                      <strong>Address:</strong> {hotel.address}
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
+                      <strong>Distance from venue:</strong> {hotel.distance}
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
+                      <strong>Rate:</strong> {hotel.rate}
+                    </p>
+                    {hotel.website && (
+                      <a 
+                        href={hotel.website} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                      >
+                        Book Now
+                      </a>
+                    )}
+                  </CardContent>
+                </Card>
+              ))
+            ) : (
+              <Card className="col-span-2">
+                <CardContent className="text-center py-6">
+                  <p className="text-gray-500 dark:text-gray-400">
+                    Hotel recommendations will be available soon.
                   </p>
-                  <p className="mb-2 text-sm">
-                    <span className="font-medium">Price Range:</span> {hotel.priceRange}
-                  </p>
-                  {hotel.website && (
-                    <a
-                      href={hotel.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-2 inline-block text-sm text-rvs-primary hover:underline"
-                    >
-                      Visit Website
-                    </a>
-                  )}
                 </CardContent>
               </Card>
-            ))}
+            )}
           </div>
         </TabsContent>
-
-        <TabsContent value="restaurants" className="animate-fade-in">
+        
+        <TabsContent value="restaurants" className="mt-6">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {restaurants.map((restaurant) => (
-              <Card key={restaurant.id}>
-                <CardContent className="p-6">
-                  <h3 className="mb-2 text-lg font-semibold">{restaurant.name}</h3>
-                  <p className="mb-1 text-sm">
-                    <span className="font-medium">Cuisine:</span> {restaurant.cuisine}
-                  </p>
-                  <p className="mb-1 text-sm">
-                    <span className="font-medium">Distance:</span> {restaurant.distance}
-                  </p>
-                  <p className="text-sm">
-                    <span className="font-medium">Price Range:</span> {restaurant.priceRange}
+            {restaurants.length > 0 ? (
+              restaurants.map((restaurant, index) => (
+                <Card key={index}>
+                  <CardHeader>
+                    <CardTitle className="text-lg">{restaurant.name}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
+                      <strong>Cuisine:</strong> {restaurant.cuisine}
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
+                      <strong>Distance:</strong> {restaurant.distance}
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
+                      <strong>Price Range:</strong> {restaurant.priceRange}
+                    </p>
+                  </CardContent>
+                </Card>
+              ))
+            ) : (
+              <Card className="col-span-3">
+                <CardContent className="text-center py-6">
+                  <p className="text-gray-500 dark:text-gray-400">
+                    Restaurant recommendations will be available soon.
                   </p>
                 </CardContent>
               </Card>
-            ))}
+            )}
           </div>
         </TabsContent>
-
-        <TabsContent value="faqs" className="animate-fade-in">
-          <div className="space-y-4">
-            {faqs.map((faq, index) => (
-              <Card key={index}>
-                <CardContent className="p-6">
-                  <h3 className="mb-2 text-lg font-semibold">{faq.question}</h3>
-                  <p className="text-gray-600 dark:text-gray-300">{faq.answer}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+        
+        <TabsContent value="faqs" className="mt-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Frequently Asked Questions</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {faqs.length > 0 ? (
+                <div className="space-y-6">
+                  {faqs.map((faq, index) => (
+                    <div key={index} className="border-b border-gray-200 dark:border-gray-700 pb-4 last:border-0">
+                      <h3 className="font-medium mb-2">{faq.question}</h3>
+                      <p className="text-gray-600 dark:text-gray-300">{faq.answer}</p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-gray-500 dark:text-gray-400 text-center py-6">
+                  FAQs will be available soon.
+                </p>
+              )}
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </div>
