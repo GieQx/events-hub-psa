@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -19,14 +18,17 @@ import { isAdmin, useAdminAuth } from "@/utils/adminAuth";
 import { getEventBorderColor } from "@/utils/eventHelpers";
 
 // Import admin management components
+import { EventsManagement } from "@/components/admin/EventsManagement";
 import { SpeakersManagement } from "@/components/admin/SpeakersManagement";
 import { AgendaManagement } from "@/components/admin/AgendaManagement";
-import { PartnersManagement } from "@/components/admin/PartnersManagement";
-import { ResourcesManagement } from "@/components/admin/ResourcesManagement";
-import { ChallengesManagement } from "@/components/admin/ChallengesManagement";
 import { HomeContentManagement } from "@/components/admin/HomeContentManagement";
-import { TopicsManagement } from "@/components/admin/TopicsManagement";
+import { ResourcesManagement } from "@/components/admin/ResourcesManagement";
 import { MarqueeManagement } from "@/components/admin/MarqueeManagement";
+import { PressReleaseManagement } from "@/components/admin/PressReleaseManagement";
+import { PartnersManagement } from "@/components/admin/PartnersManagement";
+import { TopicsManagement } from "@/components/admin/TopicsManagement";
+import { ChallengesManagement } from "@/components/admin/ChallengesManagement";
+import { GalleryManagement } from "@/components/admin/GalleryManagement";
 
 const AdminLoginForm = ({ onLogin }: { onLogin: (username: string, password: string) => { success: boolean, message?: string } }) => {
   const [username, setUsername] = useState("");
@@ -201,8 +203,8 @@ const AdminPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
-      <header className="bg-white dark:bg-gray-800 shadow-sm">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <header className="border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link to="/">
@@ -228,261 +230,29 @@ const AdminPage = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8">
+      <main className="p-6">
         <ScrollSection>
-          <Tabs defaultValue="events" value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="mb-6">
-              <TabsTrigger value="home">Home</TabsTrigger>
+          <Tabs defaultValue="events" className="w-full">
+            <TabsList className="mb-8 flex max-w-full overflow-x-auto">
               <TabsTrigger value="events">Events</TabsTrigger>
+              <TabsTrigger value="home">Home Content</TabsTrigger>
               <TabsTrigger value="speakers">Speakers</TabsTrigger>
               <TabsTrigger value="agenda">Agenda</TabsTrigger>
-              <TabsTrigger value="topics">Topics</TabsTrigger>
               <TabsTrigger value="partners">Partners</TabsTrigger>
               <TabsTrigger value="resources">Resources</TabsTrigger>
-              <TabsTrigger value="challenges">Challenges</TabsTrigger>
+              <TabsTrigger value="gallery">Gallery</TabsTrigger>
+              <TabsTrigger value="press">Press Releases</TabsTrigger>
+              <TabsTrigger value="topics">Topics</TabsTrigger>
               <TabsTrigger value="marquee">Marquee</TabsTrigger>
+              <TabsTrigger value="challenges">Challenges</TabsTrigger>
             </TabsList>
+
+            <TabsContent value="events">
+              <EventsManagement />
+            </TabsContent>
 
             <TabsContent value="home">
               <HomeContentManagement />
-            </TabsContent>
-
-            <TabsContent value="events" className="space-y-4">
-              <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold">Events Management</h2>
-                <Button onClick={handleCreateEvent} className="flex items-center gap-2">
-                  <Plus className="h-4 w-4" />
-                  Add Event
-                </Button>
-              </div>
-
-              {editingEvent ? (
-                <Card>
-                  <CardHeader>
-                    <CardTitle>{isCreating ? "Create New Event" : "Edit Event"}</CardTitle>
-                    <CardDescription>
-                      {isCreating ? "Add a new event to the platform" : "Modify event details"}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="title">Event Title</Label>
-                        <Input 
-                          id="title" 
-                          name="title" 
-                          value={editingEvent.title} 
-                          onChange={handleInputChange} 
-                          placeholder="Enter event title" 
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="shortName">Short Name</Label>
-                        <Input 
-                          id="shortName" 
-                          name="shortName" 
-                          value={editingEvent.shortName} 
-                          onChange={handleInputChange} 
-                          placeholder="Short name (e.g. NCCRVS)" 
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="description">Description</Label>
-                      <Textarea 
-                        id="description" 
-                        name="description" 
-                        value={editingEvent.description} 
-                        onChange={handleInputChange} 
-                        placeholder="Brief description" 
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="longDescription">Long Description</Label>
-                      <Textarea 
-                        id="longDescription" 
-                        name="longDescription" 
-                        value={editingEvent.longDescription} 
-                        onChange={handleInputChange}
-                        placeholder="Detailed description" 
-                        className="min-h-[120px]" 
-                      />
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="date">Display Date</Label>
-                        <Input 
-                          id="date" 
-                          name="date" 
-                          value={editingEvent.date} 
-                          onChange={handleInputChange} 
-                          placeholder="May 15-18, 2026" 
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="eventStartDate">Start Date</Label>
-                        <Input 
-                          id="eventStartDate" 
-                          name="eventStartDate" 
-                          type="date"
-                          value={editingEvent.eventStartDate} 
-                          onChange={handleInputChange} 
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="eventEndDate">End Date</Label>
-                        <Input 
-                          id="eventEndDate" 
-                          name="eventEndDate" 
-                          type="date"
-                          value={editingEvent.eventEndDate} 
-                          onChange={handleInputChange} 
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="location">Location</Label>
-                        <Input 
-                          id="location" 
-                          name="location" 
-                          value={editingEvent.location} 
-                          onChange={handleInputChange} 
-                          placeholder="City, Country" 
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="color">Branding Color</Label>
-                        <Select
-                          value={editingEvent.color}
-                          onValueChange={(value) => setEditingEvent({...editingEvent, color: value})}
-                        >
-                          <SelectTrigger id="color" className="w-full">
-                            <SelectValue placeholder="Select a color" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="bg-blue-500">Blue</SelectItem>
-                            <SelectItem value="bg-green-500">Green</SelectItem>
-                            <SelectItem value="bg-red-500">Red</SelectItem>
-                            <SelectItem value="bg-purple-500">Purple</SelectItem>
-                            <SelectItem value="bg-yellow-500">Yellow</SelectItem>
-                            <SelectItem value="bg-pink-500">Pink</SelectItem>
-                            <SelectItem value="bg-orange-500">Orange</SelectItem>
-                            <SelectItem value="bg-teal-500">Teal</SelectItem>
-                            <SelectItem value="bg-indigo-500">Indigo</SelectItem>
-                            <SelectItem value="bg-rvs-primary">RVS Primary</SelectItem>
-                            <SelectItem value="bg-bms-primary">BMS Primary</SelectItem>
-                            <SelectItem value="bg-sm-primary">SM Primary</SelectItem>
-                            <SelectItem value="bg-cs-primary">CS Primary</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="imageUrl">Image URL</Label>
-                        <Input 
-                          id="imageUrl" 
-                          name="imageUrl" 
-                          value={editingEvent.imageUrl || ""} 
-                          onChange={handleInputChange} 
-                          placeholder="https://example.com/image.jpg" 
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="videoUrl">Video URL</Label>
-                        <Input 
-                          id="videoUrl" 
-                          name="videoUrl" 
-                          value={editingEvent.videoUrl || ""} 
-                          onChange={handleInputChange} 
-                          placeholder="https://youtube.com/watch?v=xyz" 
-                        />
-                      </div>
-                    </div>
-
-                    <div className="flex items-center space-x-2">
-                      <input
-                        type="checkbox"
-                        id="published"
-                        checked={editingEvent.published}
-                        onChange={handleTogglePublish}
-                        className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                      />
-                      <Label htmlFor="published">Published</Label>
-                    </div>
-
-                    <div className="flex items-center space-x-2">
-                      <input
-                        type="checkbox"
-                        id="featured"
-                        checked={editingEvent.featured || false}
-                        onChange={handleToggleFeatured}
-                        className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                      />
-                      <Label htmlFor="featured">Featured</Label>
-                    </div>
-                  </CardContent>
-                  <CardFooter className="flex justify-between">
-                    <Button variant="outline" onClick={resetForm}>Cancel</Button>
-                    <Button onClick={handleSaveEvent} className="flex items-center gap-2">
-                      <Save className="h-4 w-4" />
-                      Save Event
-                    </Button>
-                  </CardFooter>
-                </Card>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {events.map((event) => {
-                    // Get the event border color based on event ID or color
-                    const borderColorClass = event.id.startsWith("nc") ? 
-                      getEventBorderColor(event.id) : 
-                      `border-l-${event.color.replace('bg-', '')}`;
-
-                    return (
-                      <Card key={event.id} className={`border-l-4 ${event.published ? borderColorClass : 'border-l-gray-300'}`}>
-                        <CardHeader>
-                          <CardTitle>{event.title}</CardTitle>
-                          <CardDescription>{event.shortName} • {event.date}</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                          <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">{event.description}</p>
-                          <p className="text-sm mt-2">{event.location}</p>
-                          {event.featured && (
-                            <span className="mt-2 inline-block bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded dark:bg-blue-900 dark:text-blue-200">
-                              Featured
-                            </span>
-                          )}
-                          {event.imageUrl && (
-                            <div className="mt-3">
-                              <img 
-                                src={event.imageUrl} 
-                                alt={event.title} 
-                                className="h-20 w-full object-cover rounded"
-                              />
-                            </div>
-                          )}
-                        </CardContent>
-                        <CardFooter className="flex justify-between">
-                          <Button variant="outline" size="sm" onClick={() => handleEditEvent(event)} className="flex items-center gap-1">
-                            <Edit className="h-3 w-3" />
-                            Edit
-                          </Button>
-                          <Button variant="destructive" size="sm" onClick={() => handleDeleteEvent(event.id)} className="flex items-center gap-1">
-                            <Trash className="h-3 w-3" />
-                            Delete
-                          </Button>
-                        </CardFooter>
-                      </Card>
-                    );
-                  })}
-                </div>
-              )}
             </TabsContent>
 
             <TabsContent value="speakers">
@@ -493,10 +263,6 @@ const AdminPage = () => {
               <AgendaManagement />
             </TabsContent>
 
-            <TabsContent value="topics">
-              <TopicsManagement />
-            </TabsContent>
-
             <TabsContent value="partners">
               <PartnersManagement />
             </TabsContent>
@@ -504,13 +270,25 @@ const AdminPage = () => {
             <TabsContent value="resources">
               <ResourcesManagement />
             </TabsContent>
+            
+            <TabsContent value="gallery">
+              <GalleryManagement />
+            </TabsContent>
 
-            <TabsContent value="challenges">
-              <ChallengesManagement />
+            <TabsContent value="press">
+              <PressReleaseManagement />
+            </TabsContent>
+
+            <TabsContent value="topics">
+              <TopicsManagement />
             </TabsContent>
 
             <TabsContent value="marquee">
               <MarqueeManagement />
+            </TabsContent>
+
+            <TabsContent value="challenges">
+              <ChallengesManagement />
             </TabsContent>
           </Tabs>
         </ScrollSection>

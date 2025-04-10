@@ -16,7 +16,8 @@ const LOCAL_STORAGE_KEYS = {
   CHALLENGES: "cms_challenges",
   PARTNERS: "cms_partners",
   TOPICS: "cms_topics",
-  FAQS: "cms_faqs"
+  FAQS: "cms_faqs",
+  GALLERY: "cms_gallery"
 };
 
 // Initialize service
@@ -24,6 +25,96 @@ const initService = () => {
   if (typeof window === 'undefined') {
     return {};
   }
+
+  // Base service factory function to create standardized services
+  const createBaseService = (storageKey: string, serviceName: string) => {
+    return {
+      items: [],
+      
+      getAll: function() {
+        try {
+          const itemsJson = localStorage.getItem(storageKey);
+          return itemsJson ? JSON.parse(itemsJson) : this.items;
+        } catch (error) {
+          console.error(`Error loading ${serviceName}:`, error);
+          return this.items;
+        }
+      },
+      
+      getByEvent: function(eventId: string) {
+        try {
+          const items = this.getAll();
+          return items.filter((item: any) => item.eventId === eventId);
+        } catch (error) {
+          console.error(`Error loading ${serviceName} for event ${eventId}:`, error);
+          return [];
+        }
+      },
+      
+      getByEventId: function(eventId: string) {
+        return this.getByEvent(eventId);
+      },
+      
+      get: function(id: string) {
+        try {
+          const items = this.getAll();
+          return items.find((item: any) => item.id === id);
+        } catch (error) {
+          console.error(`Error loading ${serviceName} ${id}:`, error);
+          return null;
+        }
+      },
+      
+      getById: function(id: string) {
+        return this.get(id);
+      },
+      
+      create: function(data: any) {
+        try {
+          const items = this.getAll();
+          items.push(data);
+          localStorage.setItem(storageKey, JSON.stringify(items));
+          this.items = items;
+          return data;
+        } catch (error) {
+          console.error(`Error creating ${serviceName}:`, error);
+          return null;
+        }
+      },
+      
+      update: function(id: string, data: any) {
+        try {
+          let items = this.getAll();
+          const index = items.findIndex((item: any) => item.id === id);
+          
+          if (index !== -1) {
+            items[index] = { ...data };
+            localStorage.setItem(storageKey, JSON.stringify(items));
+            this.items = items;
+            return items[index];
+          }
+          
+          return null;
+        } catch (error) {
+          console.error(`Error updating ${serviceName} ${id}:`, error);
+          return null;
+        }
+      },
+      
+      delete: function(id: string) {
+        try {
+          let items = this.getAll();
+          items = items.filter((item: any) => item.id !== id);
+          localStorage.setItem(storageKey, JSON.stringify(items));
+          this.items = items;
+          return true;
+        } catch (error) {
+          console.error(`Error deleting ${serviceName} ${id}:`, error);
+          return false;
+        }
+      }
+    };
+  };
 
   // Events service
   const eventsService = {
@@ -140,92 +231,6 @@ const initService = () => {
     }
   };
 
-  // Base service factory function to create standardized services
-  const createBaseService = (storageKey: string, serviceName: string) => {
-    return {
-      items: [],
-      
-      getAll: function() {
-        try {
-          const itemsJson = localStorage.getItem(storageKey);
-          return itemsJson ? JSON.parse(itemsJson) : this.items;
-        } catch (error) {
-          console.error(`Error loading ${serviceName}:`, error);
-          return this.items;
-        }
-      },
-      
-      getByEvent: function(eventId: string) {
-        try {
-          const items = this.getAll();
-          return items.filter((item: any) => item.eventId === eventId);
-        } catch (error) {
-          console.error(`Error loading ${serviceName} for event ${eventId}:`, error);
-          return [];
-        }
-      },
-      
-      getByEventId: function(eventId: string) {
-        return this.getByEvent(eventId);
-      },
-      
-      get: function(id: string) {
-        try {
-          const items = this.getAll();
-          return items.find((item: any) => item.id === id);
-        } catch (error) {
-          console.error(`Error loading ${serviceName} ${id}:`, error);
-          return null;
-        }
-      },
-      
-      create: function(data: any) {
-        try {
-          const items = this.getAll();
-          items.push(data);
-          localStorage.setItem(storageKey, JSON.stringify(items));
-          this.items = items;
-          return data;
-        } catch (error) {
-          console.error(`Error creating ${serviceName}:`, error);
-          return null;
-        }
-      },
-      
-      update: function(id: string, data: any) {
-        try {
-          let items = this.getAll();
-          const index = items.findIndex((item: any) => item.id === id);
-          
-          if (index !== -1) {
-            items[index] = { ...data };
-            localStorage.setItem(storageKey, JSON.stringify(items));
-            this.items = items;
-            return items[index];
-          }
-          
-          return null;
-        } catch (error) {
-          console.error(`Error updating ${serviceName} ${id}:`, error);
-          return null;
-        }
-      },
-      
-      delete: function(id: string) {
-        try {
-          let items = this.getAll();
-          items = items.filter((item: any) => item.id !== id);
-          localStorage.setItem(storageKey, JSON.stringify(items));
-          this.items = items;
-          return true;
-        } catch (error) {
-          console.error(`Error deleting ${serviceName} ${id}:`, error);
-          return false;
-        }
-      }
-    };
-  };
-
   // Speakers service
   const speakersService = {
     ...createBaseService(LOCAL_STORAGE_KEYS.SPEAKERS, "speakers"),
@@ -245,7 +250,29 @@ const initService = () => {
   const sessionsService = createBaseService(LOCAL_STORAGE_KEYS.SESSIONS, "sessions");
 
   // Resources service
-  const resourcesService = createBaseService(LOCAL_STORAGE_KEYS.RESOURCES, "resources");
+  const resourcesService = {
+    ...createBaseService(LOCAL_STORAGE_KEYS.RESOURCES, "resources"),
+    
+    getImages: function(eventId: string) {
+      try {
+        const resources = this.getByEvent(eventId);
+        return resources.filter((resource: any) => resource.type === 'image');
+      } catch (error) {
+        console.error(`Error loading images for event ${eventId}:`, error);
+        return [];
+      }
+    },
+    
+    getDocuments: function(eventId: string) {
+      try {
+        const resources = this.getByEvent(eventId);
+        return resources.filter((resource: any) => resource.type === 'pdf' || resource.type === 'document');
+      } catch (error) {
+        console.error(`Error loading documents for event ${eventId}:`, error);
+        return [];
+      }
+    }
+  };
 
   // Marquee items service
   const marqueeItemsService = createBaseService(LOCAL_STORAGE_KEYS.MARQUEE_ITEMS, "marquee items");
@@ -253,6 +280,16 @@ const initService = () => {
   // Press releases service
   const pressReleasesService = {
     ...createBaseService(LOCAL_STORAGE_KEYS.PRESS_RELEASES, "press releases"),
+    
+    getPublished: function(eventId: string) {
+      try {
+        const pressReleases = this.getByEvent(eventId);
+        return pressReleases.filter((pr: any) => pr.published);
+      } catch (error) {
+        console.error(`Error loading published press releases for event ${eventId}:`, error);
+        return [];
+      }
+    }
   };
   
   // Agenda service
@@ -281,6 +318,26 @@ const initService = () => {
   
   // FAQs service
   const faqsService = createBaseService(LOCAL_STORAGE_KEYS.FAQS, "faqs");
+  
+  // Gallery service specific for images
+  const galleryService = {
+    ...createBaseService(LOCAL_STORAGE_KEYS.GALLERY, "gallery"),
+    
+    addPhoto: function(eventId: string, photoData: any) {
+      try {
+        const photo = {
+          ...photoData,
+          eventId,
+          id: crypto.randomUUID(),
+          uploadDate: new Date().toISOString()
+        };
+        return this.create(photo);
+      } catch (error) {
+        console.error(`Error adding photo for event ${eventId}:`, error);
+        return null;
+      }
+    }
+  };
 
   return {
     events: eventsService,
@@ -294,7 +351,8 @@ const initService = () => {
     challenges: challengesService,
     partners: partnersService,
     topics: topicsService,
-    faqs: faqsService
+    faqs: faqsService,
+    gallery: galleryService
   };
 };
 

@@ -1,5 +1,5 @@
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { MessageCircle, ArrowUp } from "lucide-react";
@@ -34,17 +34,27 @@ export function ChatbotDialog({ eventName, options, eventId = "rvs" }: ChatbotDi
       isUser: false,
     },
   ]);
+  
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
 
   // Get the correct event color
   const getEventColor = () => {
     switch(eventId) {
-      case "rvs": return "rvs-primary";
-      case "bms": return "bms-primary";
-      case "sm": return "sm-primary";
-      case "cs": return "cs-primary";
+      case "nccrvs": return "rvs-primary";
+      case "cbms": return "bms-primary";
+      case "nsm": return "sm-primary";
+      case "ncs": return "cs-primary";
       default: return "rvs-primary";
     }
   };
+
+  // Auto-scroll to latest message when conversation updates
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [conversation]);
 
   const handleOptionClick = (option: ChatOption) => {
     // Add user message
@@ -152,7 +162,11 @@ export function ChatbotDialog({ eventName, options, eventId = "rvs" }: ChatbotDi
           </div>
         ) : (
           <div className="flex h-[400px] flex-col">
-            <div className="flex-1 space-y-4 overflow-y-auto p-4">
+            <div 
+              ref={chatContainerRef}
+              className="flex-1 space-y-4 overflow-y-auto p-4"
+              style={{ maxHeight: "350px", height: "350px" }}
+            >
               {conversation.map((message, index) => (
                 <div
                   key={index}
@@ -171,6 +185,7 @@ export function ChatbotDialog({ eventName, options, eventId = "rvs" }: ChatbotDi
                   </div>
                 </div>
               ))}
+              <div ref={messagesEndRef} />
             </div>
             
             <div className="border-t p-4">

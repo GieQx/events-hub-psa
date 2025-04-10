@@ -1,3 +1,4 @@
+
 import { useParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { BackToTopButton } from "@/components/BackToTopButton";
@@ -9,6 +10,8 @@ import { EventMainContent } from "@/components/EventMainContent";
 import { EventFooter } from "@/components/EventFooter";
 import { getEventColor, getParticleColor } from "@/utils/eventHelpers";
 import { useEffect, useState } from "react";
+import { ParticleBackground } from "@/components/ParticleBackground";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { 
   rvsNewsUpdates, 
@@ -33,9 +36,10 @@ const EventPage = () => {
   const { eventId } = useParams<{ eventId: string }>();
   const [event, setEvent] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("overview");
 
   useEffect(() => {
-    const foundEvent = cmsService.events.getById(eventId || "");
+    const foundEvent = cmsService.events.get(eventId || "");
     setEvent(foundEvent);
     setLoading(false);
   }, [eventId]);
@@ -60,13 +64,17 @@ const EventPage = () => {
     );
   }
 
-  const speakers = cmsService.speakers.getByEventId(eventId || "");
-  const featuredSpeakers = cmsService.speakers.getFeatured(eventId || "");
-  const agenda = cmsService.agenda.getByEventId(eventId || "");
-  const partners = cmsService.partners.getByEventId(eventId || "");
-  const topics = cmsService.topics.getByEventId(eventId || "");
-  const resources = cmsService.resources.getByEventId(eventId || "");
-  const faqs = cmsService.faqs.getByEventId(eventId || "");
+  const speakers = cmsService.speakers.getByEvent(eventId || "");
+  const featuredSpeakers = speakers.filter(speaker => speaker.featured);
+  const agenda = cmsService.agenda.getByEvent(eventId || "");
+  const partners = cmsService.partners.getByEvent(eventId || "");
+  const topics = cmsService.topics.getByEvent(eventId || "");
+  const resources = cmsService.resources.getByEvent(eventId || "");
+  const faqs = cmsService.faqs.getByEvent(eventId || "");
+  const pressReleases = cmsService.pressReleases.getByEvent(eventId || "");
+  const photos = cmsService.resources.getByEvent(eventId || "").filter(
+    resource => resource.type === 'image'
+  );
   
   let eventChallenge;
   try {
@@ -77,6 +85,7 @@ const EventPage = () => {
     eventChallenge = null;
   }
 
+  // Format agenda data
   const formattedAgenda = agenda.map(day => ({
     date: day.id,
     title: `Day ${day.dayNumber} - ${new Date(day.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}`,
@@ -92,6 +101,7 @@ const EventPage = () => {
 
   const displayAgenda = formattedAgenda.length > 0 ? formattedAgenda : [];
 
+  // Format partners data
   const formattedPartners = partners.map(partner => ({
     id: partner.id,
     name: partner.name,
@@ -115,6 +125,7 @@ const EventPage = () => {
     }
   }
 
+  // Venue information
   const venueInfo = {
     name: event.venueName || "Convention Center",
     address: event.venueAddress || "123 Main St",
@@ -156,6 +167,7 @@ const EventPage = () => {
     },
   ];
 
+  // Format topics data
   const formattedTopics = topics.map(topic => ({
     id: topic.id,
     title: topic.title,
@@ -214,8 +226,20 @@ const EventPage = () => {
     eventEndDate: event.eventEndDate || ""
   };
 
+  const eventBgColor = getEventColor(eventId || "");
+  const particleColor = getParticleColor(eventId || "");
+
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative">
+      <div className="absolute inset-0 -z-10">
+        <ParticleBackground 
+          color={particleColor} 
+          particleCount={100}
+          interactive={true}
+          className="opacity-30" 
+        />
+      </div>
+      
       <EventHeader eventId={eventId || ""} />
       
       <EventHero 
@@ -223,30 +247,66 @@ const EventPage = () => {
         event={heroEvent} 
       />
       
-      <EventMainContent 
-        eventId={eventId || ""}
-        event={event}
-        speakers={speakers}
-        featuredSpeakers={featuredSpeakers}
-        rvsNewsUpdates={rvsNewsUpdates}
-        rvsAgenda={displayAgenda}
-        rvsPartners={formattedPartners}
-        rvsTopics={formattedTopics}
-        rvsVenueInfo={venueInfo}
-        rvsHotels={hotelInfo}
-        rvsRestaurants={restaurantInfo}
-        rvsInfoFaqs={[]}
-        rvsChallenge={eventChallenge}
-        rvsResources={resources}
-        getFaqs={getFaqs}
-        getHighlights={getHighlights}
-        getEventColor={() => getEventColor(eventId || "")}
-        getParticleColor={() => getParticleColor(eventId || "")}
-        eventCalendarDetails={eventCalendarDetails}
-      />
+      <div className="container mx-auto px-4 py-8">
+        <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid grid-cols-5 mb-8">
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="press">Press Releases</TabsTrigger>
+            <TabsTrigger value="gallery">Photo Gallery</TabsTrigger>
+            <TabsTrigger value="schedule">Schedule</TabsTrigger>
+            <TabsTrigger value="speakers">Speakers</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="overview" className="pt-4">
+            <EventMainContent 
+              eventId={eventId || ""}
+              event={event}
+              speakers={speakers}
+              featuredSpeakers={featuredSpeakers}
+              rvsNewsUpdates={rvsNewsUpdates}
+              rvsAgenda={displayAgenda}
+              rvsPartners={formattedPartners}
+              rvsTopics={formattedTopics}
+              rvsVenueInfo={venueInfo}
+              rvsHotels={hotelInfo}
+              rvsRestaurants={restaurantInfo}
+              rvsInfoFaqs={[]}
+              rvsChallenge={eventChallenge}
+              rvsResources={resources}
+              getFaqs={getFaqs}
+              getHighlights={getHighlights}
+              getEventColor={() => getEventColor(eventId || "")}
+              getParticleColor={() => getParticleColor(eventId || "")}
+              eventCalendarDetails={eventCalendarDetails}
+            />
+          </TabsContent>
+          
+          <TabsContent value="press" className="pt-4">
+            <PressReleasesPage eventId={eventId || ""} pressReleases={pressReleases} />
+          </TabsContent>
+          
+          <TabsContent value="gallery" className="pt-4">
+            <PhotoGallery eventId={eventId || ""} photos={photos} />
+          </TabsContent>
+          
+          <TabsContent value="schedule" className="pt-4">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+              <h2 className="text-2xl font-bold mb-6 text-center">Event Schedule</h2>
+              <AgendaSection days={displayAgenda} eventId={eventId || ""} />
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="speakers" className="pt-4">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+              <h2 className="text-2xl font-bold mb-6 text-center">Event Speakers</h2>
+              <SpeakersSection speakers={speakers} eventId={eventId || ""} />
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
 
       <EventFooter event={event} eventId={eventId || ""} />
-
+      
       <ChatbotDialog eventName={event?.title || ""} options={rvsChatbotOptions} eventId={eventId} />
       
       <BackToTopButton eventId={eventId} />
@@ -255,3 +315,4 @@ const EventPage = () => {
 };
 
 export default EventPage;
+
