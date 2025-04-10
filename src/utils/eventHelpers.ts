@@ -60,6 +60,25 @@ export const getParticleColor = (eventId?: string) => {
   }
 };
 
+// Get event border color class based on event ID
+export const getEventBorderColor = (eventId?: string) => {
+  if (!eventId) return "border-blue-600";
+  
+  switch(eventId) {
+    case "nccrvs": return "border-rvs-primary";
+    case "cbms": return "border-bms-primary";
+    case "nsm": return "border-sm-primary";
+    case "ncs": return "border-cs-primary";
+    case "dgrs": return "border-rvs-primary"; // Use RVS border
+    case "sdgf": return "border-bms-primary"; // Use BMS border
+    case "hsic": return "border-sm-primary";  // Use SM border
+    case "aesr": return "border-cs-primary";  // Use CS border
+    case "mwds": return "border-rvs-primary"; // Use RVS border
+    case "edsc": return "border-bms-primary"; // Use BMS border
+    default: return "border-blue-600";
+  }
+};
+
 // Check if event should be disabled based on start date
 export const shouldDisableEvent = (eventStartDate?: string, daysBeforeEnable: number = 30) => {
   if (!eventStartDate) return false;
@@ -114,3 +133,4 @@ export const formatEventDate = (startDate?: string, endDate?: string) => {
     year: 'numeric' 
   })}`;
 };
+
