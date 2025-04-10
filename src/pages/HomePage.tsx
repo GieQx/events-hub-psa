@@ -1,5 +1,5 @@
-
 import { useState, useEffect, useRef } from "react";
+import { useInView } from "react-intersection-observer";
 import { Link } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,7 @@ import { HeroSection } from "@/components/HeroSection";
 import { Footer } from "@/components/Footer";
 import { ParticleBackground } from "@/components/ParticleBackground";
 import { ContactUsSection } from "@/components/ContactUsSection";
-import { motion, useAnimation, useInView } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
 import cmsService from "@/services/cmsService";
 import { getEventColor } from "@/utils/eventHelpers";
 import { Calendar, MapPin, Users, BarChart2, ArrowRight, ChevronRight, Sparkles, CornerRightDown } from "lucide-react";
@@ -17,8 +17,11 @@ import { seedDatabaseIfEmpty } from "@/utils/seedData";
 const FadeInSection = ({ children, delay = 0, className = "" }) => {
   const controls = useAnimation();
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, threshold: 0.2 });
-  
+  const { inView } = useInView({
+    triggerOnce: true, 
+    rootMargin: '0px',
+  });
+
   useEffect(() => {
     if (inView) {
       controls.start("visible");
@@ -88,15 +91,12 @@ const HomePage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Seed the database with 10 events if it's empty
     seedDatabaseIfEmpty();
     
-    // Load the home content and events
     try {
       const content = cmsService.homeContent.get();
       setHomeContent(content);
       
-      // Get all published events
       const publishedEvents = cmsService.events.getPublished();
       setEvents(publishedEvents);
     } catch (error) {
@@ -105,12 +105,15 @@ const HomePage = () => {
     setLoading(false);
   }, []);
 
-  // Filter featured events if we have homeContent
+  const { ref, inView } = useInView({
+    triggerOnce: true, 
+    rootMargin: '0px',
+  });
+
   const featuredEvents = homeContent?.featuredEvents && events.length > 0
     ? events.filter(event => homeContent.featuredEvents.includes(event.id))
-    : events.slice(0, 3); // Default to first 3 events if no featured events specified
+    : events.slice(0, 3);
 
-  // Filter upcoming events (those with a future start date)
   const today = new Date();
   const upcomingEvents = events.filter(event => {
     if (!event || !event.eventStartDate) return false;
@@ -118,7 +121,6 @@ const HomePage = () => {
     return eventDate >= today;
   });
 
-  // Sort events by date
   upcomingEvents.sort((a, b) => {
     if (!a.eventStartDate || !b.eventStartDate) return 0;
     const dateA = new Date(a.eventStartDate);
@@ -137,7 +139,6 @@ const HomePage = () => {
           backgroundStyle={homeContent?.heroBackgroundStyle || "bg-gradient-to-r from-blue-500 to-purple-600"}
         />
 
-        {/* Featured Events Section with Enhanced Design */}
         <section className="py-20">
           <div className="container mx-auto px-4">
             <FadeInSection>
@@ -203,10 +204,8 @@ const HomePage = () => {
           </div>
         </section>
 
-        {/* Statistics Section */}
         <EventStats />
         
-        {/* Why Attend Section with Interactive Elements */}
         <section className="py-20">
           <div className="container mx-auto px-4">
             <FadeInSection>
@@ -249,7 +248,6 @@ const HomePage = () => {
           </div>
         </section>
         
-        {/* Upcoming Events Section with Timeline */}
         <section className="py-20 bg-gray-50 dark:bg-gray-900">
           <div className="container mx-auto px-4">
             <FadeInSection>
@@ -315,7 +313,6 @@ const HomePage = () => {
           </div>
         </section>
         
-        {/* Testimonials Section - if available */}
         {homeContent?.testimonials && homeContent.testimonials.length > 0 && (
           <section className="py-20">
             <div className="container mx-auto px-4">
