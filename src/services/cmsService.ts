@@ -251,7 +251,9 @@ const initService = () => {
   const marqueeItemsService = createBaseService(LOCAL_STORAGE_KEYS.MARQUEE_ITEMS, "marquee items");
 
   // Press releases service
-  const pressReleasesService = createBaseService(LOCAL_STORAGE_KEYS.PRESS_RELEASES, "press releases");
+  const pressReleasesService = {
+    ...createBaseService(LOCAL_STORAGE_KEYS.PRESS_RELEASES, "press releases"),
+  };
   
   // Agenda service
   const agendaService = createBaseService(LOCAL_STORAGE_KEYS.AGENDA, "agenda");

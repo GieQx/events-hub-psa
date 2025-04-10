@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -43,6 +42,12 @@ export function PressReleaseManagement() {
           items: [],
           getAll: function() {
             return this.items;
+          },
+          getByEvent: function(eventId: string) {
+            return this.items.filter((item: any) => item.eventId === eventId);
+          },
+          getByEventId: function(eventId: string) {
+            return this.getByEvent(eventId);
           },
           get: function(id: string) {
             return this.items.find((item: any) => item.id === id);

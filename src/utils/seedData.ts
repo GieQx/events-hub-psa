@@ -1,7 +1,28 @@
 import { CMSEvent, CMSSpeaker, CMSAgendaDay, CMSAgendaSession, CMSTopic, CMSPartner, CMSFAQ, CMSResource } from "@/types/cms";
 import { Challenge } from "@/types/challenge";
+import cmsService from "@/services/cmsService";
 
-// Seed data for events
+export const seedDatabaseIfEmpty = () => {
+  try {
+    const events = cmsService.events.getAll();
+    if (events.length === 0) {
+      seedEvents();
+      seedSpeakers();
+      seedAgenda();
+      seedTopics();
+      seedPartners();
+      seedFaqs();
+      seedResources();
+      seedChallenges();
+      seedMarqueeItems();
+      seedPressReleases();
+      console.log("Seeded database with initial data");
+    }
+  } catch (error) {
+    console.error("Error checking or seeding database:", error);
+  }
+};
+
 export const seedEvents = (): CMSEvent[] => {
   try {
     const events: CMSEvent[] = [
@@ -79,7 +100,6 @@ export const seedEvents = (): CMSEvent[] => {
   }
 };
 
-// Seed data for speakers
 export const seedSpeakers = (): CMSSpeaker[] => {
   try {
     const speakers: CMSSpeaker[] = [
@@ -209,7 +229,6 @@ export const seedSpeakers = (): CMSSpeaker[] => {
   }
 };
 
-// Seed data for agenda
 export const seedAgenda = (): CMSAgendaDay[] => {
   try {
     const agenda: CMSAgendaDay[] = [
@@ -228,7 +247,7 @@ export const seedAgenda = (): CMSAgendaDay[] => {
             endTime: "10:00",
             location: "Main Hall",
             speakerId: "spk1",
-            type: "keynote"
+            type: "talk"
           },
           {
             id: "sess2",
@@ -258,7 +277,7 @@ export const seedAgenda = (): CMSAgendaDay[] => {
             endTime: "10:00",
             location: "Main Hall",
             speakerId: "spk3",
-            type: "keynote"
+            type: "talk"
           },
           {
             id: "sess4",
@@ -288,7 +307,7 @@ export const seedAgenda = (): CMSAgendaDay[] => {
             endTime: "10:00",
             location: "Main Hall",
             speakerId: "spk5",
-            type: "keynote"
+            type: "talk"
           },
           {
             id: "sess6",
@@ -318,7 +337,7 @@ export const seedAgenda = (): CMSAgendaDay[] => {
             endTime: "10:00",
             location: "Main Hall",
             speakerId: "spk7",
-            type: "keynote"
+            type: "talk"
           },
           {
             id: "sess8",
@@ -343,7 +362,6 @@ export const seedAgenda = (): CMSAgendaDay[] => {
   }
 };
 
-// Seed data for topics
 export const seedTopics = (): CMSTopic[] => {
   try {
     const topics: CMSTopic[] = [
@@ -385,7 +403,6 @@ export const seedTopics = (): CMSTopic[] => {
   }
 };
 
-// Seed data for partners
 export const seedPartners = (): CMSPartner[] => {
   try {
     const partners: CMSPartner[] = [
@@ -427,7 +444,6 @@ export const seedPartners = (): CMSPartner[] => {
   }
 };
 
-// Seed data for FAQs
 export const seedFaqs = (): CMSFAQ[] => {
   try {
     const faqs: CMSFAQ[] = [
@@ -465,7 +481,6 @@ export const seedFaqs = (): CMSFAQ[] => {
   }
 };
 
-// Seed data for resources
 export const seedResources = (): CMSResource[] => {
   try {
     const resources: CMSResource[] = [
@@ -507,19 +522,8 @@ export const seedResources = (): CMSResource[] => {
   }
 };
 
-// Seed data for challenges
 export const seedChallenges = () => {
   try {
-    // Add update and delete functions to the challenges service if they're missing
-    const challengesService = {
-      items: [],
-      getAll: () => [],
-      getByEvent: (eventId: string) => [],
-      create: (data: any) => data,
-      update: (id: string, data: any) => data,
-      delete: (id: string) => true
-    };
-    
     const challenges: Challenge[] = [
       {
         id: "challenge1",
@@ -565,7 +569,7 @@ export const seedChallenges = () => {
     
     localStorage.setItem("cms_challenges", JSON.stringify(challenges));
     
-    return challengesService;
+    return challenges;
   } catch (error) {
     console.error("Error seeding challenges:", error);
     return null;
@@ -604,15 +608,21 @@ export const seedPressReleases = () => {
         id: "press1",
         eventId: "nccrvs",
         title: "NCCRVS Announces Keynote Speaker",
-        date: "2024-04-01",
-        content: "The National Convention on Civil Registration and Vital Statistics is pleased to announce Dr. Jane Smith as a keynote speaker."
+        publishDate: "2024-04-01",
+        summary: "The National Convention on Civil Registration and Vital Statistics is pleased to announce Dr. Jane Smith as a keynote speaker.",
+        content: "The National Convention on Civil Registration and Vital Statistics is pleased to announce Dr. Jane Smith as a keynote speaker.",
+        author: "Press Team",
+        published: true
       },
       {
         id: "press2",
         eventId: "cbms",
         title: "CBMS Announces Early Bird Registration",
-        date: "2024-04-15",
-        content: "The National Convention on Community-Based Monitoring System announces early bird registration is now open."
+        publishDate: "2024-04-15",
+        summary: "The National Convention on Community-Based Monitoring System announces early bird registration is now open.",
+        content: "The National Convention on Community-Based Monitoring System announces early bird registration is now open.",
+        author: "Events Team",
+        published: true
       }
     ];
 

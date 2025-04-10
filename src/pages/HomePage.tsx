@@ -16,8 +16,7 @@ import { seedDatabaseIfEmpty } from "@/utils/seedData";
 
 const FadeInSection = ({ children, delay = 0, className = "" }) => {
   const controls = useAnimation();
-  const ref = useRef(null);
-  const { inView } = useInView({
+  const [ref, inView] = useInView({
     triggerOnce: true, 
     rootMargin: '0px',
   });
