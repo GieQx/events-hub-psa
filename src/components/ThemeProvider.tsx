@@ -20,15 +20,14 @@ export function ThemeProvider({
   storageKey = "vite-ui-theme",
   ...props
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(
-    () => {
-      const storedTheme = localStorage.getItem(storageKey)
-      // Check if stored theme is a valid Theme value
-      return (storedTheme === "dark" || storedTheme === "light" || storedTheme === "system") 
-        ? storedTheme as Theme 
-        : defaultTheme
+  const [theme, setTheme] = useState<Theme>(() => {
+    const storedTheme = localStorage.getItem(storageKey)
+    // Validate and return a proper Theme value
+    if (storedTheme === "dark" || storedTheme === "light" || storedTheme === "system") {
+      return storedTheme as Theme
     }
-  )
+    return defaultTheme
+  })
 
   useEffect(() => {
     const root = window.document.documentElement
@@ -56,7 +55,13 @@ export function ThemeProvider({
 
   return (
     <ThemeProviderContext.Provider value={value}>
-      {children}
+      <NextThemesProvider 
+        defaultTheme={defaultTheme} 
+        storageKey={storageKey} 
+        {...props}
+      >
+        {children}
+      </NextThemesProvider>
     </ThemeProviderContext.Provider>
   )
 }
