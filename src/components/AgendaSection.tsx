@@ -3,7 +3,21 @@ import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Event, Day } from "@/components/types";
+
+export interface Event {
+  time: string;
+  title: string;
+  description?: string;
+  speaker?: string;
+  location?: string;
+  type?: "talk" | "workshop" | "panel" | "break" | "networking" | "other" | "keynote";
+}
+
+export interface Day {
+  date: string;
+  title: string;
+  events: Event[];
+}
 
 interface AgendaSectionProps {
   days: Day[];

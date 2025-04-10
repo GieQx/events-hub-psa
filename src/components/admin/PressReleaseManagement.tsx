@@ -52,6 +52,13 @@ export function PressReleaseManagement() {
           get: function(id: string) {
             return this.items.find((item: any) => item.id === id);
           },
+          getById: function(id: string) {
+            return this.get(id);
+          },
+          getPublished: function(eventId: string) {
+            const items = this.getByEvent(eventId);
+            return items.filter((item: any) => item.published);
+          },
           create: function(data: any) {
             this.items.push(data);
             return data;
@@ -245,7 +252,6 @@ export function PressReleaseManagement() {
         </div>
       )}
 
-      {/* Add/Edit Press Release Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
@@ -368,7 +374,6 @@ export function PressReleaseManagement() {
         </DialogContent>
       </Dialog>
 
-      {/* Delete Confirmation Dialog */}
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>

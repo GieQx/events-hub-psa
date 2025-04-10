@@ -1,4 +1,3 @@
-
 import { useParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { BackToTopButton } from "@/components/BackToTopButton";
@@ -12,6 +11,10 @@ import { getEventColor, getParticleColor } from "@/utils/eventHelpers";
 import { useEffect, useState } from "react";
 import { ParticleBackground } from "@/components/ParticleBackground";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AgendaSection } from "@/components/AgendaSection";
+import { SpeakersSection } from "@/components/SpeakersSection";
+import { PressReleasesPage } from "@/components/PressReleasesPage";
+import { PhotoGallery } from "@/components/PhotoGallery";
 
 import { 
   rvsNewsUpdates, 
@@ -85,7 +88,6 @@ const EventPage = () => {
     eventChallenge = null;
   }
 
-  // Format agenda data
   const formattedAgenda = agenda.map(day => ({
     date: day.id,
     title: `Day ${day.dayNumber} - ${new Date(day.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}`,
@@ -101,7 +103,6 @@ const EventPage = () => {
 
   const displayAgenda = formattedAgenda.length > 0 ? formattedAgenda : [];
 
-  // Format partners data
   const formattedPartners = partners.map(partner => ({
     id: partner.id,
     name: partner.name,
@@ -125,7 +126,6 @@ const EventPage = () => {
     }
   }
 
-  // Venue information
   const venueInfo = {
     name: event.venueName || "Convention Center",
     address: event.venueAddress || "123 Main St",
@@ -167,7 +167,6 @@ const EventPage = () => {
     },
   ];
 
-  // Format topics data
   const formattedTopics = topics.map(topic => ({
     id: topic.id,
     title: topic.title,
@@ -315,4 +314,3 @@ const EventPage = () => {
 };
 
 export default EventPage;
-

@@ -6,7 +6,6 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Linkedin, Twitter, ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import { CMSSpeaker } from "@/types/cms";
 import { SpeakerProfileModal } from "@/components/SpeakerProfileModal";
 
 export interface Speaker {
@@ -16,22 +15,27 @@ export interface Speaker {
   company: string;
   bio: string;
   photoUrl: string;
+  imageUrl?: string;
   social?: {
+    twitter?: string;
+    linkedin?: string;
+  };
+  socialLinks?: {
     twitter?: string;
     linkedin?: string;
   };
 }
 
 interface SpeakersSectionProps {
-  speakers: CMSSpeaker[] | Speaker[];
+  speakers: Speaker[];
   className?: string;
   eventId?: string;
 }
 
-export function SpeakersSection({ speakers, className = "", eventId = "rvs" }: SpeakersSectionProps) {
+export function SpeakersSection({ speakers, className = "", eventId = "nccrvs" }: SpeakersSectionProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [cardsPerView, setCardsPerView] = useState(3);
-  const [selectedSpeaker, setSelectedSpeaker] = useState<CMSSpeaker | Speaker | null>(null);
+  const [selectedSpeaker, setSelectedSpeaker] = useState<Speaker | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
   const isMediumScreen = useMediaQuery("(min-width: 769px) and (max-width: 1024px)");
@@ -84,7 +88,7 @@ export function SpeakersSection({ speakers, className = "", eventId = "rvs" }: S
     });
   };
 
-  const openSpeakerModal = (speaker: CMSSpeaker | Speaker) => {
+  const openSpeakerModal = (speaker: Speaker) => {
     setSelectedSpeaker(speaker);
     setIsModalOpen(true);
     // Pause autoplay when modal is open
@@ -101,10 +105,10 @@ export function SpeakersSection({ speakers, className = "", eventId = "rvs" }: S
   // Get the correct event color
   const getEventColor = () => {
     switch(eventId) {
-      case "rvs": return "rvs-primary";
-      case "bms": return "bms-primary";
-      case "sm": return "sm-primary";
-      case "cs": return "cs-primary";
+      case "nccrvs": return "rvs-primary";
+      case "cbms": return "bms-primary";
+      case "nsm": return "sm-primary";
+      case "ncs": return "cs-primary";
       default: return "rvs-primary";
     }
   };
