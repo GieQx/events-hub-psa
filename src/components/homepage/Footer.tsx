@@ -1,14 +1,13 @@
 
 import { Link } from "react-router-dom";
-import { ParticleBackground } from "@/components/ParticleBackground";
+import { NetworkBackground } from "@/components/NetworkBackground";
 
 export const Footer = () => {
   return (
     <footer className="bg-gray-900 py-8 text-center text-white relative">
       <div className="absolute inset-0 -z-10">
-        <ParticleBackground 
-          color="#ffffff" 
-          particleCount={30}
+        <NetworkBackground 
+          nodes={30}
           className="opacity-20" 
         />
       </div>
