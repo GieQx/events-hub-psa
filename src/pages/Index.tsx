@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { events } from "@/data/events";
 import { ScrollSection } from "@/components/ScrollSection";
 import { motion } from "framer-motion";
-// import { ParticleBackground } from "@/components/ParticleBackground";
+import { ParticleBackground } from "@/components/ParticleBackground";
 import { shouldDisableEvent } from "@/utils/eventHelpers";
 import cmsService from "@/services/cmsService";
 import { useEffect, useState } from "react";
@@ -46,6 +46,15 @@ const IndexPage = () => {
   }, []);
 
   return (
+    <div className="relative min-h-screen overflow-x-hidden">
+      <div className="absolute inset-0 -z-10">
+        <ParticleBackground 
+          color="#3b82f6" 
+          particleCount={100}
+          className="opacity-30" 
+        />
+      </div>
+
       <header className="py-6 relative z-10">
         <div className="container mx-auto px-4 flex items-center justify-between">
           <Link to="/" className="flex items-center">
@@ -289,8 +298,7 @@ const IndexPage = () => {
           </div>
         </div>
       </footer>
-      </div>
-
+    </div>
   );
 };
 

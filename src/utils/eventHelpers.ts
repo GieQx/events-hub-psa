@@ -1,4 +1,3 @@
-
 /**
  * Event helper utilities for handling event-specific colors and other functionality
  */
@@ -42,21 +41,13 @@ export const getEventHoverColor = (eventId?: string) => {
 };
 
 // Get particle color based on event ID
-export const getParticleColor = (eventId?: string) => {
-  if (!eventId) return "#9b87f5";
-  
+export const getParticleColor = (eventId: string): string => {
   switch(eventId) {
-    case "nccrvs": return "#FF6479";
-    case "cbms": return "#2A9D8F";
-    case "nsm": return "#E63946";
-    case "ncs": return "#3F7E44";
-    case "dgrs": return "#FF6479"; // Use RVS color
-    case "sdgf": return "#2A9D8F"; // Use BMS color
-    case "hsic": return "#E63946"; // Use SM color
-    case "aesr": return "#3F7E44"; // Use CS color
-    case "mwds": return "#FF6479"; // Use RVS color
-    case "edsc": return "#2A9D8F"; // Use BMS color
-    default: return "#9b87f5";
+    case "nccrvs": return "#6d28d9"; // Purple
+    case "cbms": return "#0369a1";   // Blue
+    case "nsm": return "#047857";     // Green
+    case "ncs": return "#b91c1c";     // Red
+    default: return "#3b82f6";       // Default blue
   }
 };
 
@@ -133,4 +124,3 @@ export const formatEventDate = (startDate?: string, endDate?: string) => {
     year: 'numeric' 
   })}`;
 };
-

@@ -15,6 +15,7 @@ import { EventPressTab } from "@/components/event-tabs/EventPressTab";
 import { EventGalleryTab } from "@/components/event-tabs/EventGalleryTab";
 import { EventScheduleTab } from "@/components/event-tabs/EventScheduleTab";
 import { EventSpeakersTab } from "@/components/event-tabs/EventSpeakersTab";
+import { ParticleBackground } from "@/components/ParticleBackground";
 
 import { 
   formatAgenda, 
@@ -118,7 +119,15 @@ const EventPage = () => {
   const particleColor = getParticleColor(eventId || "");
 
   return (
-    <div className="min-h-screen relative w-full">
+    <div className="min-h-screen relative w-full overflow-x-hidden">
+      <div className="absolute inset-0 -z-10">
+        <ParticleBackground 
+          color={particleColor} 
+          particleCount={100}
+          className="opacity-30" 
+        />
+      </div>
+      
       <EventHeader eventId={eventId || ""} />
       
       <EventHero 
@@ -127,7 +136,14 @@ const EventPage = () => {
       />
       
       <div className="w-full px-0 py-8">
-        
+        <Tabs defaultValue="overview" className="w-full" onValueChange={setActiveTab}>
+          <TabsList className="container mx-auto mb-8 justify-start">
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="schedule">Schedule</TabsTrigger>
+            <TabsTrigger value="speakers">Speakers</TabsTrigger>
+            <TabsTrigger value="press">Press</TabsTrigger>
+            <TabsTrigger value="gallery">Gallery</TabsTrigger>
+          </TabsList>
           
           <TabsContent value="overview" className="pt-4 w-full">
             <EventOverviewTab 
