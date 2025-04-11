@@ -16,7 +16,7 @@ export const HeroSection = () => {
         
         <ScrollSection delay={0.4}>
           <p className="mx-auto mb-8 max-w-2xl text-lg text-gray-700 dark:text-gray-300">
-            Join us at these government statistical agency events featuring experts, cutting-edge insights, and valuable networking opportunities.
+            Empowering the nation through conventions that unite experts in civil registration, national identification, and official statistics — advancing innovation, policy, and people-centered data systems.
           </p>
         </ScrollSection>
         
