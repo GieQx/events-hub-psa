@@ -3,7 +3,7 @@ import { EventMainContent } from "@/components/EventMainContent";
 
 interface EventOverviewTabProps {
   eventId: string;
-  event: any;
+  event: any;  // Using 'any' here to accommodate the extended properties
   speakers: any[];
   featuredSpeakers: any[];
   rvsNewsUpdates: any[];

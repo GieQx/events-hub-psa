@@ -1,4 +1,3 @@
-
 // CMS Schema Types
 export interface CMSEvent {
   id: string;
@@ -15,6 +14,21 @@ export interface CMSEvent {
   imageUrl?: string;
   featured?: boolean;
   published: boolean;
+  
+  // Added properties
+  venueName?: string;
+  venueAddress?: string;
+  venueDescription?: string;
+  mapUrl?: string;
+  capacity?: number;
+  registrationUrl?: string;
+  contactEmail?: string;
+  contactPhone?: string;
+  socialLinks?: {
+    facebook?: string;
+    twitter?: string;
+    instagram?: string;
+  };
 }
 
 export interface CMSSpeaker {
