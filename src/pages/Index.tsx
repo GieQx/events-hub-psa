@@ -7,11 +7,13 @@ import { AboutSection } from "@/components/homepage/AboutSection";
 import { Header } from "@/components/homepage/Header";
 import { Footer } from "@/components/homepage/Footer";
 import cmsService from "@/services/cmsService";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const IndexPage = () => {
   const [validEvents, setValidEvents] = useState<any[]>([]);
   const [featuredEvents, setFeaturedEvents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     // Get CMS content (including featured events settings)
@@ -43,7 +45,13 @@ const IndexPage = () => {
 
   return (
     <div className="relative min-h-screen overflow-x-hidden">
-
+      <div className="absolute inset-0 -z-10">
+        <ParticleBackground
+          color="#4f46e5"
+          particleCount={isMobile ? 40 : 100}
+          className="opacity-25"
+        />
+      </div>
       
       <Header />
 

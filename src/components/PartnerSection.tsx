@@ -22,11 +22,12 @@ export function PartnerSection({ partners, className = "", eventId = "nccrvs" }:
 
   return (
     <div className={`relative ${className}`}>
-      <ParticleBackground 
-        color={getParticleColor(eventId)} 
-        particleCount={40}
-        className="absolute inset-0 opacity-10 z-0" 
-      />
+      <div className="absolute inset-0 -z-10 opacity-10">
+        <ParticleBackground 
+          color={getParticleColor(eventId)} 
+          particleCount={40}
+        />
+      </div>
       <div className="relative z-10">
         <h2 className="mb-6 text-center text-3xl font-bold">Our Partners</h2>
 

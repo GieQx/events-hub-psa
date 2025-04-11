@@ -35,12 +35,25 @@ export const seedEvents = (): CMSEvent[] => {
         date: "June 15-17, 2026",
         eventStartDate: "2026-06-15",
         eventEndDate: "2026-06-17",
-        location: "San Francisco, CA",
+        location: "Manila, Philippines",
+        venueName: "Philippine International Convention Center",
+        venueAddress: "CCP Complex, Roxas Boulevard, Pasay City, 1307 Metro Manila",
+        venueDescription: "The Philippine International Convention Center is the premier international convention center in the Philippines. Located in the Cultural Center of the Philippines Complex in Pasay City, it is a multipurpose venue for conferences, exhibitions, and events.",
+        mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3861.722301421481!2d120.97986761535254!3d14.556786382557544!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397cbf0a1752b5d%3A0xad81f0fb7c8e3a27!2sPhilippine%20International%20Convention%20Center!5e0!3m2!1sen!2sus!4v1648825964877!5m2!1sen!2sus",
         color: "bg-rvs-primary",
         imageUrl: "/placeholder.svg",
         videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
         featured: true,
-        published: true
+        published: true,
+        capacity: 1200,
+        registrationUrl: "https://nccrvs-registration.example.com",
+        contactEmail: "info@nccrvs.example.com",
+        contactPhone: "+63 2 8123 4567",
+        socialLinks: {
+          facebook: "https://facebook.com/nccrvs",
+          twitter: "https://twitter.com/nccrvs",
+          instagram: "https://instagram.com/nccrvs"
+        }
       },
       {
         id: "cbms",
@@ -51,12 +64,25 @@ export const seedEvents = (): CMSEvent[] => {
         date: "September 8-10, 2026",
         eventStartDate: "2026-09-08",
         eventEndDate: "2026-09-10",
-        location: "Chicago, IL",
+        location: "Cebu City, Philippines",
+        venueName: "Waterfront Cebu City Hotel",
+        venueAddress: "Salinas Dr, Cebu City, 6000 Cebu",
+        venueDescription: "The Waterfront Cebu City Hotel is one of the premier venues in Cebu for conferences and conventions, offering state-of-the-art facilities and amenities for all types of events.",
+        mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3925.3505749648885!2d123.91449431528404!3d10.32135109019345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33a999d88c0d5e71%3A0x56e256f262b42c08!2sWaterfront%20Cebu%20City%20Hotel%20%26%20Casino!5e0!3m2!1sen!2sus!4v1648825999899!5m2!1sen!2sus",
         color: "bg-bms-primary",
         imageUrl: "/placeholder.svg",
         videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
         featured: true,
-        published: true
+        published: true,
+        capacity: 800,
+        registrationUrl: "https://cbms-registration.example.com",
+        contactEmail: "info@cbms.example.com",
+        contactPhone: "+63 32 8765 4321",
+        socialLinks: {
+          facebook: "https://facebook.com/cbms",
+          twitter: "https://twitter.com/cbms",
+          instagram: "https://instagram.com/cbms"
+        }
       },
       {
         id: "nsm",
@@ -67,12 +93,25 @@ export const seedEvents = (): CMSEvent[] => {
         date: "November 20-22, 2026",
         eventStartDate: "2026-11-20",
         eventEndDate: "2026-11-22",
-        location: "Boston, MA",
+        location: "Davao City, Philippines",
+        venueName: "SMX Convention Center Davao",
+        venueAddress: "SM Lanang Premier, JP Laurel Ave, Davao City, 8000 Davao del Sur",
+        venueDescription: "SMX Convention Center Davao is a premier venue for events and conventions in Davao City, offering modern facilities and amenities for conferences, exhibitions, and other large gatherings.",
+        mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3959.0407872562633!2d125.62879441524602!3d7.098345694873706!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x32f91335368697c9%3A0x15a1d5a6c5c86a0c!2sSMX%20Convention%20Center%20Davao!5e0!3m2!1sen!2sus!4v1648826032177!5m2!1sen!2sus",
         color: "bg-sm-primary",
         imageUrl: "/placeholder.svg",
         videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
         featured: false,
-        published: true
+        published: true,
+        capacity: 600,
+        registrationUrl: "https://nsm-registration.example.com",
+        contactEmail: "info@nsm.example.com",
+        contactPhone: "+63 82 9876 5432",
+        socialLinks: {
+          facebook: "https://facebook.com/nsm",
+          twitter: "https://twitter.com/nsm",
+          instagram: "https://instagram.com/nsm"
+        }
       },
       {
         id: "ncs",
@@ -83,12 +122,25 @@ export const seedEvents = (): CMSEvent[] => {
         date: "March 5-7, 2027",
         eventStartDate: "2027-03-05",
         eventEndDate: "2027-03-07",
-        location: "New York, NY",
+        location: "Baguio City, Philippines",
+        venueName: "Baguio Convention Center",
+        venueAddress: "Governor Pack Rd, Baguio, 2600 Benguet",
+        venueDescription: "The Baguio Convention Center is a renowned venue for events and conferences in the Philippines, offering a comfortable environment for learning and networking in the cool mountain climate of Baguio City.",
+        mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3827.737024517642!2d120.59232831530132!3d16.40752403869068!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3391a15ce3c1ec8b%3A0x5642f30f7fda7af8!2sBaguio%20Convention%20Center!5e0!3m2!1sen!2sus!4v1648826073399!5m2!1sen!2sus",
         color: "bg-cs-primary",
         imageUrl: "/placeholder.svg",
         videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
         featured: false,
-        published: true
+        published: true,
+        capacity: 500,
+        registrationUrl: "https://ncs-registration.example.com",
+        contactEmail: "info@ncs.example.com",
+        contactPhone: "+63 74 6543 210",
+        socialLinks: {
+          facebook: "https://facebook.com/ncs",
+          twitter: "https://twitter.com/ncs",
+          instagram: "https://instagram.com/ncs"
+        }
       },
     ];
     
@@ -409,30 +461,74 @@ export const seedPartners = (): CMSPartner[] => {
       {
         id: "par1",
         eventId: "nccrvs",
-        name: "VeriCorp",
+        name: "Philippine Statistics Authority",
         logoUrl: "/placeholder.svg",
-        category: "platinum"
+        category: "platinum",
+        website: "https://psa.gov.ph",
+        description: "The Philippine Statistics Authority is the central statistical authority of the Philippine government."
       },
       {
         id: "par2",
-        eventId: "cbms",
-        name: "EngageNow",
+        eventId: "nccrvs",
+        name: "Department of Information and Communications Technology",
         logoUrl: "/placeholder.svg",
-        category: "gold"
+        category: "gold",
+        website: "https://dict.gov.ph",
+        description: "The Department of Information and Communications Technology is the executive department of the Philippine government responsible for the planning, development, and promotion of the country's ICT agenda."
       },
       {
         id: "par3",
-        eventId: "nsm",
-        name: "MathIsFun",
+        eventId: "cbms",
+        name: "Department of the Interior and Local Government",
         logoUrl: "/placeholder.svg",
-        category: "silver"
+        category: "platinum",
+        website: "https://dilg.gov.ph",
+        description: "The Department of the Interior and Local Government is the executive department of the Philippine government responsible for promoting peace and order, ensuring public safety, and strengthening local government capability."
       },
       {
         id: "par4",
-        eventId: "ncs",
-        name: "GlobalImpact",
+        eventId: "cbms",
+        name: "Local Government Academy",
         logoUrl: "/placeholder.svg",
-        category: "bronze"
+        category: "gold",
+        website: "https://lga.gov.ph",
+        description: "The Local Government Academy is the premier institution for local governance capacity development in the Philippines."
+      },
+      {
+        id: "par5",
+        eventId: "nsm",
+        name: "Department of Education",
+        logoUrl: "/placeholder.svg",
+        category: "platinum",
+        website: "https://deped.gov.ph",
+        description: "The Department of Education is the executive department of the Philippine government responsible for ensuring access to, promoting equity in, and improving the quality of basic education."
+      },
+      {
+        id: "par6",
+        eventId: "nsm",
+        name: "Mathematical Society of the Philippines",
+        logoUrl: "/placeholder.svg",
+        category: "gold",
+        website: "https://mathsociety.ph",
+        description: "The Mathematical Society of the Philippines is a non-profit organization dedicated to promoting mathematics education and research in the Philippines."
+      },
+      {
+        id: "par7",
+        eventId: "ncs",
+        name: "National Economic and Development Authority",
+        logoUrl: "/placeholder.svg",
+        category: "platinum",
+        website: "https://neda.gov.ph",
+        description: "The National Economic and Development Authority is the Philippine government's premier socioeconomic planning body."
+      },
+      {
+        id: "par8",
+        eventId: "ncs",
+        name: "United Nations Development Programme",
+        logoUrl: "/placeholder.svg",
+        category: "gold",
+        website: "https://undp.org",
+        description: "The United Nations Development Programme is the United Nations' global development network, advocating for change and connecting countries to knowledge, experience, and resources to help people build a better life."
       }
     ];
     

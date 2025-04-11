@@ -1,15 +1,19 @@
-
 import { Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 
 export function ThemeToggle() {
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(true); // Default to dark
 
   // Check for user preference on mount
   useEffect(() => {
-    const isDarkMode = localStorage.getItem("theme") === "dark" || 
-      (!localStorage.getItem("theme") && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    const theme = localStorage.getItem("ui-theme");
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    
+    // If theme is explicitly set in localStorage, use that
+    // Otherwise use system preference
+    const isDarkMode = theme === "dark" || 
+      (!theme && prefersDark);
     
     setIsDark(isDarkMode);
     
@@ -23,11 +27,11 @@ export function ThemeToggle() {
   const toggleTheme = () => {
     if (isDark) {
       document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
+      localStorage.setItem("ui-theme", "light");
       setIsDark(false);
     } else {
       document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
+      localStorage.setItem("ui-theme", "dark");
       setIsDark(true);
     }
   };
@@ -38,6 +42,7 @@ export function ThemeToggle() {
       size="icon" 
       onClick={toggleTheme}
       className="rounded-full"
+      aria-label="Toggle theme"
     >
       {isDark ? (
         <Sun className="h-5 w-5" />

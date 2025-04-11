@@ -1,13 +1,11 @@
 
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { BackToTopButton } from "@/components/BackToTopButton";
 import { HeroSection } from "@/components/HeroSection";
 import { Footer } from "@/components/Footer";
 import { ParticleBackground } from "@/components/ParticleBackground";
 import { ContactUsSection } from "@/components/ContactUsSection";
-import { MapPin } from "lucide-react";
 import cmsService from "@/services/cmsService";
 import { seedDatabaseIfEmpty } from "@/utils/seedData";
 import { FeaturedEventsSection } from "@/components/home/FeaturedEventsSection";
@@ -16,11 +14,13 @@ import { ValuePropositionSection } from "@/components/home/ValuePropositionSecti
 import { UpcomingEventsTimeline } from "@/components/home/UpcomingEventsTimeline";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { CallToActionSection } from "@/components/home/CallToActionSection";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const HomePage = () => {
   const [homeContent, setHomeContent] = useState<any>(null);
   const [events, setEvents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     seedDatabaseIfEmpty();
@@ -60,7 +60,7 @@ const HomePage = () => {
       <div className="absolute inset-0 -z-10">
         <ParticleBackground 
           color="#3b82f6" 
-          particleCount={100}
+          particleCount={isMobile ? 40 : 100}
           className="opacity-30" 
         />
       </div>
