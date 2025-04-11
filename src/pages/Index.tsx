@@ -51,7 +51,7 @@ const IndexPage = () => {
         <ParticleBackground 
           color="#3b82f6" 
           particleCount={100}
-          className="opacity-30" 
+          className="opacity-70" 
         />
       
 
