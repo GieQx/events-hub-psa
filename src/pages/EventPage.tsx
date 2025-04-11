@@ -129,55 +129,6 @@ const EventPage = () => {
         eventId={eventId} 
         event={heroEvent} 
       />
-      
-      <div className="w-full px-0 py-8">
-        <Tabs defaultValue="overview" className="w-full" onValueChange={setActiveTab}>
-          <TabsList className="container mx-auto mb-8 justify-start">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="schedule">Schedule</TabsTrigger>
-            <TabsTrigger value="speakers">Speakers</TabsTrigger>
-            <TabsTrigger value="press">Press</TabsTrigger>
-            <TabsTrigger value="gallery">Gallery</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="overview" className="pt-4 w-full">
-            <EventOverviewTab 
-              eventId={eventId || ""}
-              event={event}
-              speakers={speakers}
-              featuredSpeakers={featuredSpeakers}
-              rvsNewsUpdates={rvsNewsUpdates}
-              displayAgenda={displayAgenda}
-              formattedPartners={formattedPartners}
-              formattedTopics={formattedTopics}
-              venueInfo={venueInfo}
-              hotelInfo={hotelInfo}
-              restaurantInfo={restaurantInfo}
-              faqs={[]}
-              eventChallenge={eventChallenge}
-              resources={resources}
-              getFaqs={getFaqs}
-              getHighlights={getHighlights}
-              eventCalendarDetails={eventCalendarDetails}          />
-          </TabsContent>
-          
-          <TabsContent value="press" className="pt-4 w-full">
-            <EventPressTab eventId={eventId || ""} pressReleases={pressReleases} />
-          </TabsContent>
-          
-          <TabsContent value="gallery" className="pt-4 w-full">
-            <EventGalleryTab eventId={eventId || ""} photos={photos} />
-          </TabsContent>
-          
-          <TabsContent value="schedule" className="pt-4 w-full">
-            <EventScheduleTab eventId={eventId || ""} displayAgenda={displayAgenda} />
-          </TabsContent>
-          
-          <TabsContent value="speakers" className="pt-4 w-full">
-            <EventSpeakersTab eventId={eventId || ""} speakers={speakers} />
-          </TabsContent>
-        </Tabs>
-      </div>
 
       <EventFooter event={event} eventId={eventId || ""} />
       

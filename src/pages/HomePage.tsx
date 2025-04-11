@@ -54,7 +54,7 @@ const HomePage = () => {
     <div className="relative min-h-screen overflow-x-hidden flex flex-col">
       <main className="flex-1 relative z-10">
         <HeroSection 
-          title={homeContent?.heroTitle || "Welcome to the Convention Hub"}
+          title={homeContent?.heroTitle || "Welcome to the PSA Events Hub"}
           description={homeContent?.heroSubtitle || "Discover and connect with professional communities through our world-class conventions and events."}
           buttonText="Explore Events"
           buttonLink="/events"
