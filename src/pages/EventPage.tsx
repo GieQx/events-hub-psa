@@ -127,16 +127,7 @@ const EventPage = () => {
       />
       
       <div className="w-full px-0 py-8">
-        <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <div className="container mx-auto px-4">
-            <TabsList className="grid grid-cols-5 mb-8">
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="press">Press Releases</TabsTrigger>
-              <TabsTrigger value="gallery">Photo Gallery</TabsTrigger>
-              <TabsTrigger value="schedule">Schedule</TabsTrigger>
-              <TabsTrigger value="speakers">Speakers</TabsTrigger>
-            </TabsList>
-          </div>
+        
           
           <TabsContent value="overview" className="pt-4 w-full">
             <EventOverviewTab 
