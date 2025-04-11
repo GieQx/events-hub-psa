@@ -43,11 +43,7 @@ const IndexPage = () => {
 
   return (
     <div className="relative min-h-screen overflow-x-hidden">
-     <ParticleBackground 
-        color="#3b82f6" 
-        particleCount={100}
-        className="absolute inset-0 -z-10 opacity-70" 
-      />
+
       
       <Header />
 
