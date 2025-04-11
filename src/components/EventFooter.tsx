@@ -1,6 +1,4 @@
 
-import { ParticleBackground } from "@/components/ParticleBackground";
-
 interface EventFooterProps {
   event: {
     id: string;
@@ -23,13 +21,8 @@ export function EventFooter({ event, eventId }: EventFooterProps) {
   };
 
   return (
-    <footer className="bg-gray-900 py-12 text-white relative">
-      <ParticleBackground 
-        color="#ffffff" 
-        particleCount={50}
-        className="opacity-10" 
-      />
-      <div className="container mx-auto px-4 relative z-10">
+    <footer className="bg-gray-900 py-12 text-white">
+      <div className="container mx-auto px-4">
         <div className="grid gap-8 md:grid-cols-3">
           <div>
             <h3 className="mb-4 text-xl font-bold">{event?.title}</h3>

@@ -1,3 +1,4 @@
+
 import { useParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { BackToTopButton } from "@/components/BackToTopButton";
@@ -7,9 +8,8 @@ import { EventHeader } from "@/components/EventHeader";
 import { EventHero } from "@/components/EventHero";
 import { EventMainContent } from "@/components/EventMainContent";
 import { EventFooter } from "@/components/EventFooter";
-import { getEventColor, getParticleColor } from "@/utils/eventHelpers";
+import { getEventColor } from "@/utils/eventHelpers";
 import { useEffect, useState } from "react";
-import { ParticleBackground } from "@/components/ParticleBackground";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AgendaSection } from "@/components/AgendaSection";
 import { SpeakersSection } from "@/components/SpeakersSection";
@@ -230,15 +230,6 @@ const EventPage = () => {
 
   return (
     <div className="min-h-screen relative">
-      <div className="absolute inset-0 -z-10">
-        <ParticleBackground 
-          color={particleColor} 
-          particleCount={100}
-          interactive={true}
-          className="opacity-30" 
-        />
-      </div>
-      
       <EventHeader eventId={eventId || ""} />
       
       <EventHero 
@@ -246,17 +237,19 @@ const EventPage = () => {
         event={heroEvent} 
       />
       
-      <div className="container mx-auto px-4 py-8">
+      <div className="w-full px-0 py-8">
         <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid grid-cols-5 mb-8">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="press">Press Releases</TabsTrigger>
-            <TabsTrigger value="gallery">Photo Gallery</TabsTrigger>
-            <TabsTrigger value="schedule">Schedule</TabsTrigger>
-            <TabsTrigger value="speakers">Speakers</TabsTrigger>
-          </TabsList>
+          <div className="container mx-auto px-4">
+            <TabsList className="grid grid-cols-5 mb-8">
+              <TabsTrigger value="overview">Overview</TabsTrigger>
+              <TabsTrigger value="press">Press Releases</TabsTrigger>
+              <TabsTrigger value="gallery">Photo Gallery</TabsTrigger>
+              <TabsTrigger value="schedule">Schedule</TabsTrigger>
+              <TabsTrigger value="speakers">Speakers</TabsTrigger>
+            </TabsList>
+          </div>
           
-          <TabsContent value="overview" className="pt-4">
+          <TabsContent value="overview" className="pt-4 w-full">
             <EventMainContent 
               eventId={eventId || ""}
               event={event}
@@ -275,30 +268,38 @@ const EventPage = () => {
               getFaqs={getFaqs}
               getHighlights={getHighlights}
               getEventColor={() => getEventColor(eventId || "")}
-              getParticleColor={() => getParticleColor(eventId || "")}
+              getParticleColor={() => ""}
               eventCalendarDetails={eventCalendarDetails}
             />
           </TabsContent>
           
-          <TabsContent value="press" className="pt-4">
-            <PressReleasesPage eventId={eventId || ""} pressReleases={pressReleases} />
-          </TabsContent>
-          
-          <TabsContent value="gallery" className="pt-4">
-            <PhotoGallery eventId={eventId || ""} photos={photos} />
-          </TabsContent>
-          
-          <TabsContent value="schedule" className="pt-4">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-              <h2 className="text-2xl font-bold mb-6 text-center">Event Schedule</h2>
-              <AgendaSection days={displayAgenda} eventId={eventId || ""} />
+          <TabsContent value="press" className="pt-4 w-full">
+            <div className="container mx-auto px-4">
+              <PressReleasesPage eventId={eventId || ""} pressReleases={pressReleases} />
             </div>
           </TabsContent>
           
-          <TabsContent value="speakers" className="pt-4">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-              <h2 className="text-2xl font-bold mb-6 text-center">Event Speakers</h2>
-              <SpeakersSection speakers={speakers} eventId={eventId || ""} />
+          <TabsContent value="gallery" className="pt-4 w-full">
+            <div className="container mx-auto px-4">
+              <PhotoGallery eventId={eventId || ""} photos={photos} />
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="schedule" className="pt-4 w-full">
+            <div className="container mx-auto px-4">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                <h2 className="text-2xl font-bold mb-6 text-center">Event Schedule</h2>
+                <AgendaSection days={displayAgenda} eventId={eventId || ""} />
+              </div>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="speakers" className="pt-4 w-full">
+            <div className="container mx-auto px-4">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+                <h2 className="text-2xl font-bold mb-6 text-center">Event Speakers</h2>
+                <SpeakersSection speakers={speakers} eventId={eventId || ""} />
+              </div>
             </div>
           </TabsContent>
         </Tabs>

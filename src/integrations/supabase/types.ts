@@ -47,7 +47,7 @@ export type Database = {
           },
         ]
       }
-      chatbot_qna: {
+      chatbot_qa: {
         Row: {
           answer: string
           created_at: string | null
@@ -87,13 +87,18 @@ export type Database = {
           address: string | null
           capacity: number | null
           created_at: string | null
+          date: string | null
           description: string | null
           end_date: string
           id: string
           image_url: string | null
+          is_disabled: boolean | null
+          is_featured: boolean | null
           location: string | null
           primary_color: string | null
+          slug: string | null
           start_date: string
+          time: string | null
           title: string
           updated_at: string | null
         }
@@ -101,13 +106,18 @@ export type Database = {
           address?: string | null
           capacity?: number | null
           created_at?: string | null
+          date?: string | null
           description?: string | null
           end_date: string
           id?: string
           image_url?: string | null
+          is_disabled?: boolean | null
+          is_featured?: boolean | null
           location?: string | null
           primary_color?: string | null
+          slug?: string | null
           start_date: string
+          time?: string | null
           title: string
           updated_at?: string | null
         }
@@ -115,17 +125,57 @@ export type Database = {
           address?: string | null
           capacity?: number | null
           created_at?: string | null
+          date?: string | null
           description?: string | null
           end_date?: string
           id?: string
           image_url?: string | null
+          is_disabled?: boolean | null
+          is_featured?: boolean | null
           location?: string | null
           primary_color?: string | null
+          slug?: string | null
           start_date?: string
+          time?: string | null
           title?: string
           updated_at?: string | null
         }
         Relationships: []
+      }
+      marquee_items: {
+        Row: {
+          created_at: string | null
+          event_id: string | null
+          id: string
+          is_active: boolean | null
+          text: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          event_id?: string | null
+          id?: string
+          is_active?: boolean | null
+          text: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          event_id?: string | null
+          id?: string
+          is_active?: boolean | null
+          text?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marquee_items_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
