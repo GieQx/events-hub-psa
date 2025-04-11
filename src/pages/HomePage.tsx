@@ -1,13 +1,11 @@
 
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 import { BackToTopButton } from "@/components/BackToTopButton";
 import { HeroSection } from "@/components/HeroSection";
 import { Footer } from "@/components/Footer";
 import { ParticleBackground } from "@/components/ParticleBackground";
 import { ContactUsSection } from "@/components/ContactUsSection";
-import { MapPin } from "lucide-react";
 import cmsService from "@/services/cmsService";
 import { seedDatabaseIfEmpty } from "@/utils/seedData";
 import { FeaturedEventsSection } from "@/components/home/FeaturedEventsSection";
@@ -56,11 +54,8 @@ const HomePage = () => {
   });
 
   return (
-    <>
-      <ParticlesBackground count={75} />
-    <div className="flex min-h-screen flex-col relative overflow-x-hidden">
-      
-      </div>
+    <div className="relative min-h-screen overflow-x-hidden flex flex-col">
+      <ParticleBackground count={75} />
       
       <main className="flex-1 relative z-10">
         <HeroSection 
@@ -94,7 +89,6 @@ const HomePage = () => {
       <Footer />
       <BackToTopButton />
     </div>
-    </>
   );
 };
 
