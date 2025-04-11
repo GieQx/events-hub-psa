@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import { ParticleBackground } from "@/components/ParticleBackground";
+
 import { HeroSection } from "@/components/homepage/HeroSection";
 import { EventsSection } from "@/components/homepage/EventsSection";
 import { AboutSection } from "@/components/homepage/AboutSection";
@@ -43,11 +43,6 @@ const IndexPage = () => {
 
   return (
     <div className="relative min-h-screen overflow-x-hidden">
-      <ParticleBackground 
-        color="#3b82f6" 
-        particleCount={100}
-        className="absolute inset-0 -z-10 opacity-70" 
-      />
       
       <Header />
 

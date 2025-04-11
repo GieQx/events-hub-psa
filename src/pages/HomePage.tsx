@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { BackToTopButton } from "@/components/BackToTopButton";
 import { HeroSection } from "@/components/HeroSection";
 import { Footer } from "@/components/Footer";
-import { ParticleBackground } from "@/components/ParticleBackground";
 import { ContactUsSection } from "@/components/ContactUsSection";
 import cmsService from "@/services/cmsService";
 import { seedDatabaseIfEmpty } from "@/utils/seedData";
@@ -53,8 +52,6 @@ const HomePage = () => {
 
   return (
     <div className="relative min-h-screen overflow-x-hidden flex flex-col">
-      <ParticleBackground particleCount={75} />
-      
       <main className="flex-1 relative z-10">
         <HeroSection 
           title={homeContent?.heroTitle || "Welcome to the Convention Hub"}

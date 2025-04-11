@@ -1,7 +1,6 @@
 
 import { useParams } from "react-router-dom";
 import { useEventData } from "@/hooks/useEventData";
-import { getEventColor, getParticleColor } from "@/utils/eventHelpers";
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { EventHeader } from "@/components/EventHeader";
@@ -15,7 +14,7 @@ import { EventPressTab } from "@/components/event-tabs/EventPressTab";
 import { EventGalleryTab } from "@/components/event-tabs/EventGalleryTab";
 import { EventScheduleTab } from "@/components/event-tabs/EventScheduleTab";
 import { EventSpeakersTab } from "@/components/event-tabs/EventSpeakersTab";
-import { ParticleBackground } from "@/components/ParticleBackground";
+
 
 import { 
   formatAgenda, 
@@ -116,16 +115,12 @@ const EventPage = () => {
     }
   };
 
-  const particleColor = getParticleColor(eventId || "");
+
 
   return (
     <div className="min-h-screen relative w-full overflow-x-hidden">
       <div className="absolute inset-0 -z-10">
-        <ParticleBackground 
-          color={particleColor} 
-          particleCount={100}
-          className="opacity-30" 
-        />
+
       </div>
       
       <EventHeader eventId={eventId || ""} />
@@ -163,9 +158,7 @@ const EventPage = () => {
               resources={resources}
               getFaqs={getFaqs}
               getHighlights={getHighlights}
-              eventCalendarDetails={eventCalendarDetails}
-              particleColor={particleColor}
-            />
+              eventCalendarDetails={eventCalendarDetails}          />
           </TabsContent>
           
           <TabsContent value="press" className="pt-4 w-full">
