@@ -53,7 +53,7 @@ const IndexPage = () => {
           particleCount={100}
           className="opacity-30" 
         />
-      </div>
+      
 
       <header className="py-6 relative z-10">
         <div className="container mx-auto px-4 flex items-center justify-between">
@@ -298,6 +298,7 @@ const IndexPage = () => {
           </div>
         </div>
       </footer>
+        </div>
     </div>
   );
 };
