@@ -47,7 +47,7 @@ const IndexPage = () => {
 
   return (
     
-      
+      <>
       <header className="py-6 relative z-10">
         <div className="container mx-auto px-4 flex items-center justify-between">
           <Link to="/" className="flex items-center">
@@ -292,6 +292,7 @@ const IndexPage = () => {
         </div>
       </footer>
     </div>
+    </>
   );
 };
 
