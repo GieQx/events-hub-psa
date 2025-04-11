@@ -1,8 +1,13 @@
+
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import { BackToTopButton } from "@/components/BackToTopButton";
 import { HeroSection } from "@/components/HeroSection";
 import { Footer } from "@/components/Footer";
+import { ParticleBackground } from "@/components/ParticleBackground";
 import { ContactUsSection } from "@/components/ContactUsSection";
+import { MapPin } from "lucide-react";
 import cmsService from "@/services/cmsService";
 import { seedDatabaseIfEmpty } from "@/utils/seedData";
 import { FeaturedEventsSection } from "@/components/home/FeaturedEventsSection";
@@ -51,10 +56,18 @@ const HomePage = () => {
   });
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden flex flex-col">
+    <div className="flex min-h-screen flex-col relative overflow-x-hidden">
+      <div className="absolute inset-0 -z-10">
+        <ParticleBackground 
+          color="#3b82f6" 
+          particleCount={100}
+          className="opacity-30" 
+        />
+      </div>
+      
       <main className="flex-1 relative z-10">
         <HeroSection 
-          title={homeContent?.heroTitle || "Welcome to the PSA Events Hub"}
+          title={homeContent?.heroTitle || "Welcome to the Convention Hub"}
           description={homeContent?.heroSubtitle || "Discover and connect with professional communities through our world-class conventions and events."}
           buttonText="Explore Events"
           buttonLink="/events"
