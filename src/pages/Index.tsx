@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { events } from "@/data/events";
 import { ScrollSection } from "@/components/ScrollSection";
 import { motion } from "framer-motion";
-import { ParticleBackground } from "@/components/ParticleBackground";
+// import { ParticleBackground } from "@/components/ParticleBackground";
 import { shouldDisableEvent } from "@/utils/eventHelpers";
 import cmsService from "@/services/cmsService";
 import { useEffect, useState } from "react";
