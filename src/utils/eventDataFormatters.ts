@@ -1,4 +1,3 @@
-
 import { CMSResource } from "@/types/cms";
 import { Resource } from "@/components/types";
 
@@ -12,7 +11,7 @@ export function formatAgenda(agenda: any[]) {
       title: session.title,
       description: session.description || "",
       speaker: session.speakerId ? 
-        agenda.speakerMap?.[session.speakerId]?.name : undefined,
+        session.speakerName || "Speaker TBD" : undefined,
       location: session.location || "",
       type: session.type
     }))
