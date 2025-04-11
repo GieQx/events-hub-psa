@@ -1,4 +1,3 @@
-
 import { useParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { BackToTopButton } from "@/components/BackToTopButton";
@@ -8,7 +7,7 @@ import { EventHeader } from "@/components/EventHeader";
 import { EventHero } from "@/components/EventHero";
 import { EventMainContent } from "@/components/EventMainContent";
 import { EventFooter } from "@/components/EventFooter";
-import { getEventColor } from "@/utils/eventHelpers";
+import { getEventColor, getParticleColor } from "@/utils/eventHelpers";
 import { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AgendaSection } from "@/components/AgendaSection";
@@ -229,7 +228,7 @@ const EventPage = () => {
   const particleColor = getParticleColor(eventId || "");
 
   return (
-    <div className="min-h-screen relative">
+    <div className="min-h-screen relative w-full">
       <EventHeader eventId={eventId || ""} />
       
       <EventHero 
@@ -268,7 +267,7 @@ const EventPage = () => {
               getFaqs={getFaqs}
               getHighlights={getHighlights}
               getEventColor={() => getEventColor(eventId || "")}
-              getParticleColor={() => ""}
+              getParticleColor={() => particleColor}
               eventCalendarDetails={eventCalendarDetails}
             />
           </TabsContent>
