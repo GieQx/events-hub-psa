@@ -291,7 +291,7 @@ const IndexPage = () => {
           </div>
         </div>
       </footer>
-    </div>
+    
     </>
   );
 };
