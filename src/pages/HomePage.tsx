@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { BackToTopButton } from "@/components/BackToTopButton";
 import { HeroSection } from "@/components/HeroSection";
 import { Footer } from "@/components/Footer";
-import { ParticleBackground } from "@/components/ParticleBackground";
+//import { ParticleBackground } from "@/components/ParticleBackground";
 import { ContactUsSection } from "@/components/ContactUsSection";
 import { motion, useAnimation } from "framer-motion";
 import cmsService from "@/services/cmsService";
