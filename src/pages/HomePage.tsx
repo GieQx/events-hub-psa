@@ -1,6 +1,4 @@
-
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { BackToTopButton } from "@/components/BackToTopButton";
 import { HeroSection } from "@/components/HeroSection";
 import { Footer } from "@/components/Footer";
@@ -55,7 +53,7 @@ const HomePage = () => {
 
   return (
     <div className="relative min-h-screen overflow-x-hidden flex flex-col">
-      <ParticleBackground count={75} />
+      <ParticleBackground particleCount={75} />
       
       <main className="flex-1 relative z-10">
         <HeroSection 
